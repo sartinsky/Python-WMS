@@ -18,37 +18,37 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
     try:
         # Логирование перед отправкой запроса
-        print(f'Отправка запроса к {url} с параметрами {params}')
+        #print(f'Отправка запроса к {url} с параметрами {params}')
         
         # Отправка GET-запроса
         response = requests.get(url, params=params)
 
         # Логирование кода состояния ответа
-        print(f'Ответ от сервера: {response.status_code}')
+        #print(f'Ответ от сервера: {response.status_code}')
 
         # Проверка статуса ответа
         if response.status_code == 200:
             # Парсинг JSON ответа
             data = response.json()
-            print(f'Полученные данные: {json.dumps(data, indent=4, ensure_ascii=False)}')
+            #print(f'Полученные данные: {json.dumps(data, indent=4, ensure_ascii=False)}')
             hashMap.put("table", data)
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
-            print(f'Ошибка запроса: {response.status_code} - {response.text}')
+            #print(f'Ошибка запроса: {response.status_code} - {response.text}')
     except Exception as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')
-        print(f'Исключение: {str(e)}')
+        #print(f'Исключение: {str(e)}')
 
 # Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
-
-    def put(self, key, value):
-        self.store[key] = value
+#class MockHashMap:
+#    def __init__(self):
+#        self.store = {}
+#
+#    def put(self, key, value):
+#        self.store[key] = value
 
 # Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    Get_Orders_Data_To_Table(hashMap)
-    print('Содержимое hashMap:', hashMap.store)
+#if __name__ == "__main__":
+#    hashMap = MockHashMap()
+#    Get_Orders_Data_To_Table(hashMap)
+#    print('Содержимое hashMap:', hashMap.store)
