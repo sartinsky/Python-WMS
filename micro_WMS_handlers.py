@@ -31,7 +31,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
             # Парсинг JSON ответа
             data = response.json()
             #print(f'Полученные данные: {json.dumps(data, indent=4, ensure_ascii=False)}')
-            hashMap.put("orders_table", data)
+            hashMap.put("orders_table", json.dumps(data))
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
             #print(f'Ошибка запроса: {response.status_code} - {response.text}')
@@ -39,7 +39,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
         hashMap.put("toast", f'Exception occurred: {str(e)}')
         #print(f'Исключение: {str(e)}')
 
-# Пример использования функции
+ #Пример использования функции
 #class MockHashMap:
 #    def __init__(self):
 #        self.store = {}
