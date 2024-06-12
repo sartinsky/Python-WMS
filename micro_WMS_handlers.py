@@ -45,7 +45,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 def units_input(hashMap,_files=None,_data=None):
     
     jrecord = json.loads(hashMap.get("selected_line"))
-    unit_id =jrecord['id']
+    unit_id = str(jrecord['id'])
     #unit_id = '85'
 
     # Путь к нужной таблице или представлению
