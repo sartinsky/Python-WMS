@@ -1,10 +1,11 @@
 import requests
 import json
 
-def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
-    # URL вашего PostgREST сервера
-    postgrest_url = 'http://192.168.1.109:3000'
+ # URL вашего PostgREST сервера
+postgrest_url = 'http://192.168.1.109:3000'
 
+def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
+    
     # Путь к нужной таблице или представлению
     path = 'wms_orders_captions?and=(typeid.eq.1,done.is.null)&'
     
@@ -41,7 +42,39 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
     return hashMap    
 
- #Пример использования функции
+def units_input(hashMap,_files=None,_data=None):
+    
+    jrecord = json.loads(hashMap.get("selected_line_id"))
+    unit_id =jrecord['id']
+    #unit_id = '85'
+
+    # Путь к нужной таблице или представлению
+    path = 'wms_orders_captions?id=eq.{unit_id}'.format(unit_id=unit_id)
+    
+    # Полный URL для запроса
+    url = f'{postgrest_url}/{path}'
+    
+    try:
+        # Отправка GET-запроса
+        response = requests.get(url)
+
+        # Проверка статуса ответа
+        if response.status_code == 200:
+            # Парсинг JSON ответа
+            data = response.json()
+            jrecord = json.loads(data)
+            hashMap.put("order", jrecord['caption'])
+            hashMap.put("orderRef", unit_id)
+            hashMap.put("ShowDialog", "Приемка по заказу начало")
+        else:
+           hashMap.put("toast", f'Error: {response.status_code}')
+           print(f'Ошибка запроса: {response.status_code} - {response.text}')
+    except Exception as e:
+        hashMap.put("toast", f'Exception occurred: {str(e)}')
+        
+    return hashMap  
+
+#Пример использования функции
 #class MockHashMap:
 #    def __init__(self):
 #        self.store = {}
@@ -52,5 +85,5 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 # Тестирование функции
 #if __name__ == "__main__":
 #    hashMap = MockHashMap()
-#    Get_Orders_Data_To_Table(hashMap)
+#    units_input(hashMap)
 #    print('Содержимое hashMap:', hashMap.store)
