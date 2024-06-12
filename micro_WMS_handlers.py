@@ -75,15 +75,15 @@ def units_input(hashMap,_files=None,_data=None):
     return hashMap  
 
 #Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
 # Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    units_input(hashMap)
-    print('Содержимое hashMap:', hashMap.store)
+# if __name__ == "__main__":
+#     hashMap = MockHashMap()
+#     units_input(hashMap)
+#     print('Содержимое hashMap:', hashMap.store)
