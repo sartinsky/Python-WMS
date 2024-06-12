@@ -62,7 +62,7 @@ def units_input(hashMap,_files=None,_data=None):
         if response.status_code == 200:
             # Парсинг JSON ответа
             data = response.json()
-            jrecord = json.loads(data)
+            jrecord = data[0]
             hashMap.put("order", jrecord['caption'])
             hashMap.put("orderRef", unit_id)
             hashMap.put("ShowDialog", "Приемка по заказу начало")
@@ -75,15 +75,15 @@ def units_input(hashMap,_files=None,_data=None):
     return hashMap  
 
 #Пример использования функции
-#class MockHashMap:
-#    def __init__(self):
-#        self.store = {}
-#
-#    def put(self, key, value):
-#        self.store[key] = value
+class MockHashMap:
+    def __init__(self):
+        self.store = {}
+
+    def put(self, key, value):
+        self.store[key] = value
 
 # Тестирование функции
-#if __name__ == "__main__":
-#    hashMap = MockHashMap()
-#    units_input(hashMap)
-#    print('Содержимое hashMap:', hashMap.store)
+if __name__ == "__main__":
+    hashMap = MockHashMap()
+    units_input(hashMap)
+    print('Содержимое hashMap:', hashMap.store)
