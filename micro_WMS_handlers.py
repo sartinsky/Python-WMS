@@ -39,16 +39,3 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
         hashMap.put("toast", f'Exception occurred: {str(e)}')
         print(f'Исключение: {str(e)}')
 
-# Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
-
-    def put(self, key, value):
-        self.store[key] = value
-
-# Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    Get_Orders_Data_To_Table(hashMap)
-    print('Содержимое hashMap:', hashMap.store)
