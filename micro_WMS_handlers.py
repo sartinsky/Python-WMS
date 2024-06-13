@@ -104,7 +104,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
 def Set_Var(hashMap, _files=None, _data=None):
 
-    hashMap.put("noaddr", 'true')    
+    hashMap.put("noaddr", 'true')
     return hashMap
 
 # #Пример использования функции
