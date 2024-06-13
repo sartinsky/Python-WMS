@@ -92,8 +92,8 @@ def units_input(hashMap,_files=None,_data=None):
                 Get_OrderGoods_Data_To_Table(hashMap)
                 hashMap.put("ShowScreen", "Приемка по заказу начало")
             else:
-            hashMap.put("toast", f'Error: {response.status_code}')
-            #print(f'Ошибка запроса: {response.status_code} - {response.text}')
+                hashMap.put("toast", f'Error: {response.status_code}')
+                #print(f'Ошибка запроса: {response.status_code} - {response.text}')
         except Exception as e:
             hashMap.put("toast", f'Exception occurred: {str(e)}')
         
