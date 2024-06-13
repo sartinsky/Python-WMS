@@ -159,7 +159,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
     try:
         # Отправка GET-запроса
-        response = requests.patch(url,headers,data = json.dumps(data))
+        response = requests.patch(url,headers=headers,data = json.dumps(data))
 
         # Проверка статуса ответа
         if response.status_code == 200:
