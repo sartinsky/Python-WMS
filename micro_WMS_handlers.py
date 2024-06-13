@@ -18,9 +18,6 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     }
 
     try:
-        # Логирование перед отправкой запроса
-        #print(f'Отправка запроса к {url} с параметрами {params}')
-        
         # Отправка GET-запроса
         response = requests.get(url, params=params)
 
