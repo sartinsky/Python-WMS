@@ -57,7 +57,7 @@ def units_input(hashMap,_files=None,_data=None):
             hashMap.put("order", jrecord['caption'])
             hashMap.put("orderRef", unit_id)
             Get_OrderGoods_Data_To_Table(hashMap)
-            hashMap.put("ShowDialog", "Приемка по заказу начало")
+            hashMap.put("ShowScreen", "Приемка по заказу начало")
         else:
            hashMap.put("toast", f'Error: {response.status_code}')
            #print(f'Ошибка запроса: {response.status_code} - {response.text}')
@@ -88,7 +88,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             # Парсинг JSON ответа
             data = response.json()
             hashMap.put("table", json.dumps(data))
-            #hashMap.put("ShowDialog", "wms.Ввод товара по заказу")
+            #hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
             print(f'Ошибка запроса: {response.status_code} - {response.text}')
