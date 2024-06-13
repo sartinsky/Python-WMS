@@ -40,8 +40,9 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 def units_input(hashMap,_files=None,_data=None):
     
     if hashMap.get("listener")=="barcode":
+    
         barcode = hashMap.get("barcode")
-        path = 'wms_goods?barcode=in.(%22{barcode}~%22)'.format(barcode=barcode)
+        path = 'wms_goods?barcode=in.(%22{barcode}%22)'.format(barcode=barcode)
          # Полный URL для запроса
         url = f'{postgrest_url}/{path}'
 
@@ -140,18 +141,18 @@ def goods_record_input(hashMap,_files=None,_data=None):
 
     return hashMap
 
-# #Пример использования функции
-# class MockHashMap:
-#     def __init__(self):
-#         self.store = {}
+#Пример использования функции
+class MockHashMap:
+    def __init__(self):
+        self.store = {}
 
-#     def put(self, key, value):
-#         self.store[key] = value
+    def put(self, key, value):
+        self.store[key] = value
 
-# #Тестирование функции
-# if __name__ == "__main__":
-#     hashMap = MockHashMap()
-#     Get_Orders_Data_To_Table(hashMap)
-#     units_input(hashMap)
-#     Get_OrderGoods_Data_To_Table(hashMap)
-#     print('Содержимое hashMap:', hashMap.store)
+#Тестирование функции
+if __name__ == "__main__":
+    hashMap = MockHashMap()
+    #Get_Orders_Data_To_Table(hashMap)
+    units_input(hashMap)
+    #Get_OrderGoods_Data_To_Table(hashMap)
+    #print('Содержимое hashMap:', hashMap.store)
