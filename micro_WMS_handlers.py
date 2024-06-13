@@ -173,18 +173,18 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
     return hashMap
 
-# #Пример использования функции
-# class MockHashMap:
-#     def __init__(self):
-#         self.store = {}
+#Пример использования функции
+class MockHashMap:
+    def __init__(self):
+        self.store = {}
 
-#     def put(self, key, value):
-#         self.store[key] = value
+    def put(self, key, value):
+        self.store[key] = value
 
-# #Тестирование функции
-# if __name__ == "__main__":
-#     hashMap = MockHashMap()
-#     #Get_Orders_Data_To_Table(hashMap)
-#     units_input(hashMap)
-#     #Get_OrderGoods_Data_To_Table(hashMap)
-#     #print('Содержимое hashMap:', hashMap.store)
+#Тестирование функции
+if __name__ == "__main__":
+    hashMap = MockHashMap()
+    Get_Orders_Data_To_Table(hashMap)
+    #units_input(hashMap)
+    #Get_OrderGoods_Data_To_Table(hashMap)
+    #print('Содержимое hashMap:', hashMap.store)
