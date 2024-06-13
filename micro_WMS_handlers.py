@@ -6,6 +6,7 @@ postgrest_url = 'http://192.168.1.109:3000'
 
 def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     
+    postgrest_url = 'http://192.168.1.109:3000'
     # Путь к нужной таблице или представлению
     path = 'wms_orders_captions?and=(typeid.eq.1,done.is.null)&'
     
@@ -24,21 +25,15 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
         # Отправка GET-запроса
         response = requests.get(url, params=params)
 
-        # Логирование кода состояния ответа
-        #print(f'Ответ от сервера: {response.status_code}')
-
         # Проверка статуса ответа
         if response.status_code == 200:
             # Парсинг JSON ответа
             data = response.json()
-            #print(f'Полученные данные: {json.dumps(data, indent=4, ensure_ascii=False)}')
             hashMap.put("orders_table", json.dumps(data))
         else:
-            hashMap.put("toast", f'Error: {response.status_code}')
-            #print(f'Ошибка запроса: {response.status_code} - {response.text}')
+            hashMap.put("toast", f'Error: {response.status_code}')        
     except Exception as e:
-        hashMap.put("toast", f'Exception occurred: {str(e)}')
-        #print(f'Исключение: {str(e)}')
+        hashMap.put("toast", f'Exception occurred: {str(e)}')        
 
     return hashMap    
 
@@ -107,7 +102,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
     return hashMap
 
-#Пример использования функции
+# #Пример использования функции
 # class MockHashMap:
 #     def __init__(self):
 #         self.store = {}
@@ -115,8 +110,9 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 #     def put(self, key, value):
 #         self.store[key] = value
 
-# Тестирование функции
+# #Тестирование функции
 # if __name__ == "__main__":
 #     hashMap = MockHashMap()
-#     units_input(hashMap)
+#     #units_input(hashMap)
+#     Get_Orders_Data_To_Table(hashMap)
 #     print('Содержимое hashMap:', hashMap.store)
