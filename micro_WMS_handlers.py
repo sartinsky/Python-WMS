@@ -61,7 +61,7 @@ def units_input(hashMap,_files=None,_data=None):
                     hashMap.put("unit", jrecord['unit_str'])
                     hashMap.put("ShowScreen", "wms.Ввод количества факт по заказу")                    
                 else:    
-                    hashMap.put("toast", "Товар не найден")        
+                    hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
             
