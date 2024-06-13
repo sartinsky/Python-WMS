@@ -102,6 +102,12 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
     return hashMap
 
+def Set_Var(hashMap, _files=None, _data=None)
+
+    hashMap.put("noaddr", 'true')    
+
+    return hashMap
+
 # #Пример использования функции
 # class MockHashMap:
 #     def __init__(self):
