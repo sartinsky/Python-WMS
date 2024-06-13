@@ -11,7 +11,7 @@ def init_on_start(hashMap,_files=None,_data=None):
 def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     
     # Путь к нужной таблице или представлению
-    path = 'wms_orders_captions?and=(typeid.eq.1,done.is.null)&'
+    path = 'wms_orders_captions?and=(typeid.eq.1,done.neq.true)&'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -162,7 +162,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
         response = requests.patch(url,headers=headers,data = json.dumps(data))
 
         # Проверка статуса ответа
-        if response.status_code == 200:
+        if response.status_code in [200, 204]:
             hashMap.put("toast", 'Документ завершен')
             hashMap.put("FinishProcess","") 
         else:
