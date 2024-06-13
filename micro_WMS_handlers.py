@@ -35,9 +35,9 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
 def units_input(hashMap,_files=None,_data=None):
     
-    jrecord = json.loads(hashMap.get("selected_line"))
-    unit_id = str(jrecord['id'])
-    #unit_id = '85'
+    #jrecord = json.loads(hashMap.get("selected_line"))
+    #unit_id = str(jrecord['id'])
+    unit_id = '85'
 
     # Путь к нужной таблице или представлению
     path = 'wms_orders_captions?id=eq.{unit_id}'.format(unit_id=unit_id)
@@ -56,47 +56,47 @@ def units_input(hashMap,_files=None,_data=None):
             jrecord = data[0]
             hashMap.put("order", jrecord['caption'])
             hashMap.put("orderRef", unit_id)
+            Get_OrderGoods_Data_To_Table(hashMap)
             hashMap.put("ShowDialog", "Приемка по заказу начало")
         else:
            hashMap.put("toast", f'Error: {response.status_code}')
-           print(f'Ошибка запроса: {response.status_code} - {response.text}')
+           #print(f'Ошибка запроса: {response.status_code} - {response.text}')
     except Exception as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')
         
     return hashMap  
 
-# def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
+def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
+
+    #unit_id = hashMap.get("orderRef") 
+    unit_id = 85
+    # Путь к нужной таблице или представлению
+    path = 'wms_orders_table?select=Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{unit_id}'.format(unit_id=unit_id)
     
-#     # Путь к нужной таблице или представлению
-#     path = 'wms_orders_table?'
-    
-#     # Полный URL для запроса
-#     url = f'{postgrest_url}/{path}'
+    # Полный URL для запроса
+    url = f'{postgrest_url}/{path}'
 
-#     # Параметры запроса (например, фильтрация данных)
-#     params = {
-#         'select': 'Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.~id~'
-#     }
-
-#     try:
-#         # Логирование перед отправкой запроса
+    try:
+        # Логирование перед отправкой запроса
         
-#         # Отправка GET-запроса
-#         response = requests.get(url, params=params)
+        # Отправка GET-запроса
+        #response = requests.get(url, params=params)
+        response = requests.get(url)
 
-#         # Проверка статуса ответа
-#         if response.status_code == 200:
-#             # Парсинг JSON ответа
-#             data = response.json()
-#             hashMap.put("orders_table", json.dumps(data))
-#         else:
-#             hashMap.put("toast", f'Error: {response.status_code}')
-        
-#     except Exception as e:
-#         hashMap.put("toast", f'Exception occurred: {str(e)}')
-#         #print(f'Исключение: {str(e)}')
+        # Проверка статуса ответа
+        if response.status_code == 200:
+            # Парсинг JSON ответа
+            data = response.json()
+            hashMap.put("table", json.dumps(data))
+            hashMap.put("ShowDialog", "wms.Ввод товара по заказу")
+        else:
+            hashMap.put("toast", f'Error: {response.status_code}')
+            print(f'Ошибка запроса: {response.status_code} - {response.text}')
+    except Exception as e:
+        hashMap.put("toast", f'Exception occurred: {str(e)}')
+        print(f'Исключение: {str(e)}')
 
-#     return hashMap
+    return hashMap
 
 # #Пример использования функции
 # class MockHashMap:
@@ -109,6 +109,7 @@ def units_input(hashMap,_files=None,_data=None):
 # #Тестирование функции
 # if __name__ == "__main__":
 #     hashMap = MockHashMap()
-#     #units_input(hashMap)
 #     Get_Orders_Data_To_Table(hashMap)
+#     units_input(hashMap)
+#     Get_OrderGoods_Data_To_Table(hashMap)
 #     print('Содержимое hashMap:', hashMap.store)
