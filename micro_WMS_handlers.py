@@ -56,7 +56,8 @@ def units_input(hashMap,_files=None,_data=None):
             jrecord = data[0]
             hashMap.put("order", jrecord['caption'])
             hashMap.put("orderRef", unit_id)
-            Get_OrderGoods_Data_To_Table(hashMap)            
+            Get_OrderGoods_Data_To_Table(hashMap)
+            hashMap.put("ShowDialog", "Приемка по заказу начало")
         else:
            hashMap.put("toast", f'Error: {response.status_code}')
            #print(f'Ошибка запроса: {response.status_code} - {response.text}')
