@@ -42,7 +42,7 @@ def units_input(hashMap,_files=None,_data=None):
     if hashMap.get("listener")=="barcode":
     
         barcode = hashMap.get("barcode")
-        path = 'wms_goods?barcode=in.(%22{barcode}%22)'.format(barcode=barcode)
+        path = f'wms_goods?barcode=in.(%22{barcode}%22)'
          # Полный URL для запроса
         url = f'{postgrest_url}/{path}'
 
@@ -68,13 +68,12 @@ def units_input(hashMap,_files=None,_data=None):
             
         except Exception as e:
             hashMap.put("toast", f'Exception occurred: {str(e)}')
-
     else:
         jrecord = json.loads(hashMap.get("selected_line"))
         unit_id = str(jrecord['id'])
         
         # Путь к нужной таблице или представлению
-        path = 'wms_orders_captions?id=eq.{unit_id}'.format(unit_id=unit_id)
+        path = f'wms_orders_captions?id=eq.{unit_id}'
         
         # Полный URL для запроса
         url = f'{postgrest_url}/{path}'
@@ -141,18 +140,51 @@ def goods_record_input(hashMap,_files=None,_data=None):
 
     return hashMap
 
-#Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+def on_btn_done(hashMap,_files=None,_data=None):
 
-    def put(self, key, value):
-        self.store[key] = value
+    unit_id = hashMap.get("orderRef")
+    path = f'wms_orders_captions?id=eq.{unit_id}'
 
-#Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    #Get_Orders_Data_To_Table(hashMap)
-    units_input(hashMap)
-    #Get_OrderGoods_Data_To_Table(hashMap)
-    #print('Содержимое hashMap:', hashMap.store)
+    url = f'{postgrest_url}/{path}'
+
+    # Данные для обновления в формате JSON
+    data = {
+        'done': 'true'
+        }
+
+    # Заголовки для запроса
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    try:
+        # Отправка GET-запроса
+        response = requests.patch(url,headers,data = json.dumps(data))
+
+        # Проверка статуса ответа
+        if response.status_code == 200:
+            hashMap.put("toast", 'Документ завершен')
+            hashMap.put("FinishProcess","") 
+        else:
+            hashMap.put("toast", f'Error: {response.status_code}')
+                #print(f'Ошибка запроса: {response.status_code} - {response.text}')
+    except Exception as e:
+        hashMap.put("toast", f'Exception occurred: {str(e)}')
+
+    return hashMap
+
+# #Пример использования функции
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
+
+#     def put(self, key, value):
+#         self.store[key] = value
+
+# #Тестирование функции
+# if __name__ == "__main__":
+#     hashMap = MockHashMap()
+#     #Get_Orders_Data_To_Table(hashMap)
+#     units_input(hashMap)
+#     #Get_OrderGoods_Data_To_Table(hashMap)
+#     #print('Содержимое hashMap:', hashMap.store)
