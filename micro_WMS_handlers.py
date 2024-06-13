@@ -4,6 +4,10 @@ import json
  # URL вашего PostgREST сервера
 postgrest_url = 'http://192.168.1.109:3000'
 
+
+def init_on_start(hashMap,_files=None,_data=None):
+    return hashMap
+
 def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     
     # Путь к нужной таблице или представлению
