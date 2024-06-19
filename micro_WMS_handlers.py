@@ -3,7 +3,7 @@ import json
 
  # URL вашего PostgREST сервера
 postgrest_url = 'http://192.168.1.114:3000'
-
+timeout = 5
 
 def init_on_start(hashMap,_files=None,_data=None):
     return hashMap
@@ -23,7 +23,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
     try:
         # Отправка GET-запроса
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=timeout)
 
         # Проверка статуса ответа
         if response.status_code == 200:
@@ -48,7 +48,7 @@ def units_input(hashMap,_files=None,_data=None):
 
         try:
             # Отправка GET-запроса
-            response = requests.get(url)
+            response = requests.get(url, timeout=timeout)
 
             # Проверка статуса ответа
             if response.status_code == 200:
@@ -80,7 +80,7 @@ def units_input(hashMap,_files=None,_data=None):
         
         try:
             # Отправка GET-запроса
-            response = requests.get(url)
+            response = requests.get(url, timeout=timeout)
 
             # Проверка статуса ответа
             if response.status_code == 200:
@@ -113,7 +113,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
         
         # Отправка GET-запроса
         #response = requests.get(url, params=params)
-        response = requests.get(url)
+        response = requests.get(url, timeout=timeout)
 
         # Проверка статуса ответа
         if response.status_code == 200:
