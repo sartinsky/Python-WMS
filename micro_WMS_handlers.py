@@ -132,7 +132,12 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
 def Set_Var(hashMap, _files=None, _data=None):
 
-    hashMap.put("noaddr", 'true')
+    CurScreen = hashMap.get("current_screen_name")
+
+    if CurScreen == "wms.Ввод товара по заказу":
+        hashMap.put("noaddr", true)
+    elif CurScreen=="wms.Ввод количества факт по заказу":
+        hashMap.put("noaddr", true)
     return hashMap
 
 def goods_record_input(hashMap,_files=None,_data=None):
@@ -181,10 +186,15 @@ class MockHashMap:
     def put(self, key, value):
         self.store[key] = value
 
+    def get(self, key, default=None):
+        return self.store.get(key, default)
+
 #Тестирование функции
 if __name__ == "__main__":
     hashMap = MockHashMap()
-    Get_Orders_Data_To_Table(hashMap)
+    hashMap.put("current_screen_name","wms.Ввод товара по заказу")
+    #Get_Orders_Data_To_Table(hashMap)
     #units_input(hashMap)
     #Get_OrderGoods_Data_To_Table(hashMap)
     #print('Содержимое hashMap:', hashMap.store)
+    Set_Var(hashMap)
