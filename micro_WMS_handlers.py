@@ -119,8 +119,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
         if response.status_code == 200:
             # Парсинг JSON ответа
             data = response.json()
-            hashMap.put("table", json.dumps(data))
-            #hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
+            hashMap.put("table", json.dumps(data))            
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
             print(f'Ошибка запроса: {response.status_code} - {response.text}')
@@ -178,6 +177,46 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
     return hashMap
 
+def on_input_qtyfact(hashMap,_files=None,_data=None):
+
+    CurScreen = hashMap.get("current_screen_name")
+    if CurScreen == "wms.Ввод количества факт по заказу":
+        
+        # Путь к нужной таблице или представлению
+        path = 'wms_operations'
+        
+        # Полный URL для запроса
+        url = f'{postgrest_url}/{path}'
+
+         # Заголовки для запроса
+        headers = {
+        'Content-Type': 'application/json'
+        }
+        
+        #Параметры запроса (например, фильтрация данных)
+        data = {
+        "sku_id": hashMap.get("qty"),
+        "qty": hashMap.get("nom_id"),
+        "order_id": hashMap.get("orderRef"),
+        "user": hashMap.get("ANDROID_ID"),
+        "address_id": "К РАЗМЕЩЕНИЮ"
+        }
+
+        try:
+            # Отправка GET-запроса
+            response = requests.post(url, json=data, timeout=timeout)
+
+            # Проверка статуса ответа
+            if response.status_code == 201:
+                Get_OrderGoods_Data_To_Table(hashMap)
+                hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
+            else:
+                hashMap.put("toast", f'Error: {response.status_code}')        
+        except Exception as e:
+            hashMap.put("toast", f'Exception occurred: {str(e)}')        
+
+        return hashMap 
+
 #Пример использования функции
 class MockHashMap:
     def __init__(self):
@@ -192,10 +231,11 @@ class MockHashMap:
 #Тестирование функции
 if __name__ == "__main__":
     hashMap = MockHashMap()
-    hashMap.put("listener","barcode")
+    hashMap.put("current_screen_name","wms.Ввод количества факт по заказу")
     hashMap.put("barcode","X001OMTDSV")
     #Get_Orders_Data_To_Table(hashMap)
-    units_input(hashMap)
+    #units_input(hashMap)
     #Get_OrderGoods_Data_To_Table(hashMap)
     #print('Содержимое hashMap:', hashMap.store)
     #Set_Var(hashMap)
+    on_input_qtyfact(hashMap)
