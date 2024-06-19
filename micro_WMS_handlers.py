@@ -195,8 +195,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
         
         #Параметры запроса (например, фильтрация данных)
         data = {
-        "sku_id": hashMap.get("qty"),
-        "qty": hashMap.get("nom_id"),
+        "sku_id": hashMap.get("nom_id"),
+        "qty": hashMap.get("qty"),
         "order_id": hashMap.get("orderRef"),
         "user": hashMap.get("ANDROID_ID"),
         "address_id": "К РАЗМЕЩЕНИЮ"
@@ -229,13 +229,13 @@ class MockHashMap:
         return self.store.get(key, default)
 
 #Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    hashMap.put("current_screen_name","wms.Ввод количества факт по заказу")
-    hashMap.put("barcode","X001OMTDSV")
+#if __name__ == "__main__":
+    # hashMap = MockHashMap()
+    # hashMap.put("current_screen_name","wms.Ввод количества факт по заказу")
+    # hashMap.put("barcode","X001OMTDSV")
     #Get_Orders_Data_To_Table(hashMap)
     #units_input(hashMap)
     #Get_OrderGoods_Data_To_Table(hashMap)
     #print('Содержимое hashMap:', hashMap.store)
     #Set_Var(hashMap)
-    on_input_qtyfact(hashMap)
+#    on_input_qtyfact(hashMap)
