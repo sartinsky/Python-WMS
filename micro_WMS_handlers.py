@@ -58,7 +58,7 @@ def units_input(hashMap,_files=None,_data=None):
                     jrecord = data[0]
                     hashMap.put("nom", jrecord['caption'])
                     hashMap.put("art", jrecord['code'])
-                    hashMap.put("nom_id", jrecord['id'])
+                    hashMap.put("nom_id", str(jrecord['id']))
                     hashMap.put("unit", jrecord['unit_str'])
                     hashMap.put("ShowScreen", "wms.Ввод количества факт по заказу")                    
                 else:    
@@ -192,9 +192,10 @@ class MockHashMap:
 #Тестирование функции
 if __name__ == "__main__":
     hashMap = MockHashMap()
-    hashMap.put("current_screen_name","wms.Ввод товара по заказу")
+    hashMap.put("listener","barcode")
+    hashMap.put("barcode","X001OMTDSV")
     #Get_Orders_Data_To_Table(hashMap)
-    #units_input(hashMap)
+    units_input(hashMap)
     #Get_OrderGoods_Data_To_Table(hashMap)
     #print('Содержимое hashMap:', hashMap.store)
-    Set_Var(hashMap)
+    #Set_Var(hashMap)
