@@ -67,6 +67,7 @@ def on_units_input(hashMap,_files=None,_data=None):
                         hashMap.put("ShowScreen", "wms.Ввод количества факт по заказу")
                     elif CurScreen == "wms.Ввод товара размещение взять":
                         hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
+                        hashMap.put("toast", "Bingo!!!")
                 else:    
                     hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
