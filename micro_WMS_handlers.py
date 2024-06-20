@@ -145,7 +145,8 @@ def Set_Var(hashMap, _files=None, _data=None):
     elif CurScreen=="wms.Ввод количества факт по заказу":
         hashMap.put("noaddr", 'true')
     elif CurScreen=="wms.Ввод количества взять размещение":
-        hashMap.put("noaddr", 'true')    
+        hashMap.put("noaddr", 'true')
+        hashMap.put("toast", hashMap.get("current_screen_name"))
     return hashMap
 
 def goods_record_input(hashMap,_files=None,_data=None):
