@@ -192,39 +192,44 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
     CurScreen = hashMap.get("current_screen_name")
     if CurScreen == "wms.Ввод количества факт по заказу":
         
-        # Путь к нужной таблице или представлению
-        path = 'wms_operations'
-        
-        # Полный URL для запроса
-        url = f'{postgrest_url}/{path}'
+        if listener is None:
 
-         # Заголовки для запроса
-        headers = {
-        'Content-Type': 'application/json'
-        }
-        
-        #Параметры запроса (например, фильтрация данных)
-        data = {
-        "qty": hashMap.get("qty"),
-        "sku_id": hashMap.get("nom_id"),
-        "user": hashMap.get("ANDROID_ID"),
-        "address_id": "К РАЗМЕЩЕНИЮ",
-        "order_id": hashMap.get("orderRef")
-        #"to_operation": "1"
-        }
+            # Путь к нужной таблице или представлению
+            path = 'wms_operations'
+            
+            # Полный URL для запроса
+            url = f'{postgrest_url}/{path}'
 
-        try:
-            # Отправка GET-запроса
-            response = requests.post(url, json=data, timeout=timeout)
+            # Заголовки для запроса
+            headers = {
+            'Content-Type': 'application/json'
+            }
+            
+            #Параметры запроса (например, фильтрация данных)
+            data = {
+            "qty": hashMap.get("qty"),
+            "sku_id": hashMap.get("nom_id"),
+            "user": hashMap.get("ANDROID_ID"),
+            "address_id": "К РАЗМЕЩЕНИЮ",
+            "order_id": hashMap.get("orderRef")
+            #"to_operation": "1"
+            }
 
-            # Проверка статуса ответа
-            if response.status_code == 201:
-                Get_OrderGoods_Data_To_Table(hashMap)
-                hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
-            else:
-                hashMap.put("toast", f'Error: {response.status_code}')        
-        except Exception as e:
-            hashMap.put("toast", f'Exception occurred: {str(e)}')        
+            try:
+                # Отправка GET-запроса
+                response = requests.post(url, json=data, timeout=timeout)
+
+                # Проверка статуса ответа
+                if response.status_code == 201:
+                    Get_OrderGoods_Data_To_Table(hashMap)
+                    hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
+                else:
+                    hashMap.put("toast", f'Error: {response.status_code}')        
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
+        elif listener == "BACK_BUTTON":
+            hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
+
     elif CurScreen == "wms.Ввод количества взять размещение":
 
         if listener is None:
