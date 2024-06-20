@@ -202,6 +202,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
         "qty": hashMap.get("qty"),
         "order_id": hashMap.get("orderRef"),
         "user": hashMap.get("ANDROID_ID"),
+        "to_operation": "1",
         "address_id": "К РАЗМЕЩЕНИЮ"
         }
 
