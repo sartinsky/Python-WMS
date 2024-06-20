@@ -280,6 +280,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 hashMap.put("toast", f'Error: {response.status_code}')        
         except Exception as e:
             hashMap.put("toast", f'Exception occurred: {str(e)}')  
+    else:
+        hashMap.put("toast", "Bingo")  
 
     return hashMap 
 
