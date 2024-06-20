@@ -226,7 +226,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             hashMap.put("toast", f'Exception occurred: {str(e)}')        
     elif CurScreen == "wms.Ввод количества взять размещение":
 
-        hashMap.put("qty_minus", hashMap.get("qty"))        
+        hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))        
 
          # Путь к нужной таблице или представлению
         path = 'wms_operations'
@@ -337,12 +337,15 @@ if __name__ == "__main__":
     hashMap = MockHashMap()
     #hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("barcode","X001OMTDSV")
-    hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
+    hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
     hashMap.put("listener","barcode")
+    hashMap.put("qty","1")
+    hashMap.put("nom_id","86")
+    hashMap.put("ANDROID_ID","380eaecaff29d921")
     #Get_Orders_Data_To_Table(hashMap)
-    on_units_input(hashMap)
+    #on_units_input(hashMap)
     #Get_OrderGoods_Data_To_Table(hashMap)
     #print('Содержимое hashMap:', hashMap.store)
     #Set_Var(hashMap)
-    #on_input_qtyfact(hashMap)
+    on_input_qtyfact(hashMap)
     #get_operators_placing(hashMap)
