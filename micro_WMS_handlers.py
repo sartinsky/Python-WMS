@@ -66,8 +66,7 @@ def on_units_input(hashMap,_files=None,_data=None):
                     if CurScreen == "wms.Ввод товара по заказу":
                         hashMap.put("ShowScreen", "wms.Ввод количества факт по заказу")
                     elif CurScreen == "wms.Ввод товара размещение взять":
-                        hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
-                        hashMap.put("toast", "Bingo!!!")
+                        hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")                        
                 else:    
                     hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
@@ -209,7 +208,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
         "qty": hashMap.get("qty"),
         "order_id": hashMap.get("orderRef"),
         "user": hashMap.get("ANDROID_ID"),
-        "to_operation": "1",
+        #"to_operation": "1",
         "address_id": "К РАЗМЕЩЕНИЮ"
         }
 
@@ -225,8 +224,12 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 hashMap.put("toast", f'Error: {response.status_code}')        
         except Exception as e:
             hashMap.put("toast", f'Exception occurred: {str(e)}')        
+    elif CurScreen == "wms.Ввод количества взять размещение":
 
-        return hashMap 
+        hashMap.put("qty_minus", hashMap.get("qty"))        
+
+
+    return hashMap 
 
 def get_operators_placing(hashMap, _files=None, _data=None):
 
