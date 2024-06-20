@@ -39,6 +39,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
 def units_input(hashMap,_files=None,_data=None):
     
+    CurScreen = hashMap.get("current_screen_name")
     if hashMap.get("listener")=="barcode":
     
         barcode = hashMap.get("barcode")
@@ -60,7 +61,10 @@ def units_input(hashMap,_files=None,_data=None):
                     hashMap.put("art", jrecord['code'])
                     hashMap.put("nom_id", str(jrecord['id']))
                     hashMap.put("unit", jrecord['unit_str'])
-                    hashMap.put("ShowScreen", "wms.Ввод количества факт по заказу")                    
+                    if CurScreen == "wms.Ввод товара по заказу":
+                        hashMap.put("ShowScreen", "wms.Ввод количества факт по заказу")
+                    elif CurScreen == "wms.Ввод товара размещение взять":
+                        hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
                 else:    
                     hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
@@ -122,11 +126,10 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             hashMap.put("table", json.dumps(data))            
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
-            print(f'Ошибка запроса: {response.status_code} - {response.text}')
+            
     except Exception as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')
-        print(f'Исключение: {str(e)}')
-
+        
     return hashMap
 
 def Set_Var(hashMap, _files=None, _data=None):
@@ -162,7 +165,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
     }
 
     try:
-        # Отправка GET-запроса
+        # Отправка PATCH-запроса
         response = requests.patch(url,headers=headers,data = json.dumps(data))
 
         # Проверка статуса ответа
@@ -217,6 +220,45 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         return hashMap 
 
+def get_operators_placing(hashMap, _files=None, _data=None):
+
+    user = hashMap.get("ANDROID_ID") 
+    # Путь к нужной таблице или представлению
+    path = f'rpc/get_operators_placing?user_id={user}&select=Товар:nom,Кол-во:qty'
+    
+    # Полный URL для запроса
+    url = f'{postgrest_url}/{path}'
+
+    try:
+        # Логирование перед отправкой запроса
+        
+        # Отправка GET-запроса
+        response = requests.get(url, timeout=timeout)
+
+        # Проверка статуса ответа
+        if response.status_code == 200:
+            # Парсинг JSON ответа
+            data = response.json()
+            hashMap.put("table", json.dumps(data))            
+        else:
+            hashMap.put("toast", f'Error: {response.status_code}')
+            
+    except Exception as e:
+        hashMap.put("toast", f'Exception occurred: {str(e)}')
+        
+    return hashMap
+
+def on_btn_placing(hashMap,_files=None,_data=None):
+    
+    listener = hashMap.get("listener")
+    CurScreen = hashMap.get("current_screen_name")
+    
+    if listener=="btn_placing":
+        if CurScreen == "wms.Ввод товара размещение взять":
+            hashMap.put("wms.Ввод адреса размещение")
+        
+    return hashMap 
+
 #Пример использования функции
 class MockHashMap:
     def __init__(self):
@@ -229,13 +271,14 @@ class MockHashMap:
         return self.store.get(key, default)
 
 #Тестирование функции
-#if __name__ == "__main__":
-    # hashMap = MockHashMap()
-    # hashMap.put("current_screen_name","wms.Ввод количества факт по заказу")
-    # hashMap.put("barcode","X001OMTDSV")
+if __name__ == "__main__":
+    hashMap = MockHashMap()
+    hashMap.put("ANDROID_ID","380eaecaff29d921")
+    #hashMap.put("barcode","X001OMTDSV")
     #Get_Orders_Data_To_Table(hashMap)
     #units_input(hashMap)
     #Get_OrderGoods_Data_To_Table(hashMap)
     #print('Содержимое hashMap:', hashMap.store)
     #Set_Var(hashMap)
-#    on_input_qtyfact(hashMap)
+    #on_input_qtyfact(hashMap)
+    get_operators_placing(hashMap)
