@@ -11,7 +11,7 @@ def init_on_start(hashMap,_files=None,_data=None):
 def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     
     # Путь к нужной таблице или представлению
-    path = 'wms_orders_captions?and=(typeid.eq.1,done.neq.true)&'
+    path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null))&'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
