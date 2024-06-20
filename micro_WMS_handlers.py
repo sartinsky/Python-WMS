@@ -189,6 +189,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
 def on_input_qtyfact(hashMap,_files=None,_data=None):
 
     listener = hashMap.get("listener")
+    hashMap.put("toast",hashMap.get("listener"))
     CurScreen = hashMap.get("current_screen_name")
     if CurScreen == "wms.Ввод количества факт по заказу":
         
