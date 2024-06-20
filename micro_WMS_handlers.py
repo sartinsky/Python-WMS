@@ -204,12 +204,12 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
         
         #Параметры запроса (например, фильтрация данных)
         data = {
-        "sku_id": hashMap.get("nom_id"),
         "qty": hashMap.get("qty"),
-        "order_id": hashMap.get("orderRef"),
+        "sku_id": hashMap.get("nom_id"),
         "user": hashMap.get("ANDROID_ID"),
-        #"to_operation": "1",
-        "address_id": "К РАЗМЕЩЕНИЮ"
+        "address_id": "К РАЗМЕЩЕНИЮ",
+        "order_id": hashMap.get("orderRef")
+        #"to_operation": "1"
         }
 
         try:
@@ -228,6 +228,57 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         hashMap.put("qty_minus", hashMap.get("qty"))        
 
+         # Путь к нужной таблице или представлению
+        path = 'wms_operations'
+        
+        # Полный URL для запроса
+        url = f'{postgrest_url}/{path}'
+
+         # Заголовки для запроса
+        headers = {
+        'Content-Type': 'application/json'
+        }
+        
+        #Параметры запроса (например, фильтрация данных)
+        data = {
+        "qty": hashMap.get("qty_minus"),
+        "sku_id": hashMap.get("nom_id"),
+        "user": hashMap.get("ANDROID_ID"),
+        "address_id": "К РАЗМЕЩЕНИЮ",
+        }
+
+        try:
+            # Отправка GET-запроса
+            response = requests.post(url, json=data, timeout=timeout)
+
+            # Проверка статуса ответа
+            if response.status_code == 201:
+                
+                #Параметры запроса (например, фильтрация данных)
+                data = {
+                "qty": hashMap.get("qty"),
+                "sku_id": hashMap.get("nom_id"),
+                "user": hashMap.get("ANDROID_ID"),
+                "address_id": hashMap.get("ANDROID_ID"),
+                "to_operation": "1"
+                }
+                
+                try:
+                    # Отправка GET-запроса
+                    response = requests.post(url, json=data, timeout=timeout)
+
+                    # Проверка статуса ответа
+                    if response.status_code == 201:
+                        hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
+                    else:
+                        hashMap.put("toast", f'Error: {response.status_code}')        
+                except Exception as e:
+                    hashMap.put("toast", f'Exception occurred: {str(e)}')
+                
+            else:
+                hashMap.put("toast", f'Error: {response.status_code}')        
+        except Exception as e:
+            hashMap.put("toast", f'Exception occurred: {str(e)}')  
 
     return hashMap 
 
