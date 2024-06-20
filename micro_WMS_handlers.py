@@ -189,7 +189,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
 def on_input_qtyfact(hashMap,_files=None,_data=None):
 
-    hashMap.put("toast", "1")
+    listener = hashMap.get("listener")
     CurScreen = hashMap.get("current_screen_name")
     if CurScreen == "wms.Ввод количества факт по заказу":
         
@@ -226,9 +226,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 hashMap.put("toast", f'Error: {response.status_code}')        
         except Exception as e:
             hashMap.put("toast", f'Exception occurred: {str(e)}')        
-    elif CurScreen == "wms.Ввод количества взять размещение":
+    elif CurScreen == "wms.Ввод количества взять размещение" and listener == "":
 
-        hashMap.put("toast", "2")
         hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
          # Путь к нужной таблице или представлению
