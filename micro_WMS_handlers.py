@@ -255,7 +255,7 @@ def on_btn_placing(hashMap,_files=None,_data=None):
     
     if listener=="btn_placing":
         if CurScreen == "wms.Ввод товара размещение взять":
-            hashMap.put("wms.Ввод адреса размещение")
+            hashMap.put("ShowScreen", "wms.Ввод адреса размещение")
         
     return hashMap 
 
