@@ -37,10 +37,12 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
     return hashMap    
 
-def units_input(hashMap,_files=None,_data=None):
+def on_units_input(hashMap,_files=None,_data=None):
     
     CurScreen = hashMap.get("current_screen_name")
-    if hashMap.get("listener")=="barcode":
+    listener = hashMap.get("listener")
+
+    if listener == "barcode":
     
         barcode = hashMap.get("barcode")
         path = f'wms_goods?barcode=in.(%22{barcode}%22)'
@@ -72,34 +74,36 @@ def units_input(hashMap,_files=None,_data=None):
             
         except Exception as e:
             hashMap.put("toast", f'Exception occurred: {str(e)}')
-    else:
-        jrecord = json.loads(hashMap.get("selected_line"))
-        unit_id = str(jrecord['id'])
-        
-        # Путь к нужной таблице или представлению
-        path = f'wms_orders_captions?id=eq.{unit_id}'
-        
-        # Полный URL для запроса
-        url = f'{postgrest_url}/{path}'
-        
-        try:
-            # Отправка GET-запроса
-            response = requests.get(url, timeout=timeout)
+    elif listener == "TableClick":
+            
+        if CurScreen == "wms.Выбор распоряжения" or  CurScreen == "wms.Ввод товара по заказу":    
+            jrecord = json.loads(hashMap.get("selected_line"))
+            unit_id = str(jrecord['id'])
+            
+            # Путь к нужной таблице или представлению
+            path = f'wms_orders_captions?id=eq.{unit_id}'
+            
+            # Полный URL для запроса
+            url = f'{postgrest_url}/{path}'
+            
+            try:
+                # Отправка GET-запроса
+                response = requests.get(url, timeout=timeout)
 
-            # Проверка статуса ответа
-            if response.status_code == 200:
-                # Парсинг JSON ответа
-                data = response.json()
-                jrecord = data[0]
-                hashMap.put("order", jrecord['caption'])
-                hashMap.put("orderRef", unit_id)
-                Get_OrderGoods_Data_To_Table(hashMap)
-                hashMap.put("ShowScreen", "Приемка по заказу начало")
-            else:
-                hashMap.put("toast", f'Error: {response.status_code}')
-                #print(f'Ошибка запроса: {response.status_code} - {response.text}')
-        except Exception as e:
-            hashMap.put("toast", f'Exception occurred: {str(e)}')
+                # Проверка статуса ответа
+                if response.status_code == 200:
+                    # Парсинг JSON ответа
+                    data = response.json()
+                    jrecord = data[0]
+                    hashMap.put("order", jrecord['caption'])
+                    hashMap.put("orderRef", unit_id)
+                    Get_OrderGoods_Data_To_Table(hashMap)
+                    hashMap.put("ShowScreen", "Приемка по заказу начало")
+                else:
+                    hashMap.put("toast", f'Error: {response.status_code}')
+                    #print(f'Ошибка запроса: {response.status_code} - {response.text}')
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
         
     return hashMap  
 
@@ -254,7 +258,7 @@ def on_btn_placing(hashMap,_files=None,_data=None):
     listener = hashMap.get("listener")
     CurScreen = hashMap.get("current_screen_name")
     
-    if listener=="btn_placing":
+    if listener == "btn_placing":
         if CurScreen == "wms.Ввод товара размещение взять":
             hashMap.put("ShowScreen", "wms.Ввод адреса размещение")
         
@@ -277,7 +281,7 @@ if __name__ == "__main__":
     hashMap.put("ANDROID_ID","380eaecaff29d921")
     #hashMap.put("barcode","X001OMTDSV")
     #Get_Orders_Data_To_Table(hashMap)
-    #units_input(hashMap)
+    #on_units_input(hashMap)
     #Get_OrderGoods_Data_To_Table(hashMap)
     #print('Содержимое hashMap:', hashMap.store)
     #Set_Var(hashMap)
