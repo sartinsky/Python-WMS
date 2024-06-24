@@ -363,6 +363,7 @@ def get_placement_orders(hashMap, _files=None, _data=None):
 
 def on_address_input(hashMap,_files=None,_data=None):
     
+    hashMap.put("toast", "111")
     #CurScreen = hashMap.get("current_screen_name")
     listener = hashMap.get("listener")
 
