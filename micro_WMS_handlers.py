@@ -412,7 +412,6 @@ class MockHashMap:
 #Тестирование функции
 if __name__ == "__main__":
     hashMap = MockHashMap()
-    #hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("barcode","X001OMTDSV")
     hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
     hashMap.put("listener","barcode")
@@ -424,5 +423,6 @@ if __name__ == "__main__":
     #Get_OrderGoods_Data_To_Table(hashMap)
     #print('Содержимое hashMap:', hashMap.store)
     #Set_Var(hashMap)
-    on_input_qtyfact(hashMap)
+    #on_input_qtyfact(hashMap)
     #get_operators_placing(hashMap)
+    on_address_input(hashMap)
