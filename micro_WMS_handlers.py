@@ -45,6 +45,7 @@ def on_units_input(hashMap,_files=None,_data=None):
     if listener == "barcode":
     
         barcode = hashMap.get("barcode")
+        
         path = f'wms_goods?barcode=in.(%22{barcode}%22)'
          # Полный URL для запроса
         url = f'{postgrest_url}/{path}'
@@ -145,7 +146,9 @@ def Set_Var(hashMap, _files=None, _data=None):
     elif CurScreen=="wms.Ввод количества факт по заказу":
         hashMap.put("noaddr", 'true')
     elif CurScreen=="wms.Ввод количества взять размещение":
-        hashMap.put("noaddr", 'true')        
+        hashMap.put("noaddr", 'true')
+    elif CurScreen=="wms.Ввод адреса размещение":
+        hashMap.put("action_str", 'Сканируйте адрес')        
     return hashMap
 
 def goods_record_input(hashMap,_files=None,_data=None):
@@ -189,7 +192,6 @@ def on_btn_done(hashMap,_files=None,_data=None):
 def on_input_qtyfact(hashMap,_files=None,_data=None):
 
     listener = hashMap.get("listener")
-    hashMap.put("toast",hashMap.get("listener"))
     CurScreen = hashMap.get("current_screen_name")
     if CurScreen == "wms.Ввод количества факт по заказу":
         
@@ -331,6 +333,70 @@ def on_btn_placing(hashMap,_files=None,_data=None):
             hashMap.put("ShowScreen", "wms.Ввод адреса размещение")
         
     return hashMap 
+
+def get_placement_orders(hashMap, _files=None, _data=None):
+
+    user = hashMap.get("ANDROID_ID") 
+    # Путь к нужной таблице или представлению
+    path = f'rpc/get_placement_orders?user_id={user}&select=Товар:sku,Ячейка:address,Кол-во:qty'
+            
+    # Полный URL для запроса
+    url = f'{postgrest_url}/{path}'
+
+    try:
+        
+        # Отправка GET-запроса
+        response = requests.get(url, timeout=timeout)
+
+        # Проверка статуса ответа
+        if response.status_code == 200:
+            # Парсинг JSON ответа
+            data = response.json()
+            hashMap.put("addr_table", json.dumps(data))            
+        else:
+            hashMap.put("toast", f'Error: {response.status_code}')
+            
+    except Exception as e:
+        hashMap.put("toast", f'Exception occurred: {str(e)}')
+        
+    return hashMap
+
+def on_address_input(hashMap,_files=None,_data=None):
+    
+    #CurScreen = hashMap.get("current_screen_name")
+    listener = hashMap.get("listener")
+
+    if listener == "barcode":
+    
+        barcode = hashMap.get("barcode")
+        
+        path = f'wms_addresses?barcode=in.(%22{barcode}%22)'
+                
+        # Полный URL для запроса
+        url = f'{postgrest_url}/{path}'
+
+        try:
+            # Отправка GET-запроса
+            response = requests.get(url, timeout=timeout)
+
+            # Проверка статуса ответа
+            if response.status_code == 200:
+                # Парсинг JSON ответа
+                data = response.json()
+                if data:
+                    jrecord = data[0]
+                    hashMap.put("addr", jrecord['caption'])
+                    hashMap.put("id", str(jrecord['id']))
+                    hashMap.put("ShowScreen", "wms.Ввод товара размещение")
+                else:    
+                    hashMap.put("toast", f"Ячейка с штрихкодом {barcode} не найдена")        
+            else:
+                hashMap.put("toast", f'Error: {response.status_code}')
+            
+        except Exception as e:
+            hashMap.put("toast", f'Exception occurred: {str(e)}')
+    
+    return hashMap
 
 #Пример использования функции
 class MockHashMap:
