@@ -67,7 +67,9 @@ def on_units_input(hashMap,_files=None,_data=None):
                     if CurScreen == "wms.Ввод товара по заказу":
                         hashMap.put("ShowScreen", "wms.Ввод количества факт по заказу")
                     elif CurScreen == "wms.Ввод товара размещение взять":
-                        hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")                        
+                        hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
+                    elif CurScreen == "wms.Ввод товара размещение":
+                        hashMap.put("ShowScreen", "wms.Ввод количества размещение")    
                 else:    
                     hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
@@ -363,7 +365,6 @@ def get_placement_orders(hashMap, _files=None, _data=None):
 
 def on_address_input(hashMap,_files=None,_data=None):
     
-    hashMap.put("toast", "111")
     #CurScreen = hashMap.get("current_screen_name")
     listener = hashMap.get("listener")
 
@@ -398,6 +399,40 @@ def on_address_input(hashMap,_files=None,_data=None):
             hashMap.put("toast", f'Exception occurred: {str(e)}')
     
     return hashMap
+
+def get_goods_for_address_placement(hashMap, _files=None, _data=None):
+
+    user = hashMap.get("ANDROID_ID") 
+    address = hashMap.get("addr_id") 
+    # Путь к нужной таблице или представлению
+    path = f'rpc/get_goods_for_address_placement?user_id={user}&address_id={address}&select=Товар:sku,Кол-во:qty'
+           
+    # Полный URL для запроса
+    url = f'{postgrest_url}/{path}'
+
+    try:
+        
+        # Отправка GET-запроса
+        response = requests.get(url, timeout=timeout)
+
+        # Проверка статуса ответа
+        if response.status_code == 200:
+            # Парсинг JSON ответа
+            data = response.json()
+            hashMap.put("table_goods_for_addr", json.dumps(data))            
+        else:
+            hashMap.put("toast", f'Error: {response.status_code}')
+            
+    except Exception as e:
+        hashMap.put("toast", f'Exception occurred: {str(e)}')
+        
+    return hashMap
+
+def on_BACK_BUTTON(hashMap, _files=None, _data=None):
+
+    CurScreen = hashMap.get("current_screen_name")
+    if CurScreen == "wms.Ввод товара размещение":
+        hashMap.put("ShowScreen", "wms.Ввод адреса размещение")
 
 #Пример использования функции
 class MockHashMap:
