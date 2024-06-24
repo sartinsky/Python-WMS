@@ -368,7 +368,7 @@ def on_address_input(hashMap,_files=None,_data=None):
 
     if listener == "barcode":
     
-        barcode = hashMap.get("barcode")
+        barcode = hashMap.get("addr_barcode")
         
         path = f'wms_addresses?barcode=in.(%22{barcode}%22)'
                 
