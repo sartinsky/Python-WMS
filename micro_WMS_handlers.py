@@ -578,13 +578,13 @@ def on_BACK_BUTTON(hashMap, _files=None, _data=None):
         hashMap.put("ShowScreen", "wms.Ввод адреса")    
     return hashMap 
 
-def on_btn_put(hashMap, _files=None, _data=None):
+# def on_btn_put(hashMap, _files=None, _data=None):
 
-    CurScreen = hashMap.get("current_screen_name")
-    if CurScreen == "wms.Ввод адреса":
-        hashMap.put("ShowScreen", "wms.Ввод адреса положить")
+#     CurScreen = hashMap.get("current_screen_name")
+#     if CurScreen == "wms.Ввод адреса":
+#         hashMap.put("ShowScreen", "wms.Ввод адреса положить")
     
-    return hashMap 
+#     return hashMap 
 
 #Пример использования функции
 class MockHashMap:
@@ -598,15 +598,15 @@ class MockHashMap:
         return self.store.get(key, default)
 
 #Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    hashMap.put("barcode","X001OMTDSV")
-    hashMap.put("addr_barcode","1-1-1-1")
-    hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
-    hashMap.put("listener","barcode")
-    hashMap.put("qty","1")
-    hashMap.put("nom_id","86")
-    hashMap.put("ANDROID_ID","380eaecaff29d921")
+#if __name__ == "__main__":
+    #hashMap = MockHashMap()
+    #hashMap.put("barcode","X001OMTDSV")
+    #hashMap.put("addr_barcode","1-1-1-1")
+    #hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
+    #hashMap.put("listener","barcode")
+    #hashMap.put("qty","1")
+    #hashMap.put("nom_id","86")
+    #hashMap.put("ANDROID_ID","380eaecaff29d921")
     #Get_Orders_Data_To_Table(hashMap)
     #on_units_input(hashMap)
     #Get_OrderGoods_Data_To_Table(hashMap)
