@@ -47,15 +47,15 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
     if CurScreen == 'wms.Выбор распоряжения':
         # Путь к нужной таблице или представлению
-        path = 'wms_orders_captions?and=(typeid.eq.1,done.is.null)&select=id:id,Поставщик:contractor,Номер:doc_number'
-               
+        path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null))&select=id:id,Поставщик:contractor,Номер:doc_number'
+        
     elif CurScreen == 'wms.Выбор распоряжения отбор':
         
         # Путь к нужной таблице или представлению
         path = 'wms_orders_captions?and=(typeid.eq.2,done.is.null)&select=id:id,Покупатель:contractor,Номер:doc_number'
-               
+
     # Полный URL для запроса
-    url = f'{postgrest_url}/{path}'
+        url = f'{postgrest_url}/{path}'
 
     try:
         # Отправка GET-запроса
@@ -76,14 +76,14 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
     CurScreen = hashMap.get("current_screen_name")
-    unit_id = hashMap.get("orderRef") 
+    order_id = hashMap.get("orderRef") 
 
     # Путь к нужной таблице или представлению
-    if CurScreen == 'wms.Ввод адреса отбор':
-        path = f'rpc/get_picking?orderid={unit_id}&select=Товар:sku,Адрес:address,Кол-во:qty'
+    if CurScreen == 'Приемка по заказу начало':
+        path = f'wms_orders_table?select=Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{order_id}'
                 
-    else:
-        path = f'wms_orders_table?select=Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{unit_id}'
+    elif CurScreen == 'wms.Ввод адреса отбор':
+        path = f'rpc/get_picking?orderid={order_id}&select=Товар:sku,Адрес:address,Кол-во:qty'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -98,10 +98,11 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             # Парсинг JSON ответа
             data = response.json()
             hashMap.put("central_table", json.dumps(data))
-            if CurScreen == 'wms.Ввод адреса отбор':
-                hashMap.put("addr_table", json.dumps(data))
-            else:    
+            if CurScreen == 'Приемка по заказу начало':
                 hashMap.put("table", json.dumps(data))
+                #hashMap.put("ShowScreen", 'wms.Ввод товара по заказу')
+            elif CurScreen == 'wms.Ввод адреса отбор':    
+                hashMap.put("addr_table", json.dumps(data))
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
             
