@@ -79,7 +79,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
     order_id = hashMap.get("orderRef") 
 
     # Путь к нужной таблице или представлению
-    if CurScreen == 'Приемка по заказу начало':
+    if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу':
         path = f'wms_orders_table?select=Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{order_id}'
                 
     elif CurScreen == 'wms.Ввод адреса отбор':
