@@ -72,6 +72,8 @@ def on_units_input(hashMap,_files=None,_data=None):
                         hashMap.put("ShowScreen", "wms.Ввод количества размещение")
                     elif CurScreen == "wms.Ввод товара приемка факт":
                         hashMap.put("ShowScreen", "wms.Ввод количества факт")    
+                    elif CurScreen == "wms.Ввод товара перемещение":
+                        hashMap.put("ShowScreen", "wms.Ввод количества взять")        
                 else:    
                     hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
@@ -161,6 +163,8 @@ def Set_Var(hashMap, _files=None, _data=None):
         hashMap.put("noaddr", 'true')    
     elif CurScreen=="wms.Ввод адреса":
         hashMap.put("action_str", 'Сканируйте адрес-отправитель')        
+    elif CurScreen=="wms.Ввод товара перемещение":
+        hashMap.put("noaddr", 'true')            
     return hashMap
 
 def goods_record_input(hashMap,_files=None,_data=None):
@@ -570,6 +574,8 @@ def on_BACK_BUTTON(hashMap, _files=None, _data=None):
         hashMap.put("ShowScreen", "wms.Ввод товара размещение")
     elif CurScreen == "wms.Ввод количества взять размещение":
         hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
+    elif CurScreen == "wms.Ввод товара перемещение":
+        hashMap.put("ShowScreen", "wms.Ввод адреса")    
     return hashMap 
 
 def on_btn_put(hashMap, _files=None, _data=None):
