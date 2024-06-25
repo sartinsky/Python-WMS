@@ -159,6 +159,8 @@ def Set_Var(hashMap, _files=None, _data=None):
         hashMap.put("noaddr", 'true')
     elif CurScreen=="wms.Ввод количества факт":
         hashMap.put("noaddr", 'true')    
+    elif CurScreen=="wms.Ввод адреса":
+        hashMap.put("action_str", 'Сканируйте адрес-отправитель')        
     return hashMap
 
 def goods_record_input(hashMap,_files=None,_data=None):
@@ -465,7 +467,7 @@ def get_placement_orders(hashMap, _files=None, _data=None):
 
 def on_address_input(hashMap,_files=None,_data=None):
     
-    #CurScreen = hashMap.get("current_screen_name")
+    CurScreen = hashMap.get("current_screen_name")
     listener = hashMap.get("listener")
 
     if listener == "barcode":
@@ -489,7 +491,10 @@ def on_address_input(hashMap,_files=None,_data=None):
                     jrecord = data[0]
                     hashMap.put("addr_id", str(jrecord['id']))
                     hashMap.put("addr", f"{jrecord['caption']} ({barcode})")
-                    hashMap.put("ShowScreen", "wms.Ввод товара размещение")
+                    if CurScreen == 'wms.Ввод адреса размещение':
+                        hashMap.put("ShowScreen", "wms.Ввод товара размещение")
+                    elif CurScreen == 'wms.Ввод адреса':
+                        hashMap.put("ShowScreen", "wms.Ввод товара перемещение")   
                 else:    
                     hashMap.put("toast", f"Ячейка с штрихкодом {barcode} не найдена")        
             else:
@@ -528,6 +533,34 @@ def get_goods_for_address_placement(hashMap, _files=None, _data=None):
         
     return hashMap
 
+def get_operators_moving(hashMap, _files=None, _data=None):
+
+    user = hashMap.get("ANDROID_ID") 
+    # Путь к нужной таблице или представлению
+    path = f'rpc/get_operators_moving?user_id={user}&select=Товар:nom,Кол-во:qty'
+            
+    # Полный URL для запроса
+    url = f'{postgrest_url}/{path}'
+
+    try:
+        # Логирование перед отправкой запроса
+        
+        # Отправка GET-запроса
+        response = requests.get(url, timeout=timeout)
+
+        # Проверка статуса ответа
+        if response.status_code == 200:
+            # Парсинг JSON ответа
+            data = response.json()
+            hashMap.put("table", json.dumps(data))            
+        else:
+            hashMap.put("toast", f'Error: {response.status_code}')
+            
+    except Exception as e:
+        hashMap.put("toast", f'Exception occurred: {str(e)}')
+        
+    return hashMap
+
 def on_BACK_BUTTON(hashMap, _files=None, _data=None):
 
     CurScreen = hashMap.get("current_screen_name")
@@ -537,6 +570,14 @@ def on_BACK_BUTTON(hashMap, _files=None, _data=None):
         hashMap.put("ShowScreen", "wms.Ввод товара размещение")
     elif CurScreen == "wms.Ввод количества взять размещение":
         hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
+    return hashMap 
+
+def on_btn_put(hashMap, _files=None, _data=None):
+
+    CurScreen = hashMap.get("current_screen_name")
+    if CurScreen == "wms.Ввод адреса":
+        hashMap.put("ShowScreen", "wms.Ввод адреса положить")
+    
     return hashMap 
 
 #Пример использования функции
