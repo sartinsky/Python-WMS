@@ -444,7 +444,7 @@ def on_address_input(hashMap,_files=None,_data=None):
                 data = response.json()
                 if data:
                     jrecord = data[0]
-                    hashMap.put("addr", jrecord['caption'])
+                    hashMap.put("addr", f"{jrecord['caption']} ({barcode})")
                     hashMap.put("id", str(jrecord['id']))
                     hashMap.put("ShowScreen", "wms.Ввод товара размещение")
                 else:    
@@ -511,6 +511,7 @@ class MockHashMap:
 if __name__ == "__main__":
     hashMap = MockHashMap()
     hashMap.put("barcode","X001OMTDSV")
+    hashMap.put("addr_barcode","1-1-1-1")
     hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
     hashMap.put("listener","barcode")
     hashMap.put("qty","1")
