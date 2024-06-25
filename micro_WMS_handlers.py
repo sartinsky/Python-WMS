@@ -36,7 +36,7 @@ def Set_Var(hashMap, _files=None, _data=None):
         hashMap.put("noaddr", 'true')                
     elif CurScreen=="wms.Ввод адреса отбор":
         hashMap.put("action_str", 'Сканируйте адрес ячейки')    
-        hashMap.put("NexAddr", 'Нет задания')    
+        hashMap.put("NextAddr", 'Нет задания')    
     elif CurScreen=="wms.Ввод количества отбор":
         hashMap.put("noaddr", 'false')        
     return hashMap
