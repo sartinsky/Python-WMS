@@ -706,24 +706,24 @@ def on_BACK_BUTTON(hashMap, _files=None, _data=None):
         hashMap.put("ShowScreen", "wms.Ввод товара положить")            
     return hashMap 
 
-# def on_btn_put(hashMap, _files=None, _data=None):
+def on_btn_put(hashMap, _files=None, _data=None):
 
-#     CurScreen = hashMap.get("current_screen_name")
-#     if CurScreen == "wms.Ввод адреса":
-#         hashMap.put("ShowScreen", "wms.Ввод адреса положить")
+    CurScreen = hashMap.get("current_screen_name")
+    if CurScreen == "wms.Ввод адреса":
+        hashMap.put("ShowScreen", "wms.Ввод адреса положить")
     
-#     return hashMap 
+    return hashMap 
 
 #Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
-    def get(self, key, default=None):
-        return self.store.get(key, default)
+#     def get(self, key, default=None):
+#         return self.store.get(key, default)
 
 #Тестирование функции
 #if __name__ == "__main__":
