@@ -47,14 +47,14 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
     if CurScreen == 'wms.Выбор распоряжения':
         # Путь к нужной таблице или представлению
-        path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null))&select=id:id,Поставщик:contractor,Номер:doc_number'
-        
+        path = 'wms_orders_captions?and=(typeid.eq.1,done.is.null)&select=id:id,Поставщик:contractor,Номер:doc_number'
+               
     elif CurScreen == 'wms.Выбор распоряжения отбор':
         
         # Путь к нужной таблице или представлению
         path = 'wms_orders_captions?and=(typeid.eq.2,done.is.null)&select=id:id,Покупатель:contractor,Номер:doc_number'
-
-    # Полный URL для запроса
+               
+        # Полный URL для запроса
         url = f'{postgrest_url}/{path}'
 
     try:
