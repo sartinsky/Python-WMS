@@ -765,41 +765,79 @@ def on_units_input(hashMap,_files=None,_data=None):
         except Exception as e:
             hashMap.put("toast", f'Exception occurred: {str(e)}')
     
-    elif listener == "TableClick":
+    # elif listener == "TableClick":
             
-        if CurScreen == "wms.Выбор распоряжения" or CurScreen == "wms.Ввод товара по заказу" or  CurScreen == "wms.Выбор распоряжения отбор":    
-            jrecord = json.loads(hashMap.get("selected_line"))
-            unit_id = str(jrecord['id'])
+    #     if CurScreen == "wms.Выбор распоряжения" or CurScreen == "wms.Ввод товара по заказу" or  CurScreen == "wms.Выбор распоряжения отбор":    
+    #         jrecord = json.loads(hashMap.get("selected_line"))
+    #         unit_id = str(jrecord['id'])
             
-            # Путь к нужной таблице или представлению
-            path = f'wms_orders_captions?id=eq.{unit_id}'
+    #         # Путь к нужной таблице или представлению
+    #         path = f'wms_orders_captions?id=eq.{unit_id}'
             
-            # Полный URL для запроса
-            url = f'{postgrest_url}/{path}'
+    #         # Полный URL для запроса
+    #         url = f'{postgrest_url}/{path}'
             
-            try:
-                # Отправка GET-запроса
-                response = requests.get(url, timeout=timeout)
+    #         try:
+    #             # Отправка GET-запроса
+    #             response = requests.get(url, timeout=timeout)
 
-                # Проверка статуса ответа
-                if response.status_code == 200:
-                    # Парсинг JSON ответа
-                    data = response.json()
-                    jrecord = data[0]
-                    hashMap.put("order", jrecord['caption'])
-                    hashMap.put("orderRef", unit_id)
-                    Get_OrderGoods_Data_To_Table(hashMap)
-                    if CurScreen == 'wms.Выбор распоряжения отбор':
-                        hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
-                    else:    
-                        hashMap.put("ShowScreen", "Приемка по заказу начало")
-                else:
-                    hashMap.put("toast", f'Error: {response.status_code}')
-                    #print(f'Ошибка запроса: {response.status_code} - {response.text}')
-            except Exception as e:
-                hashMap.put("toast", f'Exception occurred: {str(e)}')
+    #             # Проверка статуса ответа
+    #             if response.status_code == 200:
+    #                 # Парсинг JSON ответа
+    #                 data = response.json()
+    #                 jrecord = data[0]
+    #                 hashMap.put("order", jrecord['caption'])
+    #                 hashMap.put("orderRef", unit_id)
+    #                 Get_OrderGoods_Data_To_Table(hashMap)
+    #                 if CurScreen == 'wms.Выбор распоряжения отбор':
+    #                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
+    #                 else:    
+    #                     hashMap.put("ShowScreen", "Приемка по заказу начало")
+    #             else:
+    #                 hashMap.put("toast", f'Error: {response.status_code}')
+    #                 #print(f'Ошибка запроса: {response.status_code} - {response.text}')
+    #         except Exception as e:
+    #             hashMap.put("toast", f'Exception occurred: {str(e)}')
         
     return hashMap  
+
+def on_TableClick(hashMap,_files=None,_data=None):
+    
+    CurScreen = hashMap.get("current_screen_name")
+    listener = hashMap.get("listener")
+
+    if listener == "TableClick":
+            
+        jrecord = json.loads(hashMap.get("selected_line"))
+        unit_id = str(jrecord['id'])
+            
+        # Путь к нужной таблице или представлению
+        path = f'wms_orders_captions?id=eq.{unit_id}'
+            
+        # Полный URL для запроса
+        url = f'{postgrest_url}/{path}'
+            
+        try:
+            # Отправка GET-запроса
+            response = requests.get(url, timeout=timeout)
+
+            # Проверка статуса ответа
+            if response.status_code == 200:
+                # Парсинг JSON ответа
+                data = response.json()
+                jrecord = data[0]
+                hashMap.put("order", jrecord['caption'])
+                hashMap.put("orderRef", unit_id)
+                if CurScreen == 'wms.Выбор распоряжения отбор':
+                    hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
+                elif CurScreen == 'wms.Выбор распоряжения':    
+                    hashMap.put("ShowScreen", "Приемка по заказу начало")
+            else:
+                hashMap.put("toast", f'Error: {response.status_code}')
+        except Exception as e:
+            hashMap.put("toast", f'Exception occurred: {str(e)}')
+        
+    return hashMap
 
 #Пример использования функции
 # class MockHashMap:
