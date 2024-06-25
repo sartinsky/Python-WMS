@@ -55,7 +55,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
         path = 'wms_orders_captions?and=(typeid.eq.2,done.is.null)&select=id:id,Покупатель:contractor,Номер:doc_number'
 
     # Полный URL для запроса
-        url = f'{postgrest_url}/{path}'
+    url = f'{postgrest_url}/{path}'
 
     try:
         # Отправка GET-запроса
