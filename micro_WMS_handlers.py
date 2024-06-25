@@ -321,12 +321,13 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             }
 
             try:
-                # Отправка GET-запроса
+                # Отправка POST-запроса
                 response = requests.post(url, json=data, timeout=timeout)
 
                 # Проверка статуса ответа
                 if response.status_code == 201:
                     
+                    hashMap.put("toast", hashMap.get("addr_id"))
                     #Параметры запроса (например, фильтрация данных)
                     data = {
                     "qty": hashMap.get("qty"),
