@@ -74,6 +74,8 @@ def on_units_input(hashMap,_files=None,_data=None):
                         hashMap.put("ShowScreen", "wms.Ввод количества факт")    
                     elif CurScreen == "wms.Ввод товара перемещение":
                         hashMap.put("ShowScreen", "wms.Ввод количества взять")        
+                    elif CurScreen == "wms.Ввод товара положить":
+                        hashMap.put("ShowScreen", "wms.Ввод количества положить")            
                 else:    
                     hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
@@ -165,6 +167,10 @@ def Set_Var(hashMap, _files=None, _data=None):
         hashMap.put("action_str", 'Сканируйте адрес-отправитель')        
     elif CurScreen=="wms.Ввод товара перемещение":
         hashMap.put("noaddr", 'true')            
+    elif CurScreen=="wms.Ввод адреса положить":
+        hashMap.put("action_str", 'Сканируйте адрес-получатель')            
+    elif CurScreen=="wms.Ввод товара положить":
+        hashMap.put("noaddr", 'true')                
     return hashMap
 
 def goods_record_input(hashMap,_files=None,_data=None):
@@ -401,6 +407,122 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')                   
 
+    elif CurScreen == "wms.Ввод количества взять":
+
+        if listener is None:
+        
+            hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
+
+            # Путь к нужной таблице или представлению
+            path = 'wms_operations'
+            
+            # Полный URL для запроса
+            url = f'{postgrest_url}/{path}'
+
+            # Заголовки для запроса
+            headers = {
+            'Content-Type': 'application/json'
+            }
+            
+            #Параметры запроса (например, фильтрация данных)
+            data = {
+            "qty": hashMap.get("qty_minus"),
+            "sku_id": hashMap.get("nom_id"),
+            "user": hashMap.get("ANDROID_ID"),
+            "address_id": hashMap.get("addr_id"),
+            }
+
+            try:
+                # Отправка POST-запроса
+                response = requests.post(url, json=data, timeout=timeout)
+
+                # Проверка статуса ответа
+                if response.status_code == 201:
+                    
+                    #Параметры запроса (например, фильтрация данных)
+                    data = {
+                    "qty": hashMap.get("qty"),
+                    "sku_id": hashMap.get("nom_id"),
+                    "user": hashMap.get("ANDROID_ID"),
+                    "address_id": hashMap.get("ANDROID_ID"),
+                    "to_operation": "5",
+                    }
+                    
+                    try:
+                        # Отправка GET-запроса
+                        response = requests.post(url, json=data, timeout=timeout)
+
+                        # Проверка статуса ответа
+                        if response.status_code == 201:
+                            hashMap.put("ShowScreen", "wms.Ввод адреса")
+                        else:
+                            hashMap.put("toast", f'Error: {response.status_code}')        
+                    except Exception as e:
+                        hashMap.put("toast", f'Exception occurred: {str(e)}')
+                    
+                else:
+                    hashMap.put("toast", f'Error: {response.status_code}')        
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
+
+    elif CurScreen == "wms.Ввод количества положить":
+
+        if listener is None:
+        
+            hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
+
+            # Путь к нужной таблице или представлению
+            path = 'wms_operations'
+            
+            # Полный URL для запроса
+            url = f'{postgrest_url}/{path}'
+
+            # Заголовки для запроса
+            headers = {
+            'Content-Type': 'application/json'
+            }
+            
+            #Параметры запроса (например, фильтрация данных)
+            data = {
+            "qty": hashMap.get("qty_minus"),
+            "sku_id": hashMap.get("nom_id"),
+            "user": hashMap.get("ANDROID_ID"),
+            "address_id": hashMap.get("ANDROID_ID"),
+            "to_operation": "5"
+            }
+
+            try:
+                # Отправка POST-запроса
+                response = requests.post(url, json=data, timeout=timeout)
+
+                # Проверка статуса ответа
+                if response.status_code == 201:
+                    
+                    #Параметры запроса (например, фильтрация данных)
+                    data = {
+                    "qty": hashMap.get("qty"),
+                    "sku_id": hashMap.get("nom_id"),
+                    "user": hashMap.get("ANDROID_ID"),
+                    "address_id": hashMap.get("addr_id")                    
+                    }
+                    
+                    try:
+                        # Отправка GET-запроса
+                        response = requests.post(url, json=data, timeout=timeout)
+
+                        # Проверка статуса ответа
+                        if response.status_code == 201:
+                            hashMap.put("ShowScreen", "wms.Ввод адреса положить")
+                        else:
+                            hashMap.put("toast", f'Error: {response.status_code}')        
+                    except Exception as e:
+                        hashMap.put("toast", f'Exception occurred: {str(e)}')
+                    
+                else:
+                    hashMap.put("toast", f'Error: {response.status_code}')        
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')            
+
     return hashMap 
 
 def get_operators_placing(hashMap, _files=None, _data=None):
@@ -499,6 +621,8 @@ def on_address_input(hashMap,_files=None,_data=None):
                         hashMap.put("ShowScreen", "wms.Ввод товара размещение")
                     elif CurScreen == 'wms.Ввод адреса':
                         hashMap.put("ShowScreen", "wms.Ввод товара перемещение")   
+                    elif CurScreen == 'wms.Ввод адреса положить':
+                        hashMap.put("ShowScreen", "wms.Ввод товара положить")       
                 else:    
                     hashMap.put("toast", f"Ячейка с штрихкодом {barcode} не найдена")        
             else:
@@ -576,6 +700,10 @@ def on_BACK_BUTTON(hashMap, _files=None, _data=None):
         hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
     elif CurScreen == "wms.Ввод товара перемещение":
         hashMap.put("ShowScreen", "wms.Ввод адреса")    
+    elif CurScreen == "wms.Ввод товара положить":
+        hashMap.put("ShowScreen", "wms.Ввод адреса")        
+    elif CurScreen == "wms.Ввод количества положить":
+        hashMap.put("ShowScreen", "wms.Ввод товара положить")            
     return hashMap 
 
 # def on_btn_put(hashMap, _files=None, _data=None):
