@@ -445,7 +445,7 @@ def on_address_input(hashMap,_files=None,_data=None):
                 if data:
                     jrecord = data[0]
                     hashMap.put("addr", f"{jrecord['caption']} ({barcode})")
-                    hashMap.put("id", str(jrecord['id']))
+                    hashMap.put("addr_id", str(jrecord['id']))
                     hashMap.put("ShowScreen", "wms.Ввод товара размещение")
                 else:    
                     hashMap.put("toast", f"Ячейка с штрихкодом {barcode} не найдена")        
