@@ -138,7 +138,7 @@ def Get_Picking(hashMap, _files=None, _data=None):
                     jrecord = data[0]
                     hashMap.put("NextAddr", jrecord['address'])
                 else:
-                    hashMap.put("toast", 'Нет данных по пкикингу')    
+                    hashMap.put("toast", 'Нет данных по пиккингу')    
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
                 
@@ -398,7 +398,6 @@ def on_address_input(hashMap,_files=None,_data=None):
 
 def on_input_qtyfact(hashMap,_files=None,_data=None):
 
-    hashMap.put("toast", '111')        
     listener = hashMap.get("listener")
     CurScreen = hashMap.get("current_screen_name")
     if CurScreen == "wms.Ввод количества факт по заказу":
@@ -858,7 +857,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-#Пример использования функции
+# #Пример использования функции
 # class MockHashMap:
 #     def __init__(self):
 #         self.store = {}
@@ -872,20 +871,24 @@ def on_TableClick(hashMap,_files=None,_data=None):
 #Тестирование функции
 #if __name__ == "__main__":
     #hashMap = MockHashMap()
-    #hashMap.put("orderRef","86")
+    # hashMap.put("orderRef","86")
     # hashMap.put("barcode","X001OMTDSV")
     # hashMap.put("addr_barcode","1-1-1-1")
-    #hashMap.put("current_screen_name","wms.Ввод адреса отбор")
+    # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
     # hashMap.put("listener","barcode")
-    # hashMap.put("qty","1")
+    #hashMap.put("qty","1")
     # hashMap.put("nom_id","86")
     # hashMap.put("ANDROID_ID","380eaecaff29d921")
+    #hashMap.put("current_screen_name","wms.Ввод количества отбор")
+    ##hashMap.put("addr", 'Полка 1')
+    #hashMap.put("nom_id", '86')
+    #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
     # Get_Orders_Data_To_Table(hashMap)
     # on_units_input(hashMap)
     # Get_OrderGoods_Data_To_Table(hashMap)
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
-    # on_input_qtyfact(hashMap)
+    #on_input_qtyfact(hashMap)
     # get_operators_placing(hashMap)
     # on_address_input(hashMap)
     #Get_Picking(hashMap)
