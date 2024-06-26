@@ -97,11 +97,11 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
         if response.status_code == 200:
             # Парсинг JSON ответа
             data_with_ids = response.json()
-            data = data_with_ids
+            data = response.json()
 
             for item in data:
-                if 'sku_id' in item:
-                    del item['sku_id']
+                if 'id' in item:
+                    del item['id']
  
             hashMap.put("central_table", json.dumps(data))
             
@@ -110,7 +110,6 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             elif CurScreen == 'wms.Ввод адреса отбор':    
                 hashMap.put("addr_table", json.dumps(data))
                 hashMap.put("data_with_ids", json.dumps(data_with_ids))
-
                 
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
@@ -876,21 +875,21 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-# #Пример использования функции
-# class MockHashMap:
-#     def __init__(self):
-#         self.store = {}
+#Пример использования функции
+class MockHashMap:
+    def __init__(self):
+        self.store = {}
 
-#     def put(self, key, value):
-#         self.store[key] = value
+    def put(self, key, value):
+        self.store[key] = value
 
-#     def get(self, key, default=None):
-#        return self.store.get(key, default)
+    def get(self, key, default=None):
+       return self.store.get(key, default)
 
 #Тестирование функции
-#if __name__ == "__main__":
-    #hashMap = MockHashMap()
-    # hashMap.put("orderRef","86")
+if __name__ == "__main__":
+    hashMap = MockHashMap()
+    hashMap.put("orderRef","86")
     # hashMap.put("barcode","X001OMTDSV")
     # hashMap.put("addr_barcode","1-1-1-1")
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
@@ -898,13 +897,13 @@ def on_TableClick(hashMap,_files=None,_data=None):
     #hashMap.put("qty","1")
     # hashMap.put("nom_id","86")
     # hashMap.put("ANDROID_ID","380eaecaff29d921")
-    #hashMap.put("current_screen_name","wms.Ввод количества отбор")
+    hashMap.put("current_screen_name","wms.Ввод адреса отбор")
     ##hashMap.put("addr", 'Полка 1')
     #hashMap.put("nom_id", '86')
     #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
     # Get_Orders_Data_To_Table(hashMap)
     # on_units_input(hashMap)
-    # Get_OrderGoods_Data_To_Table(hashMap)
+    Get_OrderGoods_Data_To_Table(hashMap)
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
     #on_input_qtyfact(hashMap)
