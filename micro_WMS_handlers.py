@@ -815,8 +815,9 @@ def on_units_input(hashMap,_files=None,_data=None):
                     elif CurScreen == "wms.Ввод товара положить":
                         hashMap.put("ShowScreen", "wms.Ввод количества положить")
                     elif CurScreen == "wms.Ввод товара отбор":
-                        hashMap.put("ShowScreen", "wms.Ввод количества отбор")
-                        filtered_data = [item for item in hashMap.get('data_with_ids') if item.get('sku_id') == hashMap.get('nom_id')]  
+                        
+                        data_with_ids = json.loads(hashMap.get('data_with_ids'))
+                        filtered_data = [item for item in data_with_ids if item.get('sku_id') == hashMap.get('nom_id')]  
                         if not filtered_data:
                             
                             hashMap.put("nom", '')
@@ -826,7 +827,8 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("toast", 'Указанный товар отсутствует в заказе на отбор') 
                             hashMap.put("ShowScreen", "wms.Ввод товара отбор")
 
-                            return hashMap    
+                        else:
+                            hashMap.put("ShowScreen", "wms.Ввод количества отбор")    
                 else:    
                     hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
@@ -890,20 +892,20 @@ class MockHashMap:
 if __name__ == "__main__":
     hashMap = MockHashMap()
     hashMap.put("orderRef","86")
-    # hashMap.put("barcode","X001OMTDSV")
+    hashMap.put("barcode","X001OMTDSV")
     # hashMap.put("addr_barcode","1-1-1-1")
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
-    # hashMap.put("listener","barcode")
+    hashMap.put("listener","barcode")
     #hashMap.put("qty","1")
     # hashMap.put("nom_id","86")
     # hashMap.put("ANDROID_ID","380eaecaff29d921")
-    hashMap.put("current_screen_name","wms.Ввод адреса отбор")
+    hashMap.put("current_screen_name","wms.Ввод товара отбор")
     ##hashMap.put("addr", 'Полка 1')
     #hashMap.put("nom_id", '86')
     #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
     # Get_Orders_Data_To_Table(hashMap)
-    # on_units_input(hashMap)
-    Get_OrderGoods_Data_To_Table(hashMap)
+    on_units_input(hashMap)
+    #Get_OrderGoods_Data_To_Table(hashMap)
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
     #on_input_qtyfact(hashMap)
