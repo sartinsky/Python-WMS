@@ -112,10 +112,10 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
                     return hashMap
                 
-                else:
-                    for item in data:
-                        if 'sku_id' in item:
-                            del item['sku_id']
+                #else:
+                    # for item in data:
+                    #     if 'sku_id' in item:
+                    #         del item['sku_id']
 
             hashMap.put("central_table", json.dumps(data))
             if CurScreen == 'Приемка по заказу начало':
