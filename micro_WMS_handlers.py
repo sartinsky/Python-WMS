@@ -83,7 +83,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
         path = f'wms_orders_table?select=Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{order_id}'
                 
     elif CurScreen == 'wms.Ввод адреса отбор':
-        path = f'rpc/get_picking?orderid={order_id}&select=Товар:sku_id,sku,Адрес:address,Кол-во:qty'
+        path = f'rpc/get_picking?orderid={order_id}&select=id:sku_id,Товар:sku,Адрес:address,Кол-во:qty'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
