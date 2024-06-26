@@ -96,32 +96,20 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
         # Проверка статуса ответа
         if response.status_code == 200:
             # Парсинг JSON ответа
-            data = response.json()
-            
-            if CurScreen == 'wms.Ввод адреса отбор': 
-                
-                filtered_data = [item for item in data if item.get('sku_id') == hashMap.get('nom_id')]  
-                if not filtered_data:
-                    
-                    hashMap.put("nom", '')
-                    hashMap.put("art", '')
-                    hashMap.put("nom_id", '')
-                    hashMap.put("unit", '')
-                    hashMap.put("toast", 'Указанный товар отсутствует в заказе на отбор') 
-                    hashMap.put("ShowScreen", "wms.Ввод товара отбор")
+            data_with_ids = response.json()
+            data = data_with_ids
 
-                    return hashMap
-                
-                #else:
-                    # for item in data:
-                    #     if 'sku_id' in item:
-                    #         del item['sku_id']
-
+            for item in data:
+                if 'sku_id' in item:
+                    del item['sku_id']
+ 
             hashMap.put("central_table", json.dumps(data))
+            
             if CurScreen == 'Приемка по заказу начало':
                 hashMap.put("table", json.dumps(data))                
             elif CurScreen == 'wms.Ввод адреса отбор':    
                 hashMap.put("addr_table", json.dumps(data))
+                hashMap.put("data_with_ids", json.dumps(data_with_ids))
 
                 
         else:
@@ -828,7 +816,18 @@ def on_units_input(hashMap,_files=None,_data=None):
                     elif CurScreen == "wms.Ввод товара положить":
                         hashMap.put("ShowScreen", "wms.Ввод количества положить")
                     elif CurScreen == "wms.Ввод товара отбор":
-                        hashMap.put("ShowScreen", "wms.Ввод количества отбор")    
+                        hashMap.put("ShowScreen", "wms.Ввод количества отбор")
+                        filtered_data = [item for item in hashMap.get('data_with_ids') if item.get('sku_id') == hashMap.get('nom_id')]  
+                        if not filtered_data:
+                            
+                            hashMap.put("nom", '')
+                            hashMap.put("art", '')
+                            hashMap.put("nom_id", '')
+                            hashMap.put("unit", '')
+                            hashMap.put("toast", 'Указанный товар отсутствует в заказе на отбор') 
+                            hashMap.put("ShowScreen", "wms.Ввод товара отбор")
+
+                            return hashMap    
                 else:    
                     hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
