@@ -99,15 +99,51 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             data = response.json()
             hashMap.put("central_table", json.dumps(data))
             if CurScreen == 'Приемка по заказу начало':
-                hashMap.put("table", json.dumps(data))
-                #hashMap.put("ShowScreen", 'wms.Ввод товара по заказу')
+                hashMap.put("table", json.dumps(data))                
             elif CurScreen == 'wms.Ввод адреса отбор':    
                 hashMap.put("addr_table", json.dumps(data))
+
+                
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
             
     except Exception as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')
+        
+    return hashMap
+
+def Get_Picking(hashMap, _files=None, _data=None):
+
+    CurScreen = hashMap.get("current_screen_name")
+    order_id = hashMap.get("orderRef") 
+
+    if CurScreen == 'wms.Ввод адреса отбор':
+
+        # Путь к нужной таблице или представлению
+        path = f'rpc/get_picking?limit=1&orderid={order_id}'
+        
+        # Полный URL для запроса
+        url = f'{postgrest_url}/{path}'
+
+        try:
+            
+            # Отправка GET-запроса
+            response = requests.get(url, timeout=timeout)
+
+            # Проверка статуса ответа
+            if response.status_code == 200:
+                # Парсинг JSON ответа
+                data = response.json()
+                if data:
+                    jrecord = data[0]
+                    hashMap.put("NextAddr", jrecord['address'])
+                else:
+                    hashMap.put("toast", 'Нет данных по пкикингу')    
+            else:
+                hashMap.put("toast", f'Error: {response.status_code}')
+                
+        except Exception as e:
+            hashMap.put("toast", f'Exception occurred: {str(e)}')
         
     return hashMap
 
@@ -310,7 +346,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
             hashMap.put("FinishProcess","") 
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
-                #print(f'Ошибка запроса: {response.status_code} - {response.text}')
+                
     except Exception as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')
 
@@ -831,23 +867,25 @@ def on_TableClick(hashMap,_files=None,_data=None):
 #         self.store[key] = value
 
 #     def get(self, key, default=None):
-#         return self.store.get(key, default)
+#        return self.store.get(key, default)
 
 #Тестирование функции
 #if __name__ == "__main__":
     #hashMap = MockHashMap()
-    #hashMap.put("barcode","X001OMTDSV")
-    #hashMap.put("addr_barcode","1-1-1-1")
-    #hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
-    #hashMap.put("listener","barcode")
-    #hashMap.put("qty","1")
-    #hashMap.put("nom_id","86")
-    #hashMap.put("ANDROID_ID","380eaecaff29d921")
-    #Get_Orders_Data_To_Table(hashMap)
-    #on_units_input(hashMap)
-    #Get_OrderGoods_Data_To_Table(hashMap)
-    #print('Содержимое hashMap:', hashMap.store)
-    #Set_Var(hashMap)
-    #on_input_qtyfact(hashMap)
-    #get_operators_placing(hashMap)
-    #on_address_input(hashMap)
+    #hashMap.put("orderRef","86")
+    # hashMap.put("barcode","X001OMTDSV")
+    # hashMap.put("addr_barcode","1-1-1-1")
+    #hashMap.put("current_screen_name","wms.Ввод адреса отбор")
+    # hashMap.put("listener","barcode")
+    # hashMap.put("qty","1")
+    # hashMap.put("nom_id","86")
+    # hashMap.put("ANDROID_ID","380eaecaff29d921")
+    # Get_Orders_Data_To_Table(hashMap)
+    # on_units_input(hashMap)
+    # Get_OrderGoods_Data_To_Table(hashMap)
+    # print('Содержимое hashMap:', hashMap.store)
+    # Set_Var(hashMap)
+    # on_input_qtyfact(hashMap)
+    # get_operators_placing(hashMap)
+    # on_address_input(hashMap)
+    #Get_Picking(hashMap)
