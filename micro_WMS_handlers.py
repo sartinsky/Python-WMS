@@ -83,7 +83,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
         path = f'wms_orders_table?select=Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{order_id}'
                 
     elif CurScreen == 'wms.Ввод адреса отбор':
-        path = f'rpc/get_picking?orderid={order_id}&select=Товар:sku,Адрес:address,Кол-во:qty'
+        path = f'rpc/get_picking?orderid={order_id}&select=Товар:sku_id,sku,Адрес:address,Кол-во:qty'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -97,6 +97,26 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
         if response.status_code == 200:
             # Парсинг JSON ответа
             data = response.json()
+            
+            if CurScreen == 'wms.Ввод адреса отбор': 
+                
+                filtered_data = [item for item in data if item.get('sku_id') == hashMap.get('nom_id')]  
+                if not filtered_data:
+                    
+                    hashMap.put("nom", '')
+                    hashMap.put("art", '')
+                    hashMap.put("nom_id", '')
+                    hashMap.put("unit", '')
+                    hashMap.put("toast", 'Указанный товар отсутствует в заказе на отбор') 
+                    hashMap.put("ShowScreen", "wms.Ввод товара отбор")
+
+                    return hashMap
+                
+                else:
+                    for item in data:
+                        if 'sku_id' in item:
+                            del item['sku_id']
+
             hashMap.put("central_table", json.dumps(data))
             if CurScreen == 'Приемка по заказу начало':
                 hashMap.put("table", json.dumps(data))                
