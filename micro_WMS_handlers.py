@@ -817,7 +817,7 @@ def on_units_input(hashMap,_files=None,_data=None):
                     elif CurScreen == "wms.Ввод товара отбор":
                         
                         data_with_ids = json.loads(hashMap.get('data_with_ids'))
-                        filtered_data = [item for item in data_with_ids if item.get('sku_id') == hashMap.get('nom_id')]  
+                        filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id']]  
                         if not filtered_data:
                             
                             hashMap.put("nom", '')
@@ -894,7 +894,7 @@ if __name__ == "__main__":
     hashMap.put("orderRef","86")
     hashMap.put("current_screen_name","wms.Ввод адреса отбор")
     Get_OrderGoods_Data_To_Table(hashMap)
-    hashMap.put("barcode","X001OMTDSV")
+    hashMap.put("barcode","2000000000077")
     # hashMap.put("addr_barcode","1-1-1-1")
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
     hashMap.put("listener","barcode")
