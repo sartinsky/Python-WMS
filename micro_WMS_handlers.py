@@ -500,6 +500,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
             "address_id": "К РАЗМЕЩЕНИЮ",
+            "to_operation": "1"
             }
 
             try:
