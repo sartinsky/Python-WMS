@@ -59,6 +59,9 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     elif CurScreen == 'wms.Выбор распоряжения отгрузка':
         path = 'wms_outgoing?select=id:id,Покупатель:contractor,Номер:doc_number'    
 
+    elif CurScreen == 'wms.Выбор распоряжения инвентаризация':
+        path = 'wms_orders_captions?and=(typeid.eq.3,done.is.null)&select=id:id,Склад:contractor,Дата:doc_date_str'
+
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
 
@@ -924,6 +927,8 @@ def on_TableClick(hashMap,_files=None,_data=None):
                     hashMap.put("ShowScreen", "Приемка по заказу начало")
                 elif CurScreen == 'wms.Выбор распоряжения отгрузка':    
                     hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")    
+                elif CurScreen == 'wms.Выбор распоряжения инвентаризация':    
+                    hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")        
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
         except Exception as e:
