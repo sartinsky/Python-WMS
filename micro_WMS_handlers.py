@@ -121,7 +121,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
                 if 'id' in item:
                     del item['id']
  
-            hashMap.put("central_table", json.dumps(data))
+            hashMap.put("central_table", data)
             hashMap.put("data_with_ids", json.dumps(data_with_ids))
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка':
@@ -881,7 +881,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         # Парсинг JSON ответа
                         data = response.json()
 
-                        hashMap.put("central_table", json.dumps(data))
+                        hashMap.put("central_table", data)
                         hashMap.put("ShowScreen", "wms.Ввод адреса инвентаризация")
                             
                     else:
@@ -1006,21 +1006,21 @@ def on_TableClick(hashMap,_files=None,_data=None):
     return hashMap
 
 #Пример использования функции
-# class MockHashMap:
-#     def __init__(self):
-#         self.store = {}
+class MockHashMap:
+    def __init__(self):
+        self.store = {}
 
-#     def put(self, key, value):
-#         self.store[key] = value
+    def put(self, key, value):
+        self.store[key] = value
 
-#     def get(self, key, default=None):
-#        return self.store.get(key, default)
+    def get(self, key, default=None):
+       return self.store.get(key, default)
 
 #Тестирование функции
-#if __name__ == "__main__":
-    #hashMap = MockHashMap()
-    #hashMap.put("orderRef","86")
-    #hashMap.put("current_screen_name","wms.Выбор распоряжения отгрузка")
+if __name__ == "__main__":
+    hashMap = MockHashMap()
+    hashMap.put("orderRef","125")
+    hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
     #Get_Orders_Data_To_Table(hashMap)
     #hashMap.put("barcode","2000000000077")
     # hashMap.put("addr_barcode","1-1-1-1")
@@ -1038,7 +1038,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
     #on_units_input(hashMap)    
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
-    #on_input_qtyfact(hashMap)
+    on_input_qtyfact(hashMap)
     # get_operators_placing(hashMap)
     # on_address_input(hashMap)
     #Get_Picking(hashMap)
