@@ -96,6 +96,9 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
     elif CurScreen == 'wms.Ввод товара отгрузка':
         path = f'wms_outgoing_table?select=id:sku_id,Товар:caption,Артикул:code,Осталось отгрузить:qty&order_id=eq.{order_id}&qty=neq.0'
 
+    elif CurScreen == 'wms.Выбор распоряжения инвентаризация':
+        path = f'rpc/get_inventory_list?orderid={order_id}&select=Товар:nom,План:qty_plan,Факт:qty_fact'
+
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
 
@@ -120,7 +123,9 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка':
                 hashMap.put("table", json.dumps(data))                
             elif CurScreen == 'wms.Ввод адреса отбор':    
-                hashMap.put("addr_table", json.dumps(data))                
+                hashMap.put("addr_table", json.dumps(data))
+            elif CurScreen == 'wms.Выбор распоряжения инвентаризация':    
+                hashMap.put("ShowScreen", "wms.Ввод адреса инвентаризация")
                 
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
@@ -927,8 +932,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
                     hashMap.put("ShowScreen", "Приемка по заказу начало")
                 elif CurScreen == 'wms.Выбор распоряжения отгрузка':    
                     hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")    
-                elif CurScreen == 'wms.Выбор распоряжения инвентаризация':    
-                    hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")        
+                                   
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
         except Exception as e:
