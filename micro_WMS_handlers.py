@@ -85,13 +85,13 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
     # Путь к нужной таблице или представлению
     if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу':
-        path = f'wms_orders_table?select=Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{order_id}'
+        path = f'wms_orders_table?select=id:sku_id,Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{order_id}'
                 
     elif CurScreen == 'wms.Ввод адреса отбор':
         path = f'rpc/get_picking?orderid={order_id}&select=id:sku_id,Товар:sku,Адрес:address,Кол-во:qty'
 
     elif CurScreen == 'wms.Ввод товара отгрузка':
-        path = f'wms_outgoing_table?select=Товар:caption,Артикул:code,Осталось отгрузить:qty&order_id=eq.{order_id}'
+        path = f'wms_outgoing_table?select=id:sku_id,Товар:caption,Артикул:code,Осталось отгрузить:qty&order_id=eq.{order_id}'
 
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -858,7 +858,7 @@ def on_units_input(hashMap,_files=None,_data=None):
                         hashMap.put("ShowScreen", "wms.Ввод количества взять")        
                     elif CurScreen == "wms.Ввод товара положить":
                         hashMap.put("ShowScreen", "wms.Ввод количества положить")
-                    elif CurScreen == "wms.Ввод товара отбор":
+                    elif CurScreen == "wms.Ввод товара отбор" or CurScreen == "wms.Ввод товара отгрузка":
                         
                         data_with_ids = json.loads(hashMap.get('data_with_ids'))
                         filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id']]  
@@ -872,21 +872,11 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("ShowScreen", "wms.Ввод товара отбор")
 
                         else:
-                            hashMap.put("ShowScreen", "wms.Ввод количества отбор")
-                    elif CurScreen == "wms.Ввод товара отгрузка":
-                        data_with_ids = json.loads(hashMap.get('data_with_ids'))
-                        filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id']]  
-                        if not filtered_data:
-                            
-                            hashMap.put("nom", '')
-                            hashMap.put("art", '')
-                            hashMap.put("nom_id", '')
-                            hashMap.put("unit", '')
-                            hashMap.put("toast", 'Указанный товар отсутствует в заказе на отбор') 
-                            hashMap.put("ShowScreen", "wms.Ввод товара отбор")
-
-                        else:
-                            hashMap.put("ShowScreen", "wms.Ввод количества отгрузка")        
+                            if CurScreen == "wms.Ввод товара отбор":
+                                hashMap.put("ShowScreen", "wms.Ввод количества отбор")
+                            elif CurScreen == "wms.Ввод товара отгрузка":
+                                hashMap.put("ShowScreen", "wms.Ввод количества отгрузка")        
+                    
                 else:    
                     hashMap.put("toast", f"Товар с штрихкодом {barcode} не найден")        
             else:
@@ -938,27 +928,28 @@ def on_TableClick(hashMap,_files=None,_data=None):
     return hashMap
 
 #Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
-    def get(self, key, default=None):
-       return self.store.get(key, default)
+#     def get(self, key, default=None):
+#        return self.store.get(key, default)
 
 #Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    hashMap.put("orderRef","86")
-    hashMap.put("current_screen_name","wms.Ввод адреса отбор")
-    Get_OrderGoods_Data_To_Table(hashMap)
-    hashMap.put("barcode","2000000000077")
+#if __name__ == "__main__":
+    #hashMap = MockHashMap()
+    #hashMap.put("orderRef","86")
+    #hashMap.put("current_screen_name","wms.Выбор распоряжения отгрузка")
+    #Get_Orders_Data_To_Table(hashMap)
+    #hashMap.put("barcode","2000000000077")
     # hashMap.put("addr_barcode","1-1-1-1")
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
-    hashMap.put("listener","barcode")
-    hashMap.put("current_screen_name","wms.Ввод товара отбор")
+    #hashMap.put("listener","barcode")
+    #hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
+    #Get_OrderGoods_Data_To_Table(hashMap)
     #hashMap.put("qty","1")
     # hashMap.put("nom_id","86")
     # hashMap.put("ANDROID_ID","380eaecaff29d921")
@@ -966,7 +957,7 @@ if __name__ == "__main__":
     #hashMap.put("nom_id", '86')
     #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
     # Get_Orders_Data_To_Table(hashMap)
-    on_units_input(hashMap)    
+    #on_units_input(hashMap)    
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
     #on_input_qtyfact(hashMap)
