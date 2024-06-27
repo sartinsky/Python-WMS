@@ -459,6 +459,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             "user": hashMap.get("ANDROID_ID"),
             "address_id": "К РАЗМЕЩЕНИЮ",
             "order_id": hashMap.get("orderRef")
+            "to_operation": "1"
             }
 
             try:
