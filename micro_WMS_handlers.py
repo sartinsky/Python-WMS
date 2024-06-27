@@ -121,7 +121,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
                 if 'id' in item:
                     del item['id']
  
-            hashMap.put("central_table", data)
+            hashMap.put("central_table", json.dumps(data))
             hashMap.put("data_with_ids", json.dumps(data_with_ids))
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка':
@@ -881,7 +881,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         # Парсинг JSON ответа
                         data = response.json()
 
-                        hashMap.put("central_table", data)
+                        hashMap.put("central_table", json.dumps(data))
                         hashMap.put("ShowScreen", "wms.Ввод адреса инвентаризация")
                             
                     else:
