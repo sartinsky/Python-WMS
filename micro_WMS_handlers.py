@@ -2,7 +2,7 @@ import requests
 import json
 
  # URL вашего PostgREST сервера
-postgrest_url = 'http://192.168.1.105:3000'
+postgrest_url = 'http://192.168.1.26:3000'
 timeout = 3
 
 def init_on_start(hashMap,_files=None,_data=None):
@@ -178,7 +178,7 @@ def get_operators_placing(hashMap, _files=None, _data=None):
 
     user = hashMap.get("ANDROID_ID") 
     # Путь к нужной таблице или представлению
-    path = f'rpc/get_operators_placing?user_id={user}&select=Товар:nom,Кол-во:qty,id:sku_id'
+    path = f'rpc/get_operators_placing?user_id={user}&select=Товар:nom,Кол-во:qty'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -188,21 +188,12 @@ def get_operators_placing(hashMap, _files=None, _data=None):
         
         # Отправка GET-запроса
         response = requests.get(url, timeout=timeout)
-        
+
         # Проверка статуса ответа
         if response.status_code == 200:
-                        
             # Парсинг JSON ответа
-            data_with_ids = response.json()
             data = response.json()
-
-            for item in data:
-                if 'id' in item:
-                    del item['id']
-            
-            hashMap.put("data_with_ids", json.dumps(data_with_ids))            
-            hashMap.put("table", json.dumps(data))
-            
+            hashMap.put("table", json.dumps(data))            
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
             
@@ -215,7 +206,7 @@ def get_placement_orders(hashMap, _files=None, _data=None):
 
     user = hashMap.get("ANDROID_ID") 
     # Путь к нужной таблице или представлению
-    path = f'rpc/get_placement_orders?user_id={user}&select=Товар:sku,Ячейка:address,Кол-во:qty'
+    path = f'rpc/get_placement_orders?user_id={user}&select=Товар:sku,Ячейка:address,Кол-во:qty,id:sku_id'
             
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -228,7 +219,16 @@ def get_placement_orders(hashMap, _files=None, _data=None):
         # Проверка статуса ответа
         if response.status_code == 200:
             # Парсинг JSON ответа
+            data_with_ids = response.json()
             data = response.json()
+
+            for item in data:
+                if 'id' in item:
+                    del item['id']
+            
+            hashMap.put("data_with_ids", json.dumps(data_with_ids))            
+            hashMap.put("table", json.dumps(data))
+                        
             hashMap.put("addr_table", json.dumps(data))            
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
