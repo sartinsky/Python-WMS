@@ -179,7 +179,7 @@ def get_operators_placing(hashMap, _files=None, _data=None):
     #user = hashMap.get("ANDROID_ID") 
     user = 'К РАЗМЕЩЕНИЮ' 
     # Путь к нужной таблице или представлению
-    path = f'rpc/get_operators_placing?user_id={user}&select=Товар:nom,Кол-во:qty'
+    path = f'rpc/get_operators_placing?user_id={user}&select=id=sku_id,Товар:nom,Кол-во:qty'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -193,8 +193,16 @@ def get_operators_placing(hashMap, _files=None, _data=None):
         # Проверка статуса ответа
         if response.status_code == 200:
             # Парсинг JSON ответа
+            data_with_ids = response.json()
             data = response.json()
-            hashMap.put("table", json.dumps(data))            
+
+            for item in data:
+                if 'id' in item:
+                    del item['id']
+ 
+            hashMap.put("data_with_ids", json.dumps(data_with_ids))
+            hashMap.put("table", json.dumps(data))
+            
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
             
