@@ -965,7 +965,7 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("toast", 'Указанный товар отсутствует в заказе на отбор') 
                             hashMap.put("ShowScreen", "wms.Ввод адреса размещение")
                         else:
-                            hashMap.put("ShowScreen", "wms.Ввод количества размещение")
+                            hashMap.put("ShowScreen", "wms.Ввод товара размещение")
 
                     elif CurScreen == "wms.Ввод товара приемка факт":
                         hashMap.put("ShowScreen", "wms.Ввод количества факт")    
