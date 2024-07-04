@@ -959,7 +959,19 @@ def on_units_input(hashMap,_files=None,_data=None):
                     if CurScreen == "wms.Ввод товара по заказу":
                         hashMap.put("ShowScreen", "wms.Ввод количества факт по заказу")
                     elif CurScreen == "wms.Ввод товара размещение взять":
-                        hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
+                        
+                        data_with_ids = json.loads(hashMap.get('data_with_ids'))
+                        filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id']]  
+                        if not filtered_data:
+                            
+                            hashMap.put("nom", '')
+                            hashMap.put("art", '')
+                            hashMap.put("nom_id", '')
+                            hashMap.put("unit", '')
+                            hashMap.put("toast", 'Указанный товар отсутствует списке на забор для размещения') 
+                            hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
+                        else:
+                            hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
                     elif CurScreen == "wms.Ввод товара размещение":
 
                         data_with_ids = json.loads(hashMap.get('data_with_ids'))
