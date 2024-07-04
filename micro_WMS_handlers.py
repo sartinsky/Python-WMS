@@ -202,7 +202,7 @@ def get_operators_placing(hashMap, _files=None, _data=None):
  
             hashMap.put("data_with_ids", json.dumps(data_with_ids))
             hashMap.put("table", json.dumps(data))
-            
+
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
             
@@ -970,7 +970,7 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("art", '')
                             hashMap.put("nom_id", '')
                             hashMap.put("unit", '')
-                            hashMap.put("toast", 'Указанный товар отсутствует в заказе на отбор') 
+                            hashMap.put("toast", 'Указанный товар отсутствует списке на размещение') 
                             hashMap.put("ShowScreen", "wms.Ввод товара размещение")
                         else:
                             hashMap.put("ShowScreen", "wms.Ввод количества размещение")
