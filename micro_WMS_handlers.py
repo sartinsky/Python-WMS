@@ -176,9 +176,10 @@ def Get_Picking(hashMap, _files=None, _data=None):
 
 def get_operators_placing(hashMap, _files=None, _data=None):
 
-    user = hashMap.get("ANDROID_ID") 
+    user = hashMap.get("ANDROID_ID")
+    placingAddr = 'К РАЗМЕЩЕНИЮ'  
     # Путь к нужной таблице или представлению
-    path = f'rpc/get_operators_placing?user_id={user}&select=Товар:nom,Кол-во:qty'
+    path = f'rpc/get_operators_placing?user_id=in({user},{placingAddr})&select=Товар:nom,Кол-во:qty'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
