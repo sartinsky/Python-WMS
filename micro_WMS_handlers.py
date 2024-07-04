@@ -124,7 +124,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             hashMap.put("central_table", json.dumps(data))
             hashMap.put("data_with_ids", json.dumps(data_with_ids))
             
-            if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка':
+            if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка' or CurScreen == 'wms.Ввод количества факт по заказу':
                 hashMap.put("table", json.dumps(data))                
             elif CurScreen == 'wms.Ввод адреса отбор':    
                 hashMap.put("addr_table", json.dumps(data))
