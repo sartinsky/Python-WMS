@@ -179,7 +179,7 @@ def get_operators_placing(hashMap, _files=None, _data=None):
     #user = hashMap.get("ANDROID_ID") 
     user = 'К РАЗМЕЩЕНИЮ' 
     # Путь к нужной таблице или представлению
-    path = f'rpc/get_operators_placing?user_id={user}&select=id=sku_id,Товар:nom,Кол-во:qty'
+    path = f'rpc/get_operators_placing?user_id={user}&select=id:sku_id,Товар:nom,Кол-во:qty'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
