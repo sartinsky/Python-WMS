@@ -176,10 +176,10 @@ def Get_Picking(hashMap, _files=None, _data=None):
 
 def get_operators_placing(hashMap, _files=None, _data=None):
 
-    user = hashMap.get("ANDROID_ID")
-    placingAddr = 'К РАЗМЕЩЕНИЮ'  
+    #user = hashMap.get("ANDROID_ID") 
+    user = 'К РАЗМЕЩЕНИЮ' 
     # Путь к нужной таблице или представлению
-    path = f'rpc/get_operators_placing?user_id=in({user},{placingAddr})&select=Товар:nom,Кол-во:qty'
+    path = f'rpc/get_operators_placing?user_id={user}&select=Товар:nom,Кол-во:qty'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -1046,8 +1046,8 @@ class MockHashMap:
 #Тестирование функции
 if __name__ == "__main__":
     hashMap = MockHashMap()
-    hashMap.put("orderRef","125")
-    hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
+    #hashMap.put("orderRef","125")
+    #hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
     #Get_Orders_Data_To_Table(hashMap)
     #hashMap.put("barcode","2000000000077")
     # hashMap.put("addr_barcode","1-1-1-1")
@@ -1065,7 +1065,7 @@ if __name__ == "__main__":
     #on_units_input(hashMap)    
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
-    on_input_qtyfact(hashMap)
-    # get_operators_placing(hashMap)
+    #on_input_qtyfact(hashMap)
+    get_operators_placing(hashMap)
     # on_address_input(hashMap)
     #Get_Picking(hashMap)
