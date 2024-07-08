@@ -901,7 +901,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             
             #Параметры запроса (например, фильтрация данных)
             data = {
-            "no_order": str(no_order),
             "qty": hashMap.get("qty"),
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
@@ -1065,6 +1064,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 jrecord = data[0]
                 hashMap.put("order", jrecord['caption'])
                 hashMap.put("orderRef", unit_id)
+                hashMap.put("toast", unit_id)
                 if CurScreen == 'wms.Выбор распоряжения отбор':
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
@@ -1094,30 +1094,26 @@ class MockHashMap:
 if __name__ == "__main__":
     hashMap = MockHashMap()
     #hashMap.put("orderRef","125")
-    hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
+    hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
     #Get_Orders_Data_To_Table(hashMap)
-    hashMap.put("barcode","X001OMTDSV")
-    #hashMap.put("addr_barcode","1-1-1-1")
-    
+    #hashMap.put("barcode","X001OMTDSV")
+    hashMap.put("addr_id","1")
+    hashMap.put("orderRef","1") 
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
-    hashMap.put("listener","barcode")
     #hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
     #Get_OrderGoods_Data_To_Table(hashMap)
-    #hashMap.put("qty","1")
+    hashMap.put("qty","1")
     # hashMap.put("nom_id","86")
-    # hashMap.put("ANDROID_ID","380eaecaff29d921")
+    hashMap.put("ANDROID_ID","380eaecaff29d921")
     ##hashMap.put("addr", 'Полка 1')
-    #hashMap.put("nom_id", '86')
+    hashMap.put("nom_id", '86')
     #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
     # Get_Orders_Data_To_Table(hashMap)
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
     #on_input_qtyfact(hashMap)
-    get_operators_placing(hashMap)
-    on_units_input(hashMap)
-    hashMap.put("current_screen_name","wms.Ввод количества взять размещение")   
-    hashMap.put("listener", None)
-    hashMap.put("qty", 1)
+    # get_operators_placing(hashMap)
+    # on_units_input(hashMap)
     on_input_qtyfact(hashMap) 
     # on_address_input(hashMap)
     #Get_Picking(hashMap)
