@@ -179,7 +179,7 @@ def get_operators_placing(hashMap, _files=None, _data=None):
     #user = hashMap.get("ANDROID_ID") 
     user = 'К РАЗМЕЩЕНИЮ' 
     # Путь к нужной таблице или представлению
-    path = f'rpc/get_operators_placing?user_id={user}&select=id:sku_id,Товар:nom,Кол-во:qty'
+    path = f'rpc/get_operators_placing?user_id={user}&select=id:sku_id,Товар:nom,Кол-во:qty,order_id:id'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -199,6 +199,8 @@ def get_operators_placing(hashMap, _files=None, _data=None):
             for item in data:
                 if 'id' in item:
                     del item['id']
+                if 'order_id' in item:
+                    del item['order_id']    
  
             hashMap.put("data_with_ids", json.dumps(data_with_ids))
             hashMap.put("table", json.dumps(data))
@@ -498,9 +500,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
     elif CurScreen == "wms.Ввод количества взять размещение":
 
         if listener is None:
-        
-            hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
-
+            
             # Путь к нужной таблице или представлению
             path = 'wms_operations'
             
@@ -512,49 +512,61 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             'Content-Type': 'application/json'
             }
             
-            #Параметры запроса (например, фильтрация данных)
-            data = {
-            "no_order": str(no_order),
-            "qty": hashMap.get("qty_minus"),
-            "sku_id": hashMap.get("nom_id"),
-            "user": hashMap.get("ANDROID_ID"),
-            "address_id": "К РАЗМЕЩЕНИЮ",
-            "to_operation": "1"
-            }
+            permit = True
+            filtered_data = hashMap.get("filtered_data")
+            total_qty = int(hashMap.get("qty"))
+            for row in filtered_data:
+                cur_qty = min(total_qty,row['Кол-во'])
+                order_id = row['order_id']
 
-            try:
-                # Отправка GET-запроса
-                response = requests.post(url, json=data, timeout=timeout)
+                hashMap.put("qty_minus", str(-1*cur_qty))
+           
+                #Параметры запроса (например, фильтрация данных)
+                data = {
+                "order_id": str(order_id),    
+                "no_order": str(order_id is None),
+                "qty": hashMap.get("qty_minus"),
+                "sku_id": hashMap.get("nom_id"),
+                "user": hashMap.get("ANDROID_ID"),
+                "address_id": "К РАЗМЕЩЕНИЮ",
+                "to_operation": "1"                
+                }
 
-                # Проверка статуса ответа
-                if response.status_code == 201:
-                    
-                    #Параметры запроса (например, фильтрация данных)
-                    data = {
-                    "no_order": str(no_order),
-                    "qty": hashMap.get("qty"),
-                    "sku_id": hashMap.get("nom_id"),
-                    "user": hashMap.get("ANDROID_ID"),
-                    "address_id": hashMap.get("ANDROID_ID"),
-                    "to_operation": "1"
-                    }
-                    
-                    try:
-                        # Отправка GET-запроса
-                        response = requests.post(url, json=data, timeout=timeout)
+                try:
+                    # Отправка GET-запроса
+                    response = requests.post(url, json=data, timeout=timeout)
 
-                        # Проверка статуса ответа
-                        if response.status_code == 201:
-                            hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
-                        else:
-                            hashMap.put("toast", f'Error: {response.status_code}')        
-                    except Exception as e:
-                        hashMap.put("toast", f'Exception occurred: {str(e)}')
-                    
-                else:
-                    hashMap.put("toast", f'Error: {response.status_code}')        
-            except Exception as e:
-                hashMap.put("toast", f'Exception occurred: {str(e)}')           
+                    # Проверка статуса ответа
+                    if response.status_code == 201:
+                        
+                        #Параметры запроса (например, фильтрация данных)
+                        data = {
+                        "no_order": str(no_order),
+                        "qty": hashMap.get("qty"),
+                        "sku_id": hashMap.get("nom_id"),
+                        "user": hashMap.get("ANDROID_ID"),
+                        "address_id": hashMap.get("ANDROID_ID"),
+                        "to_operation": "1"
+                        }
+                        
+                        try:
+                            # Отправка GET-запроса
+                            response = requests.post(url, json=data, timeout=timeout)
+
+                            # Проверка статуса ответа
+                            if response.status_code == 201:
+                                permit = False
+                            else:
+                                hashMap.put("toast", f'Error: {response.status_code}')        
+                        except Exception as e:
+                            hashMap.put("toast", f'Exception occurred: {str(e)}')
+                        
+                    else:
+                        hashMap.put("toast", f'Error: {response.status_code}')        
+                except Exception as e:
+                    hashMap.put("toast", f'Exception occurred: {str(e)}')
+            if permit:
+                hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")                   
 
     elif CurScreen == "wms.Ввод количества размещение":
 
@@ -971,6 +983,7 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("toast", 'Указанный товар отсутствует списке на забор для размещения') 
                             hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
                         else:
+                            hashMap.put("filtered_data", filtered_data)
                             hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
                     elif CurScreen == "wms.Ввод товара размещение":
 
@@ -1078,15 +1091,15 @@ class MockHashMap:
 
 #Тестирование функции
 if __name__ == "__main__":
-    hashMap = MockHashMap()
+    #hashMap = MockHashMap()
     #hashMap.put("orderRef","125")
-    hashMap.put("current_screen_name","wms.Ввод товара размещение")
+    #hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
     #Get_Orders_Data_To_Table(hashMap)
-    hashMap.put("barcode","2000000000060")
-    hashMap.put("addr_barcode","1-1-1-1")
+    #hashMap.put("barcode","X001OMTDSV")
+    #hashMap.put("addr_barcode","1-1-1-1")
     
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
-    hashMap.put("listener","barcode")
+    #hashMap.put("listener","barcode")
     #hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
     #Get_OrderGoods_Data_To_Table(hashMap)
     #hashMap.put("qty","1")
@@ -1099,7 +1112,11 @@ if __name__ == "__main__":
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
     #on_input_qtyfact(hashMap)
-    get_operators_placing(hashMap)
-    on_units_input(hashMap)    
+    # get_operators_placing(hashMap)
+    # on_units_input(hashMap)
+    # hashMap.put("current_screen_name","wms.Ввод количества взять размещение")   
+    # hashMap.put("listener", None)
+    # hashMap.put("qty", 1)
+    # on_input_qtyfact(hashMap) 
     # on_address_input(hashMap)
     #Get_Picking(hashMap)
