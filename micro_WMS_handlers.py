@@ -901,7 +901,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             
             #Параметры запроса (например, фильтрация данных)
             data = {
-            "qty": hashMap.get("qty"),
+            "qty": hashMap.get("qty_fact"),
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
             "order_id": hashMap.get("orderRef"),
@@ -1064,7 +1064,6 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 jrecord = data[0]
                 hashMap.put("order", jrecord['caption'])
                 hashMap.put("orderRef", unit_id)
-                hashMap.put("toast", unit_id)
                 if CurScreen == 'wms.Выбор распоряжения отбор':
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
