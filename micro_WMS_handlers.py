@@ -1090,7 +1090,7 @@ class MockHashMap:
        return self.store.get(key, default)
 
 #Тестирование функции
-if __name__ == "__main__":
+#if __name__ == "__main__":
     #hashMap = MockHashMap()
     #hashMap.put("orderRef","125")
     #hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
