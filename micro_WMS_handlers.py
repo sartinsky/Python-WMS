@@ -513,7 +513,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             }
             
             permit = False
-            filtered_data = hashMap.get("filtered_data")
+            filtered_data = json.loads(hashMap.get('filtered_data'))
             total_qty = int(hashMap.get("qty"))
             for row in filtered_data:
                 cur_qty = min(total_qty,row['Кол-во'])
@@ -983,7 +983,7 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("toast", 'Указанный товар отсутствует списке на забор для размещения') 
                             hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
                         else:
-                            hashMap.put("filtered_data", filtered_data)
+                            hashMap.put("filtered_data", json.dumps(filtered_data))
                             hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
                     elif CurScreen == "wms.Ввод товара размещение":
 
