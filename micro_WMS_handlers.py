@@ -901,7 +901,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             
             #Параметры запроса (например, фильтрация данных)
             data = {
-            "qty": hashMap.get("qty_fact"),
+            "qty": hashMap.get("qty"),
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
             "order_id": hashMap.get("orderRef"),
@@ -1090,22 +1090,22 @@ class MockHashMap:
        return self.store.get(key, default)
 
 #Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
+#if __name__ == "__main__":
+    #hashMap = MockHashMap()
     #hashMap.put("orderRef","125")
-    hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
+    #hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
     #Get_Orders_Data_To_Table(hashMap)
     #hashMap.put("barcode","X001OMTDSV")
-    hashMap.put("addr_id","1")
-    hashMap.put("orderRef","1") 
+    #hashMap.put("addr_id","1")
+    #hashMap.put("orderRef","1") 
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
     #hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
     #Get_OrderGoods_Data_To_Table(hashMap)
-    hashMap.put("qty","1")
+    #hashMap.put("qty","1")
     # hashMap.put("nom_id","86")
-    hashMap.put("ANDROID_ID","380eaecaff29d921")
+    #hashMap.put("ANDROID_ID","380eaecaff29d921")
     ##hashMap.put("addr", 'Полка 1')
-    hashMap.put("nom_id", '86')
+    #hashMap.put("nom_id", '86')
     #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
     # Get_Orders_Data_To_Table(hashMap)
     # print('Содержимое hashMap:', hashMap.store)
@@ -1113,6 +1113,6 @@ if __name__ == "__main__":
     #on_input_qtyfact(hashMap)
     # get_operators_placing(hashMap)
     # on_units_input(hashMap)
-    on_input_qtyfact(hashMap) 
+    #on_input_qtyfact(hashMap) 
     # on_address_input(hashMap)
     #Get_Picking(hashMap)
