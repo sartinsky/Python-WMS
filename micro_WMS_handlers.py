@@ -1090,16 +1090,16 @@ class MockHashMap:
        return self.store.get(key, default)
 
 #Тестирование функции
-#if __name__ == "__main__":
-    #hashMap = MockHashMap()
+if __name__ == "__main__":
+    hashMap = MockHashMap()
     #hashMap.put("orderRef","125")
-    #hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
+    hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
     #Get_Orders_Data_To_Table(hashMap)
-    #hashMap.put("barcode","X001OMTDSV")
+    hashMap.put("barcode","X001OMTDSV")
     #hashMap.put("addr_barcode","1-1-1-1")
     
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
-    #hashMap.put("listener","barcode")
+    hashMap.put("listener","barcode")
     #hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
     #Get_OrderGoods_Data_To_Table(hashMap)
     #hashMap.put("qty","1")
@@ -1112,8 +1112,8 @@ class MockHashMap:
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
     #on_input_qtyfact(hashMap)
-    # get_operators_placing(hashMap)
-    # on_units_input(hashMap)
+    get_operators_placing(hashMap)
+    on_units_input(hashMap)
     # hashMap.put("current_screen_name","wms.Ввод количества взять размещение")   
     # hashMap.put("listener", None)
     # hashMap.put("qty", 1)
