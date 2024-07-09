@@ -60,8 +60,8 @@ def fill_central_table(data, CurScreen):
     "columns": [
         {"name": "nom", "header": "Товар", "weight": "2"},
         {"name": "qty_plan", "header": "План", "weight": "1", "gravity" : "center"},
-        {"name": "qty_fact", "header": "Факт", "weight": "1"},
-        {"name": "diff",     "header": "Разн.", "weight": "1"}
+        {"name": "qty_fact", "header": "Факт", "weight": "1", "gravity" : "center"},
+        {"name": "diff",     "header": "Разн.", "weight": "1", "gravity" : "center"}
     ],
     "rows": [],
     "colorcells": []
