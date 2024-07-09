@@ -55,7 +55,7 @@ def fill_central_table(data, CurScreen):
     "type": "table",
     "textsize": "25",
     "hidecaption": "false",
-    "hideinterline": "true",
+    "hideinterline": "false",
     "border": "true",
     "columns": [
         {"name": "nom", "header": "Товар", "weight": "2"},
