@@ -54,7 +54,7 @@ def fill_central_table(data, CurScreen):
     j = {
     "type": "table",
     "textsize": "25",
-    "hidecaption": "true",
+    "hidecaption": "false",
     "hideinterline": "true",
     "columns": [
         {"name": "nom", "header": "Товар", "weight": "2"},
@@ -79,6 +79,8 @@ def fill_central_table(data, CurScreen):
         # Проверка условия для выделения красным цветом
         if diff < 0:
             j["colorcells"].append({"row": str(index), "column": "3", "color": "#d81b60"})
+        elif diff > 0:
+            j["colorcells"].append({"row": str(index), "column": "3", "color": "#ffff00"})    
 
     return j
 
