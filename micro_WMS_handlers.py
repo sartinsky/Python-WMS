@@ -78,7 +78,7 @@ def fill_central_table(data, CurScreen):
 
         # Проверка условия для выделения красным цветом
         if diff < 0:
-            j["colorcells"].append({"row": str(index + 1), "column": "4", "color": "#d81b60"})
+            j["colorcells"].append({"row": str(index + 1), "column": "3", "color": "#d81b60"})
 
     return j
 
