@@ -49,6 +49,39 @@ def Set_Var(hashMap, _files=None, _data=None):
         hashMap.put("noaddr", 'true')    
     return hashMap
 
+def fill_central_table(data, CurScreen):
+
+    j = {
+    "type": "table",
+    "textsize": "25",
+    "hidecaption": "true",
+    "hideinterline": "true",
+    "columns": [
+        {"name": "nom", "header": "Товар", "weight": "2"},
+        {"name": "qty_plan", "header": "План", "weight": "1"},
+        {"name": "qty_fact", "header": "Факт", "weight": "1"},
+        {"name": "diff",     "header": "Разн.", "weight": "1"}
+    ],
+    "rows": [],
+    "colorcells": []
+    }        
+
+    # Перебор данных и инициализация таблицы j
+    for index, row in enumerate(data):
+        nom = row["Товар"]
+        qty_plan = row["План"]
+        qty_fact = row["Факт"]
+        diff =   qty_plan - qty_fact
+        
+        # Добавление строки в rows
+        j["rows"].append({"nom": nom, "qty_plan": qty_plan, "qty_fact": qty_fact, "diff": diff})
+
+        # Проверка условия для выделения красным цветом
+        if diff < 0:
+            j["colorcells"].append({"row": str(index + 1), "column": "4", "color": "#d81b60"})
+
+    return j
+
 def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     
     CurScreen = hashMap.get("current_screen_name")
@@ -121,7 +154,8 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
                 if 'id' in item:
                     del item['id']
  
-            hashMap.put("central_table", json.dumps(data))
+            
+            hashMap.put("central_table", json.dumps(fill_central_table(data),CurScreen))
             hashMap.put("data_with_ids", json.dumps(data_with_ids))
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка' or CurScreen == 'wms.Ввод количества факт по заказу':
@@ -928,7 +962,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         # Парсинг JSON ответа
                         data = response.json()
 
-                        hashMap.put("central_table", json.dumps(data))
+                        hashMap.put("central_table", json.dumps(fill_central_table(data),CurScreen))
                         hashMap.put("ShowScreen", "wms.Ввод адреса инвентаризация")
                             
                     else:
