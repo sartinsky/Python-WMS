@@ -155,7 +155,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
                     del item['id']
  
             
-            hashMap.put("central_table", json.dumps(fill_central_table(data),CurScreen))
+            hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen)))
             hashMap.put("data_with_ids", json.dumps(data_with_ids))
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка' or CurScreen == 'wms.Ввод количества факт по заказу':
@@ -1124,11 +1124,11 @@ class MockHashMap:
        return self.store.get(key, default)
 
 #Тестирование функции
-#if __name__ == "__main__":
-    #hashMap = MockHashMap()
-    #hashMap.put("orderRef","125")
-    #hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
-    #Get_Orders_Data_To_Table(hashMap)
+if __name__ == "__main__":
+    hashMap = MockHashMap()
+    hashMap.put("orderRef","125")
+    hashMap.put("current_screen_name","wms.Выбор распоряжения инвентаризация")
+    Get_OrderGoods_Data_To_Table(hashMap)
     #hashMap.put("barcode","X001OMTDSV")
     #hashMap.put("addr_id","1")
     #hashMap.put("orderRef","1") 
