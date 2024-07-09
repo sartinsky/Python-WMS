@@ -371,6 +371,7 @@ def on_BACK_BUTTON(hashMap, _files=None, _data=None):
 
 def on_FORVARD_BUTTON(hashMap, _files=None, _data=None):
 
+    listener = hashMap.get("listener")
     CurScreen = hashMap.get("current_screen_name")
     if CurScreen == "Приемка по заказу начало" and listener is None:
         hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
