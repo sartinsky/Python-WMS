@@ -967,6 +967,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         # Парсинг JSON ответа
                         data = response.json()
 
+                        hashMap.put("table", json.dumps(data))
                         hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen)))
                         hashMap.put("ShowScreen", "wms.Ввод адреса инвентаризация")
                             
