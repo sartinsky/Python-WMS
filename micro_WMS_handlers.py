@@ -2,7 +2,7 @@ import requests
 import json
 
  # URL вашего PostgREST сервера
-postgrest_url = 'http://192.168.1.27:3000'
+postgrest_url = 'http://192.168.1.46:3000'
 timeout = 3
 
 def init_on_start(hashMap,_files=None,_data=None):
@@ -413,6 +413,7 @@ def on_btn_placing(hashMap,_files=None,_data=None):
 
 def on_btn_done(hashMap,_files=None,_data=None):
 
+    CurScreen = hashMap.get("current_screen_name")
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
 
@@ -435,7 +436,15 @@ def on_btn_done(hashMap,_files=None,_data=None):
         # Проверка статуса ответа
         if response.status_code in [200, 204]:
             hashMap.put("toast", 'Документ завершен')
-            hashMap.put("FinishProcess","") 
+            if  CurScreen == 'wms.Ввод адреса инвентаризация':
+                central_table = hashMap.get("central_table")    
+                for row in central_table:
+                    if row['diff'] != 0:
+                        а = 1            
+
+
+
+            hashMap.put("FinishProcess","")        
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
                 
