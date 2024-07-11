@@ -435,15 +435,11 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
         # Проверка статуса ответа
         if response.status_code in [200, 204]:
+            
+            if CurScreen == 'wms.Ввод адреса инвентаризация':
+                on_input_qtyfact(hashMap)            
+            
             hashMap.put("toast", 'Документ завершен')
-            if  CurScreen == 'wms.Ввод адреса инвентаризация':
-                central_table = hashMap.get("central_table")    
-                for row in central_table:
-                    if row['diff'] != 0:
-                        а = 1            
-
-
-
             hashMap.put("FinishProcess","")        
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
@@ -893,6 +889,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     hashMap.put("toast", f'Error: {response.status_code}')        
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')
+    
     elif CurScreen == "wms.Ввод количества отгрузка":
 
         if listener is None:
@@ -987,6 +984,65 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     hashMap.put("toast", f'Error: {response.status_code}')        
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')            
+  
+    elif CurScreen == "wms.Ввод адреса инвентаризация":
+
+        if listener == 'btn_done':
+            
+            order_id = hashMap.get("orderRef")
+            path = f'rpc/get_finished_inventory_list?orderid={order_id}&select=sku_id:sku_id,address_id:address_id,qty:qty'
+
+            url = f'{postgrest_url}/{path}'
+
+            try:
+                
+                # Отправка GET-запроса
+                response = requests.get(url, timeout=timeout)
+
+                # Проверка статуса ответа
+                if response.status_code == 200:
+                    # Парсинг JSON ответа
+                    data = response.json()
+                        
+                else:
+                    hashMap.put("toast", f'Error: {response.status_code}')
+                    return hashMap
+                    
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
+                return hashMap
+
+            # Путь к нужной таблице или представлению
+            path = 'wms_operations'
+            
+            # Полный URL для запроса
+            url = f'{postgrest_url}/{path}'
+
+            # Заголовки для запроса
+            headers = {
+            'Content-Type': 'application/json'
+            }
+            
+            for row in data:
+
+                # #Параметры запроса (например, фильтрация данных)
+                data = {
+                "qty": row["qty"],
+                "sku_id": row["sku_id"],
+                "user": hashMap.get("ANDROID_ID"),
+                "address_id": row["address_id"],
+                "no_order": 'true'
+                }
+
+                try:
+                    # Отправка POST-запроса
+                    response = requests.post(url, json=data, timeout=timeout)
+
+                    # Проверка статуса ответа
+                    if not response.status_code == 201:
+                        hashMap.put("toast", f'Error: {response.status_code}')        
+                except Exception as e:
+                    hashMap.put("toast", f'Exception occurred: {str(e)}')
 
     return hashMap 
 
@@ -1128,22 +1184,23 @@ def on_TableClick(hashMap,_files=None,_data=None):
     return hashMap
 
 #Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
-    def get(self, key, default=None):
-       return self.store.get(key, default)
+#     def get(self, key, default=None):
+#        return self.store.get(key, default)
 
 #Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    hashMap.put("orderRef","125")
-    hashMap.put("current_screen_name","wms.Выбор распоряжения инвентаризация")
-    Get_OrderGoods_Data_To_Table(hashMap)
+# if __name__ == "__main__":
+#     hashMap = MockHashMap()
+#     hashMap.put("orderRef","125")
+#     hashMap.put("current_screen_name","wms.Ввод адреса инвентаризация")
+#     hashMap.put("listener","btn_done")
+#     on_btn_done(hashMap)
     #hashMap.put("barcode","X001OMTDSV")
     #hashMap.put("addr_id","1")
     #hashMap.put("orderRef","1") 
