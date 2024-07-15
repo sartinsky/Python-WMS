@@ -14,6 +14,26 @@ def init_on_start(hashMap,_files=None,_data=None):
     ui_global.init()
     return hashMap
 
+def settings_on_create(hashMap,_files=None,_data=None):
+    if not hashMap.containsKey("_UserLocale"):
+        hashMap.put("get_user_locale","_UserLocale") #get from NoSQL
+    else:
+        hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
+    
+    return hashMap 
+
+def settings_on_input(hashMap,_files=None,_data=None):
+    if hashMap.get("listener")=="lang":
+        hashMap.put("put_user_locale",hashMap.get("lang"))
+        hashMap.put("_UserLocale",hashMap.get("lang")) 
+
+        if hashMap.get("lang")=="Русский":
+            hashMap.put("setLocale","ru")   
+        elif hashMap.get("lang")=="Українська":
+            hashMap.put("setLocale","ua")      
+    
+    return hashMap 
+
 def Set_Var(hashMap, _files=None, _data=None):
 
     CurScreen = hashMap.get("current_screen_name")
