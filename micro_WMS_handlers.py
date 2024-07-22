@@ -114,6 +114,7 @@ def fill_central_table(data, CurScreen):
 
 def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     
+    hashMap.put('toast',user_locale)
     CurScreen = hashMap.get("current_screen_name")
 
     # Путь к нужной таблице или представлению
