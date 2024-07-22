@@ -13,6 +13,7 @@ user_locale = ''
 def init_on_start(hashMap,_files=None,_data=None):
     ui_global.init()
     user_locale = hashMap.get("USER_LOCALE")
+    hashMap.put("toast",user_locale)
     return hashMap
 
 def settings_on_create(hashMap,_files=None,_data=None):
