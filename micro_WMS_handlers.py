@@ -8,9 +8,11 @@ import json
  # URL вашего PostgREST сервера
 postgrest_url = 'http://192.168.1.108:3000'
 timeout = 3
+user_locale = ''
 
 def init_on_start(hashMap,_files=None,_data=None):
     ui_global.init()
+    user_locale = hashMap.get("USER_LOCALE")
     return hashMap
 
 def settings_on_create(hashMap,_files=None,_data=None):
