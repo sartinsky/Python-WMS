@@ -1245,21 +1245,21 @@ def on_TableClick(hashMap,_files=None,_data=None):
     return hashMap
 
 #Пример использования функции
-# class MockHashMap:
-#     def __init__(self):
-#         self.store = {}
+class MockHashMap:
+    def __init__(self):
+        self.store = {}
 
-#     def put(self, key, value):
-#         self.store[key] = value
+    def put(self, key, value):
+        self.store[key] = value
 
-#     def get(self, key, default=None):
-#        return self.store.get(key, default)
+    def get(self, key, default=None):
+       return self.store.get(key, default)
 
 #Тестирование функции
-# if __name__ == "__main__":
-#     hashMap = MockHashMap()
+if __name__ == "__main__":
+    hashMap = MockHashMap()
 #     hashMap.put("orderRef","125")
-#     hashMap.put("current_screen_name","wms.Ввод адреса инвентаризация")
+    hashMap.put("current_screen_name","wms.Выбор распоряжения")
 #     hashMap.put("listener","btn_done")
 #     on_btn_done(hashMap)
     #hashMap.put("barcode","X001OMTDSV")
@@ -1274,7 +1274,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
     ##hashMap.put("addr", 'Полка 1')
     #hashMap.put("nom_id", '86')
     #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
-    # Get_Orders_Data_To_Table(hashMap)
+    Get_Orders_Data_To_Table(hashMap)
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
     #on_input_qtyfact(hashMap)
