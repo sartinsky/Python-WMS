@@ -8,12 +8,10 @@ import json
  # URL вашего PostgREST сервера
 postgrest_url = 'http://192.168.1.108:3000'
 timeout = 3
-user_locale = ''
 
 def init_on_start(hashMap,_files=None,_data=None):
     ui_global.init()
     user_locale = hashMap.get("USER_LOCALE")
-    hashMap.put("toast",user_locale)
     return hashMap
 
 def settings_on_create(hashMap,_files=None,_data=None):
@@ -115,7 +113,7 @@ def fill_central_table(data, CurScreen):
 
 def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     
-    hashMap.put('toast',user_locale)
+    user_locale = hashMap.get("USER_LOCALE")
     CurScreen = hashMap.get("current_screen_name")
 
     # Путь к нужной таблице или представлению
@@ -161,6 +159,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
 def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
+    user_locale = hashMap.get("USER_LOCALE")
     CurScreen = hashMap.get("current_screen_name")
     order_id = hashMap.get("orderRef") 
 
@@ -223,6 +222,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
 def Get_Picking(hashMap, _files=None, _data=None):
 
+    user_locale = hashMap.get("USER_LOCALE")
     CurScreen = hashMap.get("current_screen_name")
     order_id = hashMap.get("orderRef") 
 
@@ -258,7 +258,7 @@ def Get_Picking(hashMap, _files=None, _data=None):
 
 def get_operators_placing(hashMap, _files=None, _data=None):
 
-    #user = hashMap.get("ANDROID_ID") 
+    user_locale = hashMap.get("USER_LOCALE")
     user = 'К РАЗМЕЩЕНИЮ' 
     # Путь к нужной таблице или представлению
     if user_locale == 'ua':
@@ -300,6 +300,7 @@ def get_operators_placing(hashMap, _files=None, _data=None):
 
 def get_placement_orders(hashMap, _files=None, _data=None):
 
+    user_locale = hashMap.get("USER_LOCALE")
     user = hashMap.get("ANDROID_ID") 
     # Путь к нужной таблице или представлению
     if user_locale == 'ua':
@@ -339,6 +340,7 @@ def get_placement_orders(hashMap, _files=None, _data=None):
 
 def get_goods_for_address_placement(hashMap, _files=None, _data=None):
 
+    user_locale = hashMap.get("USER_LOCALE")
     user = hashMap.get("ANDROID_ID") 
     address = hashMap.get("addr_id") 
     # Путь к нужной таблице или представлению
@@ -370,6 +372,7 @@ def get_goods_for_address_placement(hashMap, _files=None, _data=None):
 
 def get_operators_moving(hashMap, _files=None, _data=None):
 
+    user_locale = hashMap.get("USER_LOCALE")
     user = hashMap.get("ANDROID_ID") 
     # Путь к нужной таблице или представлению
     if user_locale == 'ua':
@@ -455,6 +458,7 @@ def on_btn_placing(hashMap,_files=None,_data=None):
 
 def on_btn_done(hashMap,_files=None,_data=None):
 
+    user_locale = hashMap.get("USER_LOCALE")
     CurScreen = hashMap.get("current_screen_name")
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
@@ -496,6 +500,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
 def on_address_input(hashMap,_files=None,_data=None):
     
+    user_locale = hashMap.get("USER_LOCALE")
     CurScreen = hashMap.get("current_screen_name")
     listener = hashMap.get("listener")
 
@@ -545,6 +550,7 @@ def on_address_input(hashMap,_files=None,_data=None):
 
 def on_input_qtyfact(hashMap,_files=None,_data=None):
 
+    user_locale = hashMap.get("USER_LOCALE")
     no_order = not hashMap.get("orderRef")
     listener = hashMap.get("listener")
     CurScreen = hashMap.get("current_screen_name")
@@ -1099,6 +1105,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
 def on_units_input(hashMap,_files=None,_data=None):
     
+    user_locale = hashMap.get("USER_LOCALE")
     CurScreen = hashMap.get("current_screen_name")
     listener = hashMap.get("listener")
 
@@ -1246,22 +1253,22 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-#Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# #Пример использования функции
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
-    def get(self, key, default=None):
-       return self.store.get(key, default)
+#     def get(self, key, default=None):
+#        return self.store.get(key, default)
 
 #Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
+#if __name__ == "__main__":
+#    hashMap = MockHashMap()
 #     hashMap.put("orderRef","125")
-    hashMap.put("current_screen_name","wms.Выбор распоряжения")
+#    hashMap.put("current_screen_name","wms.Выбор распоряжения")
 #     hashMap.put("listener","btn_done")
 #     on_btn_done(hashMap)
     #hashMap.put("barcode","X001OMTDSV")
@@ -1276,7 +1283,7 @@ if __name__ == "__main__":
     ##hashMap.put("addr", 'Полка 1')
     #hashMap.put("nom_id", '86')
     #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
-    Get_Orders_Data_To_Table(hashMap)
+    #Get_Orders_Data_To_Table(hashMap)
     # print('Содержимое hashMap:', hashMap.store)
     # Set_Var(hashMap)
     #on_input_qtyfact(hashMap)
