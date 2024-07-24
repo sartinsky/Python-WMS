@@ -75,7 +75,40 @@ def Set_Var(hashMap, _files=None, _data=None):
         hashMap.put("noaddr", 'true')    
     return hashMap
 
-def fill_central_table(data, CurScreen):
+def fill_central_table(data, CurScreen, user_locale):
+
+    if CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу':
+        columns = [
+        {"name": "nom", "header": "Товар", "weight": "2"},
+        {"name": "qty_plan", "header": "План", "weight": "1", "gravity": "center"},
+        {"name": "qty_fact", "header": "Факт", "weight": "1", "gravity": "center"}
+        ]
+        
+        if user_locale == 'ru':
+            columns.append({"name": "diff",     "header": "Разн.", "weight": "1", "gravity" : "center"})
+        elif user_locale == 'ua':   
+            columns.append({"name": "diff",     "header": "Різн.", "weight": "1", "gravity" : "center"})
+        
+        
+    elif CurScreen == "wms.Ввод адреса отбор":
+        columns = [
+        {"name": "nom", "header": "Товар", "weight": "2"},
+        ]
+
+        if user_locale == 'ru':
+            columns.append({"name": "diff",     "header": "Осталось отобрать", "weight": "1", "gravity" : "center"})
+        elif user_locale == 'ua':   
+            columns.append({"name": "diff",     "header": "Залишилось відібрати", "weight": "1", "gravity" : "center"})
+
+    elif CurScreen == "wms.Ввод товара отгрузка":
+        columns = [
+        {"name": "nom", "header": "Товар", "weight": "2"},
+        ]
+
+        if user_locale == 'ru':
+            columns.append({"name": "diff",     "header": "Осталось отгрузить", "weight": "1", "gravity" : "center"})
+        elif user_locale == 'ua':   
+            columns.append({"name": "diff",     "header": "Залишилось відвантажити", "weight": "1", "gravity" : "center"})
 
     j = {
     "type": "table",
@@ -83,12 +116,7 @@ def fill_central_table(data, CurScreen):
     "hidecaption": "false",
     "hideinterline": "true",
     "borders": "true",
-    "columns": [
-        {"name": "nom", "header": "Товар", "weight": "2"},
-        {"name": "qty_plan", "header": "План", "weight": "1", "gravity" : "center"},
-        {"name": "qty_fact", "header": "Факт", "weight": "1", "gravity" : "center"},
-        {"name": "diff",     "header": "Разн.", "weight": "1", "gravity" : "center"}
-    ],
+    "columns": columns,
     "rows": [],
     "colorcells": []
     }        
@@ -96,18 +124,29 @@ def fill_central_table(data, CurScreen):
     # Перебор данных и инициализация таблицы j
     for index, row in enumerate(data):
         nom = row["Товар"]
-        qty_plan = row["План"]
-        qty_fact = row["Факт"]
-        diff =   qty_plan - qty_fact
-        
-        # Добавление строки в rows
-        j["rows"].append({"nom": nom, "qty_plan": qty_plan, "qty_fact": qty_fact, "diff": diff})
+        if CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу':
+            qty_plan = row["План"]
+            qty_fact = row["Факт"]
+            diff =   qty_plan - qty_fact
+        elif CurScreen == 'wms.Ввод адреса отбор':
+            diff = row["Кол-во"] if user_locale == 'ru' else row["Кіл-ть"]
+        elif CurScreen == '"wms.Ввод товара отгрузка':    
+            diff = row["Осталось отгрузить"] if user_locale == 'ru' else row["Залишилось відвантажити"]
 
-        # Проверка условия для выделения красным цветом
-        if diff < 0:
-            j["colorcells"].append({"row": str(index), "column": "3", "color": "#d81b60"})
-        elif diff > 0:
-            j["colorcells"].append({"row": str(index), "column": "3", "color": "#ffff00"})    
+        
+        if CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу':
+            # Добавление строки в rows
+            j["rows"].append({"nom": nom, "qty_plan": qty_plan, "qty_fact": qty_fact, "diff": diff})
+
+            # Проверка условия для выделения красным цветом
+            if diff < 0:
+                j["colorcells"].append({"row": str(index), "column": "3", "color": "#d81b60"})
+            elif diff > 0:
+                j["colorcells"].append({"row": str(index), "column": "3", "color": "#ffff00"})    
+
+        else:
+             # Добавление строки в rows
+            j["rows"].append({"nom": nom, "diff": diff})
 
     return j
 
@@ -201,7 +240,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
                     del item['id']
  
             
-            hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen)))
+            hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen,user_locale)))
             hashMap.put("data_with_ids", json.dumps(data_with_ids))
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка' or CurScreen == 'wms.Ввод количества факт по заказу':
@@ -1031,7 +1070,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         data = response.json()
 
                         hashMap.put("table", json.dumps(data))
-                        hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen)))
+                        hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen,user_locale)))
                         hashMap.put("ShowScreen", "wms.Ввод адреса инвентаризация")
                             
                     else:
@@ -1264,19 +1303,22 @@ def on_TableClick(hashMap,_files=None,_data=None):
 #     def get(self, key, default=None):
 #        return self.store.get(key, default)
 
-#Тестирование функции
-#if __name__ == "__main__":
-#    hashMap = MockHashMap()
-#     hashMap.put("orderRef","125")
-#    hashMap.put("current_screen_name","wms.Выбор распоряжения")
-#     hashMap.put("listener","btn_done")
-#     on_btn_done(hashMap)
+# #Тестирование функции
+# if __name__ == "__main__":
+#     hashMap = MockHashMap()
+#     hashMap.put("orderRef","126")
+#     hashMap.put("current_screen_name","wms.Ввод адреса отбор")
+#     hashMap.put("USER_LOCALE","ua")
+#     Set_Var(hashMap)
+#     Get_OrderGoods_Data_To_Table(hashMap)
+#     Get_Picking(hashMap)
+    #on_btn_done(hashMap)
     #hashMap.put("barcode","X001OMTDSV")
     #hashMap.put("addr_id","1")
     #hashMap.put("orderRef","1") 
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
     #hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
-    #Get_OrderGoods_Data_To_Table(hashMap)
+    
     #hashMap.put("qty","1")
     # hashMap.put("nom_id","86")
     #hashMap.put("ANDROID_ID","380eaecaff29d921")
@@ -1285,10 +1327,9 @@ def on_TableClick(hashMap,_files=None,_data=None):
     #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
     #Get_Orders_Data_To_Table(hashMap)
     # print('Содержимое hashMap:', hashMap.store)
-    # Set_Var(hashMap)
     #on_input_qtyfact(hashMap)
     # get_operators_placing(hashMap)
     # on_units_input(hashMap)
     #on_input_qtyfact(hashMap) 
     # on_address_input(hashMap)
-    #Get_Picking(hashMap)
+    
