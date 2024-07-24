@@ -1218,8 +1218,7 @@ def on_units_input(hashMap,_files=None,_data=None):
  
                         data_with_ids = json.loads(hashMap.get('data_with_ids'))
                         if CurScreen == "wms.Ввод товара отбор":
-                            addressid = 'Адрес' if user_locale == 'ua' else 'Адреса'
-                            filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id'] and item[addressid] == jrecord[addressid]]  
+                            filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id'] and item['Адрес' if user_locale == 'ru' else 'Адреса'] == hashMap.get('addr_id')]  
                         else:    
                             filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id']]  
                         if not filtered_data:
@@ -1296,29 +1295,37 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-# #Пример использования функции
-# class MockHashMap:
-#     def __init__(self):
-#         self.store = {}
+#Пример использования функции
+class MockHashMap:
+    def __init__(self):
+        self.store = {}
 
-#     def put(self, key, value):
-#         self.store[key] = value
+    def put(self, key, value):
+        self.store[key] = value
 
-#     def get(self, key, default=None):
-#        return self.store.get(key, default)
+    def get(self, key, default=None):
+       return self.store.get(key, default)
 
-# #Тестирование функции
-# if __name__ == "__main__":
-#     hashMap = MockHashMap()
-#     hashMap.put("orderRef","126")
-#     hashMap.put("current_screen_name","wms.Ввод адреса отбор")
-#     hashMap.put("USER_LOCALE","ua")
-#     Set_Var(hashMap)
-#     Get_OrderGoods_Data_To_Table(hashMap)
-#     Get_Picking(hashMap)
+#Тестирование функции
+if __name__ == "__main__":
+    hashMap = MockHashMap()
+    hashMap.put("orderRef","126")
+    hashMap.put("current_screen_name","wms.Ввод адреса отбор")
+    hashMap.put("USER_LOCALE","ua")
+    Set_Var(hashMap)
+    Get_OrderGoods_Data_To_Table(hashMap)
+    Get_Picking(hashMap)
+
+    hashMap.put("listener","barcode")
+    hashMap.put("addr_barcode","1-1-1-1-1")
+    on_address_input(hashMap)
+    hashMap.put("current_screen_name","wms.Ввод товара отбор")
+    hashMap.put("barcode","2000000000145")
+    on_units_input(hashMap)
+
     #on_btn_done(hashMap)
-    #hashMap.put("barcode","X001OMTDSV")
-    #hashMap.put("addr_id","1")
+    
+    
     #hashMap.put("orderRef","1") 
     # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
     #hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
@@ -1333,7 +1340,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
     # print('Содержимое hashMap:', hashMap.store)
     #on_input_qtyfact(hashMap)
     # get_operators_placing(hashMap)
-    # on_units_input(hashMap)
+    
     #on_input_qtyfact(hashMap) 
-    # on_address_input(hashMap)
+    
     
