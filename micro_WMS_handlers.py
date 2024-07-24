@@ -130,7 +130,7 @@ def fill_central_table(data, CurScreen, user_locale):
             diff =   qty_plan - qty_fact
         elif CurScreen == 'wms.Ввод адреса отбор':
             diff = row["Кол-во"] if user_locale == 'ru' else row["Кіл-ть"]
-        elif CurScreen == '"wms.Ввод товара отгрузка':    
+        elif CurScreen == 'wms.Ввод товара отгрузка':    
             diff = row["Осталось отгрузить"] if user_locale == 'ru' else row["Залишилось відвантажити"]
 
         
@@ -1310,18 +1310,18 @@ class MockHashMap:
 if __name__ == "__main__":
     hashMap = MockHashMap()
     hashMap.put("orderRef","126")
-    hashMap.put("current_screen_name","wms.Ввод адреса отбор")
+    hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
     hashMap.put("USER_LOCALE","ua")
     Set_Var(hashMap)
     Get_OrderGoods_Data_To_Table(hashMap)
-    Get_Picking(hashMap)
+    #Get_Picking(hashMap)
 
-    hashMap.put("listener","barcode")
-    hashMap.put("addr_barcode","1-1-1-1-1")
-    on_address_input(hashMap)
-    hashMap.put("current_screen_name","wms.Ввод товара отбор")
-    hashMap.put("barcode","2000000000145")
-    on_units_input(hashMap)
+    # hashMap.put("listener","barcode")
+    # hashMap.put("addr_barcode","1-1-1-1-1")
+    # on_address_input(hashMap)
+    # hashMap.put("current_screen_name","wms.Ввод товара отбор")
+    # hashMap.put("barcode","2000000000145")
+    # on_units_input(hashMap)
 
     #on_btn_done(hashMap)
     
