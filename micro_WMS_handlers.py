@@ -1215,9 +1215,13 @@ def on_units_input(hashMap,_files=None,_data=None):
                     elif CurScreen == "wms.Ввод товара положить":
                         hashMap.put("ShowScreen", "wms.Ввод количества положить")
                     elif CurScreen == "wms.Ввод товара отбор" or CurScreen == "wms.Ввод товара отгрузка":
-                        
+ 
                         data_with_ids = json.loads(hashMap.get('data_with_ids'))
-                        filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id']]  
+                        if CurScreen == "wms.Ввод товара отбор":
+                            addressid = 'Адрес' if user_locale == 'ua' else 'Адреса'
+                            filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id'] and item[addressid] == jrecord[addressid]]  
+                        else:    
+                            filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id']]  
                         if not filtered_data:
                             
                             hashMap.put("nom", '')
