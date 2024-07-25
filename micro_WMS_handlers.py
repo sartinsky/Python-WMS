@@ -77,7 +77,8 @@ def Set_Var(hashMap, _files=None, _data=None):
 
 def fill_central_table(data, CurScreen, user_locale):
 
-    if CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу':
+    if (CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало'
+       or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод количества инвентаризация'):
         columns = [
         {"name": "nom", "header": "Товар", "weight": "2"},
         {"name": "qty_plan", "header": "План", "weight": "1", "gravity": "center"},
@@ -124,7 +125,8 @@ def fill_central_table(data, CurScreen, user_locale):
     # Перебор данных и инициализация таблицы j
     for index, row in enumerate(data):
         nom = row["Товар"]
-        if CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу':
+        if (CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало'
+       or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод количества инвентаризация'):
             qty_plan = row["План"]
             qty_fact = row["Факт"]
             diff =   qty_plan - qty_fact
@@ -134,7 +136,8 @@ def fill_central_table(data, CurScreen, user_locale):
             diff = row["Осталось отгрузить"] if user_locale == 'ru' else row["Залишилось відвантажити"]
 
         
-        if CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу':
+        if (CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало'
+       or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод количества инвентаризация'):
             # Добавление строки в rows
             j["rows"].append({"nom": nom, "qty_plan": qty_plan, "qty_fact": qty_fact, "diff": diff})
 
@@ -1309,13 +1312,21 @@ class MockHashMap:
 #Тестирование функции
 if __name__ == "__main__":
     hashMap = MockHashMap()
-    hashMap.put("orderRef","126")
-    hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
+    hashMap.put("orderRef","129")
+    hashMap.put("current_screen_name","wms.Выбор распоряжения инвентаризация")
     hashMap.put("USER_LOCALE","ua")
-    Set_Var(hashMap)
+    on_TableClick(hashMap)
     Get_OrderGoods_Data_To_Table(hashMap)
+    hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
+    hashMap.put("addr_id", '2')
+    hashMap.put("nom", 'Автолампа')
+    hashMap.put("art", '')
+    hashMap.put("nom_id", '102')
+    hashMap.put("listener", None)
+    hashMap.put("qty",'1')
+    on_input_qtyfact(hashMap)
     #Get_Picking(hashMap)
-
+    #Set_Var(hashMap)
     # hashMap.put("listener","barcode")
     # hashMap.put("addr_barcode","1-1-1-1-1")
     # on_address_input(hashMap)
