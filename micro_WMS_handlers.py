@@ -546,8 +546,8 @@ def on_btn_Create_Doc(hashMap,_files=None,_data=None):
     CurScreen = hashMap.get("current_screen_name")
     if CurScreen == 'wms.Данные приходной накладной':
         if hashMap.get('incomedoc_contragent_name') and hashMap.get('incomedoc_contragent_code') and hashMap.get('incomedoc_num') and hashMap.get('incomedoc_date'):
-            a = 1;
-            
+            hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
+
         else:
             if user_locale == 'ua':
                 hashMap.put("toast", 'Не заповнено ВСЮ інформацію про документ')
