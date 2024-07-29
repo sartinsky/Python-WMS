@@ -540,6 +540,23 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
     return hashMap
 
+def on_btn_Create_Doc(hashMap,_files=None,_data=None):
+
+    user_locale = hashMap.get("USER_LOCALE")
+    CurScreen = hashMap.get("current_screen_name")
+    if CurScreen == 'wms.Данные приходной накладной':
+        if hashMap.get('incomedoc_contragent_name') and hashMap.get('incomedoc_contragent_code') and hashMap.get('incomedoc_num') and hashMap.get('incomedoc_date'):
+            a = 1;
+            
+        else:
+            if user_locale == 'ua':
+                hashMap.put("toast", 'Не заповнено ВСЮ інформацію про документ')
+            elif user_locale == 'ru':
+                hashMap.put("toast", 'Не заполнена ВСЯ информация про документ')
+
+    return hashMap
+
+
 def on_address_input(hashMap,_files=None,_data=None):
     
     user_locale = hashMap.get("USER_LOCALE")
