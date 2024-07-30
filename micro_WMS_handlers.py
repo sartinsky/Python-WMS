@@ -815,7 +815,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             data = {
             "sku_id": hashMap.get("nom_id"),
             "qty_plan": hashMap.get("qty_plan"),
-            "qty": hashMap.get("qty"),
+            "qty_fact": hashMap.get("qty"),
             "order_id": str(order_id)
             }
 
@@ -831,7 +831,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     # Запись существует, выполняем PATCH-запрос для обновления записи
                     patch_data = {
                         "qty_plan": hashMap.get("qty_plan"),
-                        "qty": hashMap.get("qty")
+                        "qty_fact": hashMap.get("qty")
                     }
                     patch_url = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{hashMap.get("nom_id")}&id=eq.{record_id}'
                     response = requests.patch(patch_url, json=patch_data, headers=headers, timeout=timeout)
