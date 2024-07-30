@@ -803,7 +803,16 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             headers = {
             'Content-Type': 'application/json'
             }
-            
+                
+            params = {
+                "order_id": str(order_id),
+                "no_order": str(no_order),
+                "sku_id": hashMap.get("nom_id"),
+                "user": hashMap.get("ANDROID_ID"),
+                "address_id": hashMap.get("ANDROID_ID"),
+                "to_operation": "1"
+            }    
+
             #Параметры запроса (например, фильтрация данных)
             data = {
             "order_id": hashMap.get('orderRef'),
@@ -816,17 +825,46 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             }
 
             try:
-                # Отправка patch-запроса
-                response = requests.post(url, json=data, timeout=timeout)
-
-                # Проверка статуса ответа
-                if response.status_code == 201:
-                    hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
-                    
+                # Проверка существования записи
+                get_response = requests.get(url, headers=headers, params=params, timeout=timeout)
+                
+                if get_response.status_code == 200 and get_response.json():
+                    # Запись существует, выполняем PATCH-запрос для обновления записи
+                    patch_data = {
+                        "qty": hashMap.get("qty")
+                    }
+                    patch_url = f'{postgrest_url}/{path}?order_id=eq.{order_id}&no_order=eq.{no_order}&sku_id=eq.{hashMap.get("nom_id")}&user=eq.{hashMap.get("ANDROID_ID")}&address_id=eq.{hashMap.get("ANDROID_ID")}&to_operation=eq.1'
+                    response = requests.patch(patch_url, json=patch_data, headers=headers, timeout=timeout)
+                    if response.status_code == 200 or response.status_code == 204:
+                        hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
+                    else:
+                        hashMap.put("toast", f'Error: {response.status_code}')
+                elif get_response.status_code == 404 or not get_response.json():
+                    # Запись не существует, выполняем POST-запрос для создания новой
+                    response = requests.post(url, json=data, headers=headers, timeout=timeout)
+                    if response.status_code == 201:
+                        hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
+                    else:
+                        hashMap.put("toast", f'Error: {response.status_code}')
                 else:
-                    hashMap.put("toast", f'Error: {response.status_code}')        
+                    hashMap.put("toast", f'Error: {get_response.status_code}')
+                    
             except Exception as e:
-                hashMap.put("toast", f'Exception occurred: {str(e)}')                   
+                hashMap.put("toast", f'Exception occurred: {str(e)}')   
+            
+
+            # try:
+            #     # Отправка patch-запроса
+            #     response = requests.post(url, json=data, timeout=timeout)
+
+            #     # Проверка статуса ответа
+            #     if response.status_code == 201:
+            #         hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
+                    
+            #     else:
+            #         hashMap.put("toast", f'Error: {response.status_code}')        
+            # except Exception as e:
+            #     hashMap.put("toast", f'Exception occurred: {str(e)}')                   
 
     elif CurScreen == "wms.Ввод количества взять":
 
