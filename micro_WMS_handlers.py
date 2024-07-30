@@ -1,7 +1,7 @@
-# import ui_global
-# from pony.orm.core import db_session
-# from pony import orm
-# from pony.orm import Database,Required,Set,select,commit
+import ui_global
+from pony.orm.core import db_session
+from pony import orm
+from pony.orm import Database,Required,Set,select,commit
 import requests
 import json
 
@@ -9,18 +9,18 @@ import json
 postgrest_url = 'http://192.168.1.102:3000'
 timeout = 3
 
-# def init_on_start(hashMap,_files=None,_data=None):
-#     ui_global.init()
-#     user_locale = hashMap.get("USER_LOCALE")
-#     return hashMap
+def init_on_start(hashMap,_files=None,_data=None):
+    ui_global.init()
+    user_locale = hashMap.get("USER_LOCALE")
+    return hashMap
 
-# def settings_on_create(hashMap,_files=None,_data=None):
-    # if not hashMap.containsKey("_UserLocale"):
-    #     hashMap.put("get_user_locale","_UserLocale") #get from NoSQL
-    # else:
-    #     hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
+def settings_on_create(hashMap,_files=None,_data=None):
+    if not hashMap.containsKey("_UserLocale"):
+        hashMap.put("get_user_locale","_UserLocale") #get from NoSQL
+    else:
+        hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
     
-    # return hashMap 
+    return hashMap 
 
 def settings_on_input(hashMap,_files=None,_data=None):
     if hashMap.get("listener")=="lang":
