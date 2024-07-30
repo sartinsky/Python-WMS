@@ -806,7 +806,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             
             #Параметры запроса (например, фильтрация данных)
             data = {
-            "order_id": hashMap.get('order_id'),
+            "order_id": hashMap.get('unit_id'),
             "no_order": str(no_order),
             "qty": hashMap.get("qty"),
             "sku_id": hashMap.get("nom_id"),
@@ -817,7 +817,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
             try:
                 # Отправка patch-запроса
-                response = requests.patch(url, json=data, timeout=timeout)
+                response = requests.post(url, json=data, timeout=timeout)
 
                 # Проверка статуса ответа
                 if response.status_code == 201:
