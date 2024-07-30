@@ -206,7 +206,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
     order_id = hashMap.get("orderRef") 
 
     # Путь к нужной таблице или представлению
-    if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу':
+    if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
         path = f'wms_orders_table?select=id:sku_id,Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{order_id}'
                 
     elif CurScreen == 'wms.Ввод адреса отбор':
@@ -794,6 +794,60 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
         if listener is None:
         
             order_id = hashMap.get("orderRef")
+
+            # Заголовки для запроса
+            headers = {
+            'Content-Type': 'application/json'
+            }           
+            order_id  = hashMap.get('orderRef')
+            
+            #----------------------wms_orders
+            path = 'wms_orders'
+            path_get = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{hashMap.get("nom_id")}'
+            
+            url = f'{postgrest_url}/{path}'
+            url_get = f'{postgrest_url}/{path_get}'
+            
+            #Параметры запроса (например, фильтрация данных)
+            data = {
+            "sku_id": hashMap.get("nom_id"),
+            "qty_plan": hashMap.get("qty_plan"),
+            "order_id": str(order_id)
+            }
+
+            try:
+                # Проверка существования записи
+                get_response = requests.get(url, headers=headers, timeout=timeout)
+                
+                if get_response.status_code == 200 and get_response.json():
+                    
+                    existing_record = get_response.json()[0]  # Предполагаем, что возвращается список
+                    record_id = existing_record['id']
+                    
+                    # Запись существует, выполняем PATCH-запрос для обновления записи
+                    patch_data = {
+                        "qty_plan": hashMap.get("qty_plan")
+                    }
+                    patch_url = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{hashMap.get("nom_id")}&id=eq.{record_id}'
+                    response = requests.patch(patch_url, json=patch_data, headers=headers, timeout=timeout)
+                    if not (response.status_code == 200 or response.status_code == 204):
+                        hashMap.put("toast", f'Error: {response.status_code}')
+                        return hashMap
+                elif get_response.status_code == 404 or not get_response.json():
+                    # Запись не существует, выполняем POST-запрос для создания новой
+                    response = requests.post(url, json=data, headers=headers, timeout=timeout)
+                    if not response.status_code == 201:
+                        hashMap.put("toast", f'Error: {response.status_code}')
+                        return hashMap
+                else:
+                    hashMap.put("toast", f'Error: {get_response.status_code}')
+                    return hashMap
+                    
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
+                return hashMap
+
+            #----------------------wms_operations
             # Путь к нужной таблице или представлению
             path = 'wms_operations'
             path_get = f'{postgrest_url}/{path}?order_id=eq.{order_id}&no_order=eq.{no_order}&sku_id=eq.{hashMap.get("nom_id")}&user=eq.{hashMap.get("ANDROID_ID")}&address_id=eq.{hashMap.get("ANDROID_ID")}&to_operation=eq.1'
@@ -802,13 +856,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             url = f'{postgrest_url}/{path}'
             url_get = f'{postgrest_url}/{path_get}'
 
-            # Заголовки для запроса
-            headers = {
-            'Content-Type': 'application/json'
-            }
-
-            order_id  = hashMap.get('orderRef')
-            
             #Параметры запроса (например, фильтрация данных)
             data = {
             "order_id": str(order_id),
@@ -848,19 +895,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')   
             
-
-            # try:
-            #     # Отправка patch-запроса
-            #     response = requests.post(url, json=data, timeout=timeout)
-
-            #     # Проверка статуса ответа
-            #     if response.status_code == 201:
-            #         hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
-                    
-            #     else:
-            #         hashMap.put("toast", f'Error: {response.status_code}')        
-            # except Exception as e:
-            #     hashMap.put("toast", f'Exception occurred: {str(e)}')                   
 
     elif CurScreen == "wms.Ввод количества взять":
 
@@ -1370,6 +1404,8 @@ if __name__ == "__main__":
     hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("listener", None)
     hashMap.put("nom_id", '95')
+    hashMap.put("qty_plan", '5')
+    hashMap.put("qty", '3')
     on_input_qtyfact(hashMap)
     # on_TableClick(hashMap)
     # Get_OrderGoods_Data_To_Table(hashMap)
