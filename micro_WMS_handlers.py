@@ -78,7 +78,8 @@ def Set_Var(hashMap, _files=None, _data=None):
 def fill_central_table(data, CurScreen, user_locale):
 
     if (CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало'
-       or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод количества инвентаризация'):
+       or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод количества инвентаризация'
+       or CurScreen == 'wms.Ввод товара приемка факт'):
         columns = [
         {"name": "nom", "header": "Товар", "weight": "2"},
         {"name": "qty_plan", "header": "План", "weight": "1", "gravity": "center"},
@@ -126,7 +127,8 @@ def fill_central_table(data, CurScreen, user_locale):
     for index, row in enumerate(data):
         nom = row["Товар"]
         if (CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало'
-       or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод количества инвентаризация'):
+       or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод количества инвентаризация'
+       or CurScreen == 'wms.Ввод товара приемка факт'):
             qty_plan = row["План"]
             qty_fact = row["Факт"]
             diff =   qty_plan - qty_fact
@@ -137,7 +139,8 @@ def fill_central_table(data, CurScreen, user_locale):
 
         
         if (CurScreen == 'wms.Выбор распоряжения инвентаризация' or CurScreen == 'Приемка по заказу начало'
-       or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод количества инвентаризация'):
+           or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод количества инвентаризация'
+           or CurScreen == 'wms.Ввод товара приемка факт'):
             # Добавление строки в rows
             j["rows"].append({"nom": nom, "qty_plan": qty_plan, "qty_fact": qty_fact, "diff": diff})
 
@@ -1399,14 +1402,14 @@ class MockHashMap:
 if __name__ == "__main__":
     hashMap = MockHashMap()
     hashMap.put("orderRef","139")
-    hashMap.put("current_screen_name","wms.Ввод количества факт")
+    hashMap.put("current_screen_name","wms.Ввод товара приемка факт")
     hashMap.put("USER_LOCALE","ua")
     hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("listener", None)
     hashMap.put("nom_id", '95')
     hashMap.put("qty_plan", '5')
     hashMap.put("qty", '3')
-    on_input_qtyfact(hashMap)
+    Get_OrderGoods_Data_To_Table(hashMap)
     # on_TableClick(hashMap)
     # Get_OrderGoods_Data_To_Table(hashMap)
     # hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
