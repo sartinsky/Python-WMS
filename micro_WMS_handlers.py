@@ -1,7 +1,7 @@
-import ui_global
-from pony.orm.core import db_session
-from pony import orm
-from pony.orm import Database,Required,Set,select,commit
+# import ui_global
+# from pony.orm.core import db_session
+# from pony import orm
+# from pony.orm import Database,Required,Set,select,commit
 import requests
 import json
 
@@ -9,18 +9,18 @@ import json
 postgrest_url = 'http://192.168.1.102:3000'
 timeout = 3
 
-def init_on_start(hashMap,_files=None,_data=None):
-    ui_global.init()
-    user_locale = hashMap.get("USER_LOCALE")
-    return hashMap
+# def init_on_start(hashMap,_files=None,_data=None):
+#     ui_global.init()
+#     user_locale = hashMap.get("USER_LOCALE")
+#     return hashMap
 
-def settings_on_create(hashMap,_files=None,_data=None):
-    if not hashMap.containsKey("_UserLocale"):
-        hashMap.put("get_user_locale","_UserLocale") #get from NoSQL
-    else:
-        hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
+# def settings_on_create(hashMap,_files=None,_data=None):
+    # if not hashMap.containsKey("_UserLocale"):
+    #     hashMap.put("get_user_locale","_UserLocale") #get from NoSQL
+    # else:
+    #     hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
     
-    return hashMap 
+    # return hashMap 
 
 def settings_on_input(hashMap,_files=None,_data=None):
     if hashMap.get("listener")=="lang":
@@ -793,11 +793,14 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:
         
+            order_id = hashMap.get("orderRef")
             # Путь к нужной таблице или представлению
             path = 'wms_operations'
-            
+            path_get = f'{postgrest_url}/{path}?order_id=eq.{order_id}&no_order=eq.{no_order}&sku_id=eq.{hashMap.get("nom_id")}&user=eq.{hashMap.get("ANDROID_ID")}&address_id=eq.{hashMap.get("ANDROID_ID")}&to_operation=eq.1'
+
             # Полный URL для запроса
             url = f'{postgrest_url}/{path}'
+            url_get = f'{postgrest_url}/{path_get}'
 
             # Заголовки для запроса
             headers = {
@@ -805,15 +808,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             }
 
             order_id  = hashMap.get('orderRef')
-            params = {
-                "order_id": str(order_id),
-                "no_order": str(no_order),
-                "sku_id": hashMap.get("nom_id"),
-                "user": hashMap.get("ANDROID_ID"),
-                "address_id": hashMap.get("ANDROID_ID"),
-                "to_operation": "1"
-            }    
-
+            
             #Параметры запроса (например, фильтрация данных)
             data = {
             "order_id": str(order_id),
@@ -824,10 +819,10 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             "address_id": hashMap.get("ANDROID_ID"),
             "to_operation": "1"
             }
-
+            
             try:
                 # Проверка существования записи
-                get_response = requests.get(url, headers=headers, params=params, timeout=timeout)
+                get_response = requests.get(url, headers=headers, timeout=timeout)
                 
                 if get_response.status_code == 200 and get_response.json():
                     # Запись существует, выполняем PATCH-запрос для обновления записи
@@ -1355,31 +1350,35 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-# #Пример использования функции
-# class MockHashMap:
-#     def __init__(self):
-#         self.store = {}
+#Пример использования функции
+class MockHashMap:
+    def __init__(self):
+        self.store = {}
 
-#     def put(self, key, value):
-#         self.store[key] = value
+    def put(self, key, value):
+        self.store[key] = value
 
-#     def get(self, key, default=None):
-#        return self.store.get(key, default)
+    def get(self, key, default=None):
+       return self.store.get(key, default)
 
-# #Тестирование функции
-# if __name__ == "__main__":
-#     hashMap = MockHashMap()
-#     hashMap.put("orderRef","129")
-#     hashMap.put("current_screen_name","wms.Выбор распоряжения инвентаризация")
-#     hashMap.put("USER_LOCALE","ua")
-#     on_TableClick(hashMap)
-#     Get_OrderGoods_Data_To_Table(hashMap)
-#     hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
-#     hashMap.put("addr_id", '2')
-#     hashMap.put("nom", 'Автолампа')
-#     hashMap.put("art", '')
-#     hashMap.put("nom_id", '102')
-#     hashMap.put("listener", None)
+#Тестирование функции
+if __name__ == "__main__":
+    hashMap = MockHashMap()
+    hashMap.put("orderRef","139")
+    hashMap.put("current_screen_name","wms.Ввод количества факт")
+    hashMap.put("USER_LOCALE","ua")
+    hashMap.put("ANDROID_ID","380eaecaff29d921")
+    hashMap.put("listener", None)
+    hashMap.put("nom_id", '95')
+    on_input_qtyfact(hashMap)
+    # on_TableClick(hashMap)
+    # Get_OrderGoods_Data_To_Table(hashMap)
+    # hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
+    # hashMap.put("addr_id", '2')
+    # hashMap.put("nom", 'Автолампа')
+    # hashMap.put("art", '')
+    
+    
 #     hashMap.put("qty",'1')
 #     on_input_qtyfact(hashMap)
     #Get_Picking(hashMap)
@@ -1400,7 +1399,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
     
     #hashMap.put("qty","1")
     # hashMap.put("nom_id","86")
-    #hashMap.put("ANDROID_ID","380eaecaff29d921")
+    
     ##hashMap.put("addr", 'Полка 1')
     #hashMap.put("nom_id", '86')
     #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
