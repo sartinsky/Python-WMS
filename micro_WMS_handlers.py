@@ -806,7 +806,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             
             #Параметры запроса (например, фильтрация данных)
             data = {
-            "order_id": hashMap.get('unit_id'),
+            "order_id": hashMap.get('orderRef'),
             "no_order": str(no_order),
             "qty": hashMap.get("qty"),
             "sku_id": hashMap.get("nom_id"),
