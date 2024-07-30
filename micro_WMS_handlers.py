@@ -1282,8 +1282,11 @@ def on_TableClick(hashMap,_files=None,_data=None):
 
     if listener == "TableClick":
             
-        jrecord = json.loads(hashMap.get("selected_line"))
-        unit_id = str(jrecord['id'])
+        if CurScreen == 'wms.Данные приходной накладной':
+            unit_id = hashMap.get("unit_id")
+        else:
+            jrecord = json.loads(hashMap.get("selected_line"))
+            unit_id = str(jrecord['id'])
             
         # Путь к нужной таблице или представлению
         path = f'wms_orders_captions?id=eq.{unit_id}'
@@ -1307,7 +1310,9 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 elif CurScreen == 'wms.Выбор распоряжения':    
                     hashMap.put("ShowScreen", "Приемка по заказу начало")
                 elif CurScreen == 'wms.Выбор распоряжения отгрузка':    
-                    hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")    
+                    hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")
+                elif CurScreen == 'wms.Данные приходной накладной':    
+                    hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")        
                                    
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
