@@ -210,7 +210,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
     # Путь к нужной таблице или представлению
     if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
-        path = f'wms_orders_table?select=id:sku_id,Товар:nom,Артикул:code,План:plan,Факт:fact&order_id=eq.{order_id}'
+        path = f'wms_orders_table?select=id:sku_id,Товар:nom,Артикул:code,План:plan,Факт:fact,manual:manual&order_id=eq.{order_id}'
                 
     elif CurScreen == 'wms.Ввод адреса отбор':
         if user_locale == 'ua':
@@ -244,6 +244,8 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             for item in data:
                 if 'id' in item:
                     del item['id']
+                if 'manual' in item:
+                    del item['manual']    
  
             
             hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen,user_locale)))
