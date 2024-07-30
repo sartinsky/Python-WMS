@@ -1282,11 +1282,8 @@ def on_TableClick(hashMap,_files=None,_data=None):
 
     if listener == "TableClick":
             
-        if CurScreen == 'wms.Данные приходной накладной':
-            unit_id = hashMap.get("unit_id")
-        else:
-            jrecord = json.loads(hashMap.get("selected_line"))
-            unit_id = str(jrecord['id'])
+        jrecord = json.loads(hashMap.get("selected_line"))
+        unit_id = str(jrecord['id'])
             
         # Путь к нужной таблице или представлению
         path = f'wms_orders_captions?id=eq.{unit_id}'
@@ -1310,10 +1307,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 elif CurScreen == 'wms.Выбор распоряжения':    
                     hashMap.put("ShowScreen", "Приемка по заказу начало")
                 elif CurScreen == 'wms.Выбор распоряжения отгрузка':    
-                    hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")
-                elif CurScreen == 'wms.Данные приходной накладной':    
-                    hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")        
-                                   
+                    hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")                                   
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
         except Exception as e:
@@ -1321,33 +1315,33 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-#Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# #Пример использования функции
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
-    def get(self, key, default=None):
-       return self.store.get(key, default)
+#     def get(self, key, default=None):
+#        return self.store.get(key, default)
 
-#Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    hashMap.put("orderRef","129")
-    hashMap.put("current_screen_name","wms.Выбор распоряжения инвентаризация")
-    hashMap.put("USER_LOCALE","ua")
-    on_TableClick(hashMap)
-    Get_OrderGoods_Data_To_Table(hashMap)
-    hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
-    hashMap.put("addr_id", '2')
-    hashMap.put("nom", 'Автолампа')
-    hashMap.put("art", '')
-    hashMap.put("nom_id", '102')
-    hashMap.put("listener", None)
-    hashMap.put("qty",'1')
-    on_input_qtyfact(hashMap)
+# #Тестирование функции
+# if __name__ == "__main__":
+#     hashMap = MockHashMap()
+#     hashMap.put("orderRef","129")
+#     hashMap.put("current_screen_name","wms.Выбор распоряжения инвентаризация")
+#     hashMap.put("USER_LOCALE","ua")
+#     on_TableClick(hashMap)
+#     Get_OrderGoods_Data_To_Table(hashMap)
+#     hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
+#     hashMap.put("addr_id", '2')
+#     hashMap.put("nom", 'Автолампа')
+#     hashMap.put("art", '')
+#     hashMap.put("nom_id", '102')
+#     hashMap.put("listener", None)
+#     hashMap.put("qty",'1')
+#     on_input_qtyfact(hashMap)
     #Get_Picking(hashMap)
     #Set_Var(hashMap)
     # hashMap.put("listener","barcode")
