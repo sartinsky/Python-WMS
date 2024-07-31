@@ -808,7 +808,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             
             #----------------------wms_orders
             path = 'wms_orders'
-            path_get = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{hashMap.get("nom_id")}&qty_plan=neq.0'
+            path_get = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{hashMap.get("nom_id")}&qty_plan=gt.0'
             
             url = f'{postgrest_url}/{path}'
             url_get = f'{postgrest_url}/{path_get}'
