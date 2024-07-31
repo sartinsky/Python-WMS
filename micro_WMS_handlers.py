@@ -1404,15 +1404,15 @@ class MockHashMap:
 #Тестирование функции
 if __name__ == "__main__":
     hashMap = MockHashMap()
-    hashMap.put("orderRef","139")
-    hashMap.put("current_screen_name","wms.Ввод товара приемка факт")
+    hashMap.put("orderRef","151")
+    hashMap.put("current_screen_name","wms.Ввод количества факт")
     hashMap.put("USER_LOCALE","ua")
     hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("listener", None)
     hashMap.put("nom_id", '95')
     hashMap.put("qty_plan", '5')
     hashMap.put("qty", '3')
-    Get_OrderGoods_Data_To_Table(hashMap)
+    on_input_qtyfact(hashMap)
     # on_TableClick(hashMap)
     # Get_OrderGoods_Data_To_Table(hashMap)
     # hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
