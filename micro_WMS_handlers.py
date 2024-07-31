@@ -817,7 +817,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             data = {
             "sku_id": hashMap.get("nom_id"),
             "qty_plan": hashMap.get("qty_plan"),
-            "qty_fact": hashMap.get("qty"),
             "order_id": str(order_id)
             }
 
