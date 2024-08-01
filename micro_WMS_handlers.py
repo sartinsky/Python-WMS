@@ -798,18 +798,19 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:
         
-            order_id = hashMap.get("orderRef")
+            order_id = int(hashMap.get("orderRef"))
+            nom_id = int(hashMap.get("nom_id"))
+            ANDROID_ID = hashMap.get("ANDROID_ID")
 
             # Заголовки для запроса
             headers = {
             'Content-Type': 'application/json'
             }           
-            order_id  = hashMap.get('orderRef')
             
             #----------------------wms_orders
             path = 'wms_orders'
-            path_get = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{hashMap.get("nom_id")}&qty_plan=gt.0'
-            
+            path_get = f'{path}?order_id=eq.{order_id}&sku_id=eq.{nom_id}&qty_fact=is.null'
+                        
             url = f'{postgrest_url}/{path}'
             url_get = f'{postgrest_url}/{path_get}'
             
@@ -822,7 +823,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
             try:
                 # Проверка существования записи
-                get_response = requests.get(url, headers=headers, timeout=timeout)
+                get_response = requests.get(url_get, headers=headers, timeout=timeout)
                 
                 if get_response.status_code == 200 and get_response.json():
                     
@@ -834,7 +835,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         "qty_plan": hashMap.get("qty_plan")
                         #"qty_fact": hashMap.get("qty")
                     }
-                    patch_url = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{hashMap.get("nom_id")}&id=eq.{record_id}'
+                    patch_url = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{nom_id}&id=eq.{record_id}'
                     response = requests.patch(patch_url, json=patch_data, headers=headers, timeout=timeout)
                     if not (response.status_code == 200 or response.status_code == 204):
                         hashMap.put("toast", f'Error: {response.status_code}')
@@ -856,7 +857,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             #----------------------wms_operations
             # Путь к нужной таблице или представлению
             path = 'wms_operations'
-            path_get = f'{postgrest_url}/{path}?order_id=eq.{order_id}&no_order=eq.{no_order}&sku_id=eq.{hashMap.get("nom_id")}&user=eq.{hashMap.get("ANDROID_ID")}&address_id=eq.{hashMap.get("ANDROID_ID")}&to_operation=eq.1'
+            path_get = f'{path}?order_id=eq.{order_id}&no_order=eq.{no_order}&sku_id=eq.{nom_id}&user=eq.{ANDROID_ID}&address_id=eq.{ANDROID_ID}&to_operation=eq.1'
 
             # Полный URL для запроса
             url = f'{postgrest_url}/{path}'
@@ -867,22 +868,22 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             "order_id": str(order_id),
             "no_order": str(no_order),
             "qty": hashMap.get("qty"),
-            "sku_id": hashMap.get("nom_id"),
-            "user": hashMap.get("ANDROID_ID"),
-            "address_id": hashMap.get("ANDROID_ID"),
+            "sku_id": str(nom_id),
+            "user": ANDROID_ID,
+            "address_id": ANDROID_ID,
             "to_operation": "1"
             }
             
             try:
                 # Проверка существования записи
-                get_response = requests.get(url, headers=headers, timeout=timeout)
+                get_response = requests.get(url_get, headers=headers, timeout=timeout)
                 
                 if get_response.status_code == 200 and get_response.json():
                     # Запись существует, выполняем PATCH-запрос для обновления записи
                     patch_data = {
                         "qty": hashMap.get("qty")
                     }
-                    patch_url = f'{postgrest_url}/{path}?order_id=eq.{order_id}&no_order=eq.{no_order}&sku_id=eq.{hashMap.get("nom_id")}&user=eq.{hashMap.get("ANDROID_ID")}&address_id=eq.{hashMap.get("ANDROID_ID")}&to_operation=eq.1'
+                    patch_url = f'{postgrest_url}/{path}?order_id=eq.{order_id}&no_order=eq.{no_order}&sku_id=eq.{nom_id}&user=eq.{ANDROID_ID}&address_id=eq.{ANDROID_ID}&to_operation=eq.1'
                     response = requests.patch(patch_url, json=patch_data, headers=headers, timeout=timeout)
                     if response.status_code == 200 or response.status_code == 204:
                         hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
@@ -1404,14 +1405,14 @@ class MockHashMap:
 #Тестирование функции
 if __name__ == "__main__":
     hashMap = MockHashMap()
-    hashMap.put("orderRef","151")
+    hashMap.put("orderRef","152")
     hashMap.put("current_screen_name","wms.Ввод количества факт")
     hashMap.put("USER_LOCALE","ua")
     hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("listener", None)
     hashMap.put("nom_id", '95')
-    hashMap.put("qty_plan", '5')
-    hashMap.put("qty", '3')
+    hashMap.put("qty_plan", '2')
+    hashMap.put("qty", '1')
     on_input_qtyfact(hashMap)
     # on_TableClick(hashMap)
     # Get_OrderGoods_Data_To_Table(hashMap)
