@@ -1,4 +1,4 @@
-import ui_global
+#import ui_global
 from pony.orm.core import db_session
 from pony import orm
 from pony.orm import Database,Required,Set,select,commit
@@ -9,18 +9,18 @@ import json
 postgrest_url = 'http://192.168.1.102:3000'
 timeout = 3
 
-def init_on_start(hashMap,_files=None,_data=None):
-    ui_global.init()
-    user_locale = hashMap.get("USER_LOCALE")
-    return hashMap
+# def init_on_start(hashMap,_files=None,_data=None):
+#     ui_global.init()
+#     user_locale = hashMap.get("USER_LOCALE")
+#     return hashMap
 
-def settings_on_create(hashMap,_files=None,_data=None):
-    if not hashMap.containsKey("_UserLocale"):
-        hashMap.put("get_user_locale","_UserLocale") #get from NoSQL
-    else:
-        hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
+# def settings_on_create(hashMap,_files=None,_data=None):
+#     if not hashMap.containsKey("_UserLocale"):
+#         hashMap.put("get_user_locale","_UserLocale") #get from NoSQL
+#     else:
+#         hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
     
-    return hashMap 
+#     return hashMap 
 
 def settings_on_input(hashMap,_files=None,_data=None):
     if hashMap.get("listener")=="lang":
@@ -687,7 +687,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             permit = get_Permit_On_qty(hashMap, user_locale)
             if permit:
                 
-                hashMap.put("qty_minus", str(-1*cur_qty))
+                hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
            
                 #Параметры запроса (например, фильтрация данных)
                 data = {
@@ -1039,63 +1039,72 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
     elif CurScreen == "wms.Ввод количества отбор":
 
         if listener is None:
-        
-            hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
-
-            # Путь к нужной таблице или представлению
-            path = 'wms_operations'
             
-            # Полный URL для запроса
-            url = f'{postgrest_url}/{path}'
+            permit = get_Permit_On_qty(hashMap, user_locale)
+            if permit:
 
-            # Заголовки для запроса
-            headers = {
-            'Content-Type': 'application/json'
-            }
-            
-            #Параметры запроса (например, фильтрация данных)
-            data = {
-            "no_order": str(no_order),
-            "qty": hashMap.get("qty_minus"),
-            "sku_id": hashMap.get("nom_id"),
-            "user": hashMap.get("ANDROID_ID"),
-            "address_id": hashMap.get("addr_id")            
-            }
+                hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
-            try:
-                # Отправка POST-запроса
-                response = requests.post(url, json=data, timeout=timeout)
+                # Путь к нужной таблице или представлению
+                path = 'wms_operations'
+                
+                # Полный URL для запроса
+                url = f'{postgrest_url}/{path}'
 
-                # Проверка статуса ответа
-                if response.status_code == 201:
-                    
-                    #Параметры запроса (например, фильтрация данных)
-                    data = {
-                    "no_order": str(no_order),
-                    "qty": hashMap.get("qty"),
-                    "sku_id": hashMap.get("nom_id"),
-                    "user": hashMap.get("ANDROID_ID"),
-                    "address_id": "ОТБОР",
-                    "order_id": hashMap.get("orderRef")
-                    }
-                    
-                    try:
-                        # Отправка GET-запроса
-                        response = requests.post(url, json=data, timeout=timeout)
+                # Заголовки для запроса
+                headers = {
+                'Content-Type': 'application/json'
+                }
+                
+                #Параметры запроса (например, фильтрация данных)
+                data = {
+                "no_order": str(no_order),
+                "qty": hashMap.get("qty_minus"),
+                "sku_id": hashMap.get("nom_id"),
+                "user": hashMap.get("ANDROID_ID"),
+                "address_id": hashMap.get("addr_id")            
+                }
 
-                        # Проверка статуса ответа
-                        if response.status_code == 201:
-                            hashMap.put("ShowScreen", "wms.Ввод адреса отбор")
-                        else:
-                            hashMap.put("toast", f'Error: {response.status_code}')        
-                    except Exception as e:
-                        hashMap.put("toast", f'Exception occurred: {str(e)}')
-                    
-                else:
-                    hashMap.put("toast", f'Error: {response.status_code}')        
-            except Exception as e:
-                hashMap.put("toast", f'Exception occurred: {str(e)}')
-    
+                try:
+                    # Отправка POST-запроса
+                    response = requests.post(url, json=data, timeout=timeout)
+
+                    # Проверка статуса ответа
+                    if response.status_code == 201:
+                        
+                        #Параметры запроса (например, фильтрация данных)
+                        data = {
+                        "no_order": str(no_order),
+                        "qty": hashMap.get("qty"),
+                        "sku_id": hashMap.get("nom_id"),
+                        "user": hashMap.get("ANDROID_ID"),
+                        "address_id": "ОТБОР",
+                        "order_id": hashMap.get("orderRef")
+                        }
+                        
+                        try:
+                            # Отправка GET-запроса
+                            response = requests.post(url, json=data, timeout=timeout)
+
+                            # Проверка статуса ответа
+                            if response.status_code == 201:
+                                hashMap.put("ShowScreen", "wms.Ввод адреса отбор")
+                            else:
+                                hashMap.put("toast", f'Error: {response.status_code}')        
+                        except Exception as e:
+                            hashMap.put("toast", f'Exception occurred: {str(e)}')
+                        
+                    else:
+                        hashMap.put("toast", f'Error: {response.status_code}')        
+                except Exception as e:
+                    hashMap.put("toast", f'Exception occurred: {str(e)}')
+
+            else:        
+                if user_locale == 'ua':
+                    hashMap.put("toast", 'Не можна перевищувати кількість до відбору')
+                elif user_locale == 'ru':
+                    hashMap.put("toast", 'Нельзя превышать количество к отбору')
+
     elif CurScreen == "wms.Ввод количества отгрузка":
 
         if listener is None:
@@ -1339,9 +1348,9 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("unit", '')
                             if CurScreen == "wms.Ввод товара отбор":
                                 if user_locale == 'ua':
-                                    hashMap.put("toast", 'Товар не знайдено або не відповідає вказаній комірці') 
+                                    hashMap.put("toast", 'Товар не відповідає вказаній комірці') 
                                 elif user_locale == 'ru':
-                                    hashMap.put("toast", 'Товар не найден или не соответствует указанной ячейке') 
+                                    hashMap.put("toast", 'Товар не соответствует указанной ячейке') 
                                 hashMap.put("ShowScreen", "wms.Ввод товара отбор")
                             else:
                                 if user_locale == 'ua':
@@ -1439,64 +1448,25 @@ if __name__ == "__main__":
     
     hashMap.put("USER_LOCALE","ua")
     hashMap.put("ANDROID_ID","380eaecaff29d921")
-    
-    hashMap.put("listener", 'btn_placing')
-    hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
-    on_btn_placing(hashMap)
-    hashMap.put("current_screen_name","wms.Ввод адреса размещение")
-    get_placement_orders(hashMap)
-    hashMap.put("addr_id", '1-1-1-1-1')
-    hashMap.put("addr", '1-1-1-1-1')
-    get_goods_for_address_placement(hashMap) 
-    hashMap.put("nom", 'Свердло')
+    hashMap.put("orderRef","163")
+    hashMap.put("current_screen_name","wms.Ввод адреса отбор")
+    Get_OrderGoods_Data_To_Table(hashMap)
+    Get_Picking(hashMap)
+    hashMap.put("addr_id", '1-1-1-1-5')
     hashMap.put("nom_id", '95')
-    
-    hashMap.put("current_screen_name","wms.Ввод количества размещение")
-    hashMap.put("qty","3")
-    hashMap.put("listener", None)
+    hashMap.put("qty", '3')
+    hashMap.put("current_screen_name","wms.Ввод количества отбор")
     on_input_qtyfact(hashMap)
-    #hashMap.put("orderRef","155")
-    #hashMap.put("nom_id", '95')
-    #hashMap.put("qty_plan", '2')
-    #hashMap.put("qty", '1')
-    #on_TableClick(hashMap)
-    # on_TableClick(hashMap)
-    # Get_OrderGoods_Data_To_Table(hashMap)
-    # hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
-    # hashMap.put("addr_id", '2')
-    # hashMap.put("nom", 'Автолампа')
-    # hashMap.put("art", '')
+    # on_btn_placing(hashMap)
+    # hashMap.put("current_screen_name","wms.Ввод адреса размещение")
+    # get_placement_orders(hashMap)
+    # hashMap.put("addr_id", '1-1-1-1-1')
+    # hashMap.put("addr", '1-1-1-1-1')
+    # get_goods_for_address_placement(hashMap) 
+    # hashMap.put("nom", 'Свердло')
+    # hashMap.put("nom_id", '95')
     
-    
-#     hashMap.put("qty",'1')
-#     on_input_qtyfact(hashMap)
-    #Get_Picking(hashMap)
-    #Set_Var(hashMap)
-    # hashMap.put("listener","barcode")
-    # hashMap.put("addr_barcode","1-1-1-1-1")
-    # on_address_input(hashMap)
-    # hashMap.put("current_screen_name","wms.Ввод товара отбор")
-    # hashMap.put("barcode","2000000000145")
-    # on_units_input(hashMap)
-
-    #on_btn_done(hashMap)
-    
-    
-    #hashMap.put("orderRef","1") 
-    # hashMap.put("current_screen_name","wms.Ввод адреса отбор")
-    #hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
-    
-    #hashMap.put("qty","1")
-    # hashMap.put("nom_id","86")
-    
-    ##hashMap.put("addr", 'Полка 1')
-    #hashMap.put("nom_id", '86')
-    #hashMap.put("unit", "Пиво Оболонь светлое 0.5 л")
-    #Get_Orders_Data_To_Table(hashMap)
-    # print('Содержимое hashMap:', hashMap.store)
-    #on_input_qtyfact(hashMap)
-    # get_operators_placing(hashMap)
-    
-    #on_input_qtyfact(hashMap) 
-    
-    
+    # hashMap.put("current_screen_name","wms.Ввод количества размещение")
+    # hashMap.put("qty","3")
+    # hashMap.put("listener", None)
+    # on_input_qtyfact(hashMap)
