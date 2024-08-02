@@ -510,12 +510,13 @@ def on_btn_done(hashMap,_files=None,_data=None):
     user_locale = hashMap.get("USER_LOCALE")
     Doc_Updated = hashMap.get("Doc_Updated")
 
-    if not Doc_Updated or Doc_Updated == False:
+    if not Doc_Updated is None and Doc_Updated == False:
         if user_locale == 'ua':
             hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
         elif user_locale == 'ru':
             hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
-
+        return hashMap
+        
     CurScreen = hashMap.get("current_screen_name")
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
