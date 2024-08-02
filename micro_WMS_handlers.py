@@ -1390,12 +1390,11 @@ def on_TableClick(hashMap,_files=None,_data=None):
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
                     if jrecord['manual'] == True:
+                        hashMap.put("toast", unit_id)
                         hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
-                        hashMap.put("toast", "1")
                     else:
                         hashMap.put("ShowScreen", "Приемка по заказу начало")
-                        hashMap.put("toast", "1")
-
+                        
                 elif CurScreen == 'wms.Выбор распоряжения отгрузка':    
                     hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")                                   
             else:
