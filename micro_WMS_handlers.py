@@ -20,7 +20,7 @@ def settings_on_create(hashMap,_files=None,_data=None):
     else:
         hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
     
-     return hashMap 
+    return hashMap 
 
 def settings_on_input(hashMap,_files=None,_data=None):
     if hashMap.get("listener")=="lang":
