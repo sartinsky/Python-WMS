@@ -555,22 +555,6 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
     return hashMap
 
-def on_btn_Create_Doc(hashMap,_files=None,_data=None):
-
-    user_locale = hashMap.get("USER_LOCALE")
-    CurScreen = hashMap.get("current_screen_name")
-    if CurScreen == 'wms.Данные приходной накладной':
-        if hashMap.get('incomedoc_contragent_name') and hashMap.get('incomedoc_contragent_code') and hashMap.get('incomedoc_num') and hashMap.get('incomedoc_date'):
-            hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
-
-        else:
-            if user_locale == 'ua':
-                hashMap.put("toast", 'Не заповнено ВСЮ інформацію про документ')
-            elif user_locale == 'ru':
-                hashMap.put("toast", 'Не заполнена ВСЯ информация про документ')
-
-    return hashMap
-
 def on_address_input(hashMap,_files=None,_data=None):
     
     user_locale = hashMap.get("USER_LOCALE")
@@ -1390,6 +1374,13 @@ def on_TableClick(hashMap,_files=None,_data=None):
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
                     if jrecord['manual'] == True:
+                        
+                        curorder = hashMap.get("order")
+                        curorderRef = hashMap.get("orderRef")
+                        hashMap.put("FinishProcess")
+                        hashMap.put("StartProcess", 'Приемка по факту')                        
+                        hashMap.put("order", curorder)
+                        hashMap.put("orderRef", curorderRef)
                         hashMap.put("ShowScreen", "wms.Данные приходной накладной")
                     else:
                         hashMap.put("ShowScreen", "Приемка по заказу начало")
