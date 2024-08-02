@@ -1109,40 +1109,48 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:
         
-            hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
+            permit = get_Permit_On_qty(hashMap, user_locale)
+            if permit:
+                        
+                hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
-            # Путь к нужной таблице или представлению
-            path = 'wms_operations'
-            
-            # Полный URL для запроса
-            url = f'{postgrest_url}/{path}'
+                # Путь к нужной таблице или представлению
+                path = 'wms_operations'
+                
+                # Полный URL для запроса
+                url = f'{postgrest_url}/{path}'
 
-            # Заголовки для запроса
-            headers = {
-            'Content-Type': 'application/json'
-            }
-            
-            #Параметры запроса (например, фильтрация данных)
-            data = {
-            "no_order": str(no_order),
-            "qty": hashMap.get("qty_minus"),
-            "sku_id": hashMap.get("nom_id"),
-            "user": hashMap.get("ANDROID_ID"),
-            "order_id": hashMap.get("orderRef"),
-            "address_id": 'ОТБОР'
-            }
+                # Заголовки для запроса
+                headers = {
+                'Content-Type': 'application/json'
+                }
+                
+                #Параметры запроса (например, фильтрация данных)
+                data = {
+                "no_order": str(no_order),
+                "qty": hashMap.get("qty_minus"),
+                "sku_id": hashMap.get("nom_id"),
+                "user": hashMap.get("ANDROID_ID"),
+                "order_id": hashMap.get("orderRef"),
+                "address_id": 'ОТБОР'
+                }
 
-            try:
-                # Отправка POST-запроса
-                response = requests.post(url, json=data, timeout=timeout)
+                try:
+                    # Отправка POST-запроса
+                    response = requests.post(url, json=data, timeout=timeout)
 
-                # Проверка статуса ответа
-                if response.status_code == 201:
-                    hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")                                        
-                else:
-                    hashMap.put("toast", f'Error: {response.status_code}')        
-            except Exception as e:
-                hashMap.put("toast", f'Exception occurred: {str(e)}')
+                    # Проверка статуса ответа
+                    if response.status_code == 201:
+                        hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")                                        
+                    else:
+                        hashMap.put("toast", f'Error: {response.status_code}')        
+                except Exception as e:
+                    hashMap.put("toast", f'Exception occurred: {str(e)}')
+            else:        
+                if user_locale == 'ua':
+                    hashMap.put("toast", 'Не можна перевищувати кількість відібраного по замовленню')
+                elif user_locale == 'ru':
+                    hashMap.put("toast", 'Нельзя превышать количество отобранного по заказу')
 
     elif CurScreen == "wms.Ввод количества инвентаризация":
 
