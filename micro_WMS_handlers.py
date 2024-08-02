@@ -20,7 +20,7 @@ def settings_on_create(hashMap,_files=None,_data=None):
     else:
         hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
     
-    return hashMap 
+     return hashMap 
 
 def settings_on_input(hashMap,_files=None,_data=None):
     if hashMap.get("listener")=="lang":
@@ -1366,8 +1366,9 @@ def on_TableClick(hashMap,_files=None,_data=None):
 
     if listener == "TableClick":
             
-        jrecord = json.loads(hashMap.get("selected_line"))
-        unit_id = str(jrecord['id'])
+        #jrecord = json.loads(hashMap.get("selected_line"))
+        #unit_id = str(jrecord['id'])
+        unit_id = hashMap.get("orderRef")
             
         # Путь к нужной таблице или представлению
         path = f'wms_orders_captions?id=eq.{unit_id}'
@@ -1389,7 +1390,11 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 if CurScreen == 'wms.Выбор распоряжения отбор':
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
-                    hashMap.put("ShowScreen", "Приемка по заказу начало")
+                    if jrecord['manual'] == True:
+                        hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
+                    else:
+                        hashMap.put("ShowScreen", "Приемка по заказу начало")
+
                 elif CurScreen == 'wms.Выбор распоряжения отгрузка':    
                     hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")                                   
             else:
@@ -1413,15 +1418,15 @@ class MockHashMap:
 #Тестирование функции
 if __name__ == "__main__":
     hashMap = MockHashMap()
-    hashMap.put("orderRef","152")
-    hashMap.put("current_screen_name","wms.Ввод количества факт")
+    hashMap.put("orderRef","155")
+    hashMap.put("current_screen_name","wms.Выбор распоряжения")
     hashMap.put("USER_LOCALE","ua")
     hashMap.put("ANDROID_ID","380eaecaff29d921")
-    hashMap.put("listener", None)
+    hashMap.put("listener", 'TableClick')
     hashMap.put("nom_id", '95')
     hashMap.put("qty_plan", '2')
     hashMap.put("qty", '1')
-    on_input_qtyfact(hashMap)
+    on_TableClick(hashMap)
     # on_TableClick(hashMap)
     # Get_OrderGoods_Data_To_Table(hashMap)
     # hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
