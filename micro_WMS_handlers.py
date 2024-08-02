@@ -684,16 +684,9 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             'Content-Type': 'application/json'
             }
             
-            permit = False
-            filtered_data = json.loads(hashMap.get('filtered_data'))
-            total_qty = int(hashMap.get("qty"))
-            for row in filtered_data:
-                if user_locale == 'ua':
-                    cur_qty = min(total_qty,row['Кіл-ть'])
-                elif user_locale == 'ru':
-                    cur_qty = min(total_qty,row['Кол-во'])
-                order_id = row['order_id']
-
+            permit = get_Permit_On_qty(hashMap, user_locale)
+            if permit:
+                
                 hashMap.put("qty_minus", str(-1*cur_qty))
            
                 #Параметры запроса (например, фильтрация данных)
@@ -730,7 +723,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                             # Проверка статуса ответа
                             if response.status_code == 201:
-                                permit = True
+                                hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
                             else:
                                 hashMap.put("toast", f'Error: {response.status_code}')        
                         except Exception as e:
@@ -740,9 +733,12 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         hashMap.put("toast", f'Error: {response.status_code}')        
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
-            if permit:
-                hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")                   
-
+            else:
+                if user_locale == 'ua':
+                    hashMap.put("toast", 'Не можна перевищувати кількість до відбору')
+                elif user_locale == 'ru':
+                    hashMap.put("toast", 'Нельзя превышать количество к отбору') 
+            
     elif CurScreen == "wms.Ввод количества размещение":
 
         if listener is None:
@@ -1341,11 +1337,18 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("art", '')
                             hashMap.put("nom_id", '')
                             hashMap.put("unit", '')
-                            if user_locale == 'ua':
-                                hashMap.put("toast", 'Вказаний товар відсутній у заказі на відбір') 
-                            elif user_locale == 'ru':
-                                hashMap.put("toast", 'Указанный товар отсутствует в заказе на отбор') 
-                            hashMap.put("ShowScreen", "wms.Ввод товара отбор")
+                            if CurScreen == "wms.Ввод товара отбор":
+                                if user_locale == 'ua':
+                                    hashMap.put("toast", 'Товар не знайдено або не відповідає вказаній комірці') 
+                                elif user_locale == 'ru':
+                                    hashMap.put("toast", 'Товар не найден или не соответствует указанной ячейке') 
+                                hashMap.put("ShowScreen", "wms.Ввод товара отбор")
+                            else:
+                                if user_locale == 'ua':
+                                    hashMap.put("toast", 'Товар відсутній у заказі на відбір') 
+                                elif user_locale == 'ru':
+                                    hashMap.put("toast", 'Товар отсутствует в заказе на отбор') 
+                                hashMap.put("ShowScreen", "wms.Ввод товара отбор")
 
                         else:
                             if CurScreen == "wms.Ввод товара отбор":
