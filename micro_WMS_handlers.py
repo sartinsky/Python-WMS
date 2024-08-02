@@ -1,4 +1,4 @@
-#import ui_global
+import ui_global
 from pony.orm.core import db_session
 from pony import orm
 from pony.orm import Database,Required,Set,select,commit
@@ -9,18 +9,18 @@ import json
 postgrest_url = 'http://192.168.1.102:3000'
 timeout = 3
 
-# def init_on_start(hashMap,_files=None,_data=None):
-#     ui_global.init()
-#     user_locale = hashMap.get("USER_LOCALE")
-#     return hashMap
+def init_on_start(hashMap,_files=None,_data=None):
+    ui_global.init()
+    user_locale = hashMap.get("USER_LOCALE")
+    return hashMap
 
-# def settings_on_create(hashMap,_files=None,_data=None):
-#     if not hashMap.containsKey("_UserLocale"):
-#         hashMap.put("get_user_locale","_UserLocale") #get from NoSQL
-#     else:
-#         hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
+def settings_on_create(hashMap,_files=None,_data=None):
+    if not hashMap.containsKey("_UserLocale"):
+        hashMap.put("get_user_locale","_UserLocale") #get from NoSQL
+    else:
+        hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
     
-#     return hashMap 
+    return hashMap 
 
 def settings_on_input(hashMap,_files=None,_data=None):
     if hashMap.get("listener")=="lang":
@@ -42,9 +42,27 @@ def get_Permit_On_qty(hashMap, user_locale):
     for row in filtered_data:
         if row['id'] == int(cur_sku_id):
             if user_locale == 'ua':
-                cur_qty = min(total_qty,row['Кіл-ть'])                        
+                if 'Кіл-ть' in row:
+                    cur_qty = min(total_qty, row['Кіл-ть'])
+                    row['Кіл-ть'] = row['Кіл-ть'] - cur_qty
+                else:
+                    # Поиск ключа, содержащего "Осталось"
+                    for key in row.keys():
+                        if 'Залишилось' in key:
+                            cur_qty = min(total_qty, row[key])
+                            row[key] = row[key] - cur_qty
+                            break                
             elif user_locale == 'ru':
-                cur_qty = min(total_qty,row['Кол-во'])                        
+                if 'Кол-во' in row:
+                    cur_qty = min(total_qty, row['Кол-во'])
+                    row['Кол-во'] = row['Кол-во'] - cur_qty
+                else:
+                    # Поиск ключа, содержащего "Осталось"
+                    for key in row.keys():
+                        if 'Осталось' in key:
+                            cur_qty = min(total_qty, row[key])
+                            row[key] = row[key] - cur_qty
+                            break
             break        
                 
     return False if total_qty > cur_qty else True
@@ -1457,13 +1475,11 @@ if __name__ == "__main__":
     hashMap.put("USER_LOCALE","ua")
     hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("orderRef","163")
-    hashMap.put("current_screen_name","wms.Ввод адреса отбор")
+    hashMap.put("current_screen_name","wms.Ввод товара отгрузка")
     Get_OrderGoods_Data_To_Table(hashMap)
-    Get_Picking(hashMap)
-    hashMap.put("addr_id", '1-1-1-1-5')
     hashMap.put("nom_id", '95')
     hashMap.put("qty", '3')
-    hashMap.put("current_screen_name","wms.Ввод количества отбор")
+    hashMap.put("current_screen_name","wms.Ввод количества отгрузка")
     on_input_qtyfact(hashMap)
     # on_btn_placing(hashMap)
     # hashMap.put("current_screen_name","wms.Ввод адреса размещение")
