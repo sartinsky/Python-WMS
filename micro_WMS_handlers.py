@@ -1373,16 +1373,16 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 if CurScreen == 'wms.Выбор распоряжения отбор':
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
-                    if jrecord['manual'] == True:
+                    # if jrecord['manual'] == True:
                         
-                        curorder = hashMap.get("order")
-                        curorderRef = hashMap.get("orderRef")
-                        hashMap.put("FinishProcess")
-                        hashMap.put("StartProcess", 'Приемка по факту')                        
-                        hashMap.put("order", curorder)
-                        hashMap.put("orderRef", curorderRef)
-                        hashMap.put("ShowScreen", "wms.Данные приходной накладной")
-                    else:
+                    #     curorder = hashMap.get("order")
+                    #     curorderRef = hashMap.get("orderRef")
+                    #     hashMap.put("FinishProcess")
+                    #     hashMap.put("StartProcess", 'Приемка по факту')                        
+                    #     hashMap.put("order", curorder)
+                    #     hashMap.put("orderRef", curorderRef)
+                    #     hashMap.put("ShowScreen", "wms.Данные приходной накладной")
+                    # else:
                         hashMap.put("ShowScreen", "Приемка по заказу начало")
                         
                 elif CurScreen == 'wms.Выбор распоряжения отгрузка':    
