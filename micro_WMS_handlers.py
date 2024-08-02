@@ -1391,7 +1391,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 elif CurScreen == 'wms.Выбор распоряжения':    
                     if jrecord['manual'] == True:
                         hashMap.put("toast", unit_id)
-                        hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
+                        hashMap.put("ShowScreen", "wms.Данные приходной накладной")
                     else:
                         hashMap.put("ShowScreen", "Приемка по заказу начало")
                         
