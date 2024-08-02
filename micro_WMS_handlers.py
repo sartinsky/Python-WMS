@@ -507,6 +507,7 @@ def on_btn_placing(hashMap,_files=None,_data=None):
 
 def on_btn_done(hashMap,_files=None,_data=None):
 
+    hashMap.put("toast", '1')
     user_locale = hashMap.get("USER_LOCALE")
     Doc_Updated = hashMap.get("Doc_Updated")
 
@@ -517,6 +518,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
             hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
         return hashMap
         
+    hashMap.put("toast", '2')   
     CurScreen = hashMap.get("current_screen_name")
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
@@ -553,7 +555,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
                 
     except Exception as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')
-
+    hashMap.put("toast", '3')   
     return hashMap
 
 def on_address_input(hashMap,_files=None,_data=None):
