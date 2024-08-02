@@ -1366,9 +1366,8 @@ def on_TableClick(hashMap,_files=None,_data=None):
 
     if listener == "TableClick":
             
-        #jrecord = json.loads(hashMap.get("selected_line"))
-        #unit_id = str(jrecord['id'])
-        unit_id = hashMap.get("orderRef")
+        jrecord = json.loads(hashMap.get("selected_line"))
+        unit_id = str(jrecord['id'])
             
         # Путь к нужной таблице или представлению
         path = f'wms_orders_captions?id=eq.{unit_id}'
