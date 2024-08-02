@@ -1404,29 +1404,29 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-#Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# #Пример использования функции
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
-    def get(self, key, default=None):
-       return self.store.get(key, default)
+#     def get(self, key, default=None):
+#        return self.store.get(key, default)
 
-#Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
-    hashMap.put("orderRef","155")
-    hashMap.put("current_screen_name","wms.Выбор распоряжения")
-    hashMap.put("USER_LOCALE","ua")
-    hashMap.put("ANDROID_ID","380eaecaff29d921")
-    hashMap.put("listener", 'TableClick')
-    hashMap.put("nom_id", '95')
-    hashMap.put("qty_plan", '2')
-    hashMap.put("qty", '1')
-    on_TableClick(hashMap)
+# #Тестирование функции
+# if __name__ == "__main__":
+#     hashMap = MockHashMap()
+#     hashMap.put("orderRef","155")
+#     hashMap.put("current_screen_name","wms.Выбор распоряжения")
+#     hashMap.put("USER_LOCALE","ua")
+#     hashMap.put("ANDROID_ID","380eaecaff29d921")
+#     hashMap.put("listener", 'TableClick')
+#     hashMap.put("nom_id", '95')
+#     hashMap.put("qty_plan", '2')
+#     hashMap.put("qty", '1')
+#     on_TableClick(hashMap)
     # on_TableClick(hashMap)
     # Get_OrderGoods_Data_To_Table(hashMap)
     # hashMap.put("current_screen_name","wms.Ввод количества инвентаризация")
