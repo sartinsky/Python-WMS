@@ -245,9 +245,9 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
     elif CurScreen == 'wms.Ввод адреса списание':
         if user_locale == 'ua':
-            path = f'rpc/get_operators_outgoing_manually?order_id={order_id}&select=Товар:nom,Комірка:address,Кіл-ть:qty'
+            path = f'rpc/get_operators_outgoing_manually?orderid={order_id}&select=Товар:nom,Комірка:address,Кіл-ть:qty'
         elif user_locale == 'ru':
-            path = f'rpc/get_operators_outgoing_manually?order_id={order_id}&select=Товар:nom,Ячейка:address,Кол-во:qty'
+            path = f'rpc/get_operators_outgoing_manually?orderid={order_id}&select=Товар:nom,Ячейка:address,Кол-во:qty'
 
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
