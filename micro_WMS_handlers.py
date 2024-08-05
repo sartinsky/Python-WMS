@@ -54,41 +54,22 @@ def Set_Var(hashMap, _files=None, _data=None):
 
     CurScreen = hashMap.get("current_screen_name")
 
-    if CurScreen == "wms.Ввод товара по заказу":
+    if CurScreen == "wms.Ввод товара по заказу" or CurScreen=="wms.Ввод товара приемка факт" or CurScreen=="wms.Ввод количества факт по заказу" or \
+       CurScreen=="wms.Ввод количества взять размещение" or CurScreen=="wms.Ввод количества факт" or CurScreen=="wms.Ввод товара перемещение" or \
+       CurScreen=="wms.Ввод товара положить" or CurScreen=="wms.Ввод товара отгрузка" or CurScreen=="wms.Ввод количества отгрузка" or CurScreen=="wms.Ввод товара инвентаризация":
+    
         hashMap.put("noaddr", 'true')
-    elif CurScreen=="wms.Ввод количества факт по заказу":
-        hashMap.put("noaddr", 'true')
-    elif CurScreen=="wms.Ввод количества взять размещение":
-        hashMap.put("noaddr", 'true')
-    elif CurScreen=="wms.Ввод адреса размещение":
-        hashMap.put("action_str", 'Сканируйте адрес')
-    elif CurScreen=="wms.Ввод количества размещение":
+    elif CurScreen=="wms.Ввод адреса размещение" or CurScreen=="wms.Ввод адреса инвентаризация" or CurScreen=="wms.Ввод адреса списание":
+        hashMap.put("action_str", 'Сканируйте адрес ячейки')
+    elif CurScreen=="wms.Ввод количества размещение" or CurScreen=="wms.Ввод количества отбор" or CurScreen == 'wms.Ввод количества списание':
         hashMap.put("noaddr", 'false')
-    elif CurScreen=="wms.Ввод товара приемка факт":
-        hashMap.put("noaddr", 'true')
-    elif CurScreen=="wms.Ввод количества факт":
-        hashMap.put("noaddr", 'true')    
     elif CurScreen=="wms.Ввод адреса":
         hashMap.put("action_str", 'Сканируйте адрес-отправитель')        
-    elif CurScreen=="wms.Ввод товара перемещение":
-        hashMap.put("noaddr", 'true')            
     elif CurScreen=="wms.Ввод адреса положить":
         hashMap.put("action_str", 'Сканируйте адрес-получатель')            
-    elif CurScreen=="wms.Ввод товара положить":
-        hashMap.put("noaddr", 'true')                
     elif CurScreen=="wms.Ввод адреса отбор":
         hashMap.put("action_str", 'Сканируйте адрес ячейки')    
         hashMap.put("NextAddr", 'Нет задания')
-    elif CurScreen=="wms.Ввод количества отбор" or CurScreen == 'wms.Ввод количества списание':
-        hashMap.put("noaddr", 'false')
-    elif CurScreen=="wms.Ввод товара отгрузка":
-        hashMap.put("noaddr", 'true')
-    elif CurScreen=="wms.Ввод количества отгрузка":
-        hashMap.put("noaddr", 'true')
-    elif CurScreen=="wms.Ввод адреса инвентаризация":
-        hashMap.put("action_str", 'Сканируйте адрес')
-    elif CurScreen=="wms.Ввод товара инвентаризация":
-        hashMap.put("noaddr", 'true')    
     return hashMap
 
 def fill_central_table(data, CurScreen, user_locale):
