@@ -270,10 +270,10 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
                     del item['manual']
                 if 'qty' in item:
                     del item['qty']    
- 
-            
-            hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen,user_locale)))
-            hashMap.put("data_with_ids", json.dumps(data_with_ids))
+                        
+            if not CurScreen == 'wms.Ввод адреса списание':
+                hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen,user_locale)))
+                hashMap.put("data_with_ids", json.dumps(data_with_ids))
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
                 hashMap.put("table", json.dumps(data))
@@ -1530,18 +1530,19 @@ if __name__ == "__main__":
     hashMap = MockHashMap()
     
     hashMap.put("USER_LOCALE","ua")
-    hashMap.put("ANDROID_ID","380eaecaff29d921")
-    hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
-    hashMap.put("listener", 'btn_placing')
-    on_btn_placing(hashMap)
-    hashMap.put("current_screen_name","wms.Ввод адреса размещение")
-    get_placement_orders(hashMap)
-    hashMap.put("addr_id", '1-1-1-1-1')
-    hashMap.put("nom_id", '95')
-    hashMap.put("qty", '2')
-    hashMap.put("current_screen_name","wms.Ввод количества размещение")
-    hashMap.put("listener", None)
-    on_input_qtyfact(hashMap)
+    hashMap.put('orderRef','186')
+    #hashMap.put("ANDROID_ID","380eaecaff29d921")
+    hashMap.put("current_screen_name","wms.Ввод адреса списание")
+    #hashMap.put("listener", 'btn_placing')
+    #on_btn_placing(hashMap)
+    #hashMap.put("current_screen_name","wms.Ввод адреса размещение")
+    #get_placement_orders(hashMap)
+    #hashMap.put("addr_id", '1-1-1-1-1')
+    #hashMap.put("nom_id", '95')
+    #hashMap.put("qty", '2')
+    #hashMap.put("current_screen_name","wms.Ввод количества размещение")
+    #hashMap.put("listener", None)
+    Get_OrderGoods_Data_To_Table(hashMap)
     
     
     #Get_OrderGoods_Data_To_Table(hashMap)
