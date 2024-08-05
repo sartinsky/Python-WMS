@@ -1307,6 +1307,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:
             
+                order_id = hashMap.get("orderRef")
+
                 hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
                 # Путь к нужной таблице или представлению
@@ -1322,6 +1324,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 
                 #Параметры запроса (например, фильтрация данных)
                 data = {
+                "order_id": order_id,
                 "no_order": 'true',
                 "qty": hashMap.get("qty_minus"),
                 "sku_id": hashMap.get("nom_id"),
