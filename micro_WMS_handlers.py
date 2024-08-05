@@ -734,7 +734,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                             hashMap.put("toast", f'Exception occurred: {str(e)}')
                         
                     else:
-                        hashMap.put("toast", f'Error: {response.status_code}')        
+                        error_message = response.json().get('message', response.text)
+                        hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
             else:
@@ -793,7 +794,10 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                             # Проверка статуса ответа
                             if not response.status_code == 201:
-                                hashMap.put("toast", f'Error: {response.status_code}') 
+                                hashMap.put("toast", f'Error: {response.status_code}')
+                            else:
+                                error_message = response.json().get('message', response.text)
+                                hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')     
                                 return hashMap
 
                 except Exception as e:
@@ -989,7 +993,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         hashMap.put("toast", f'Exception occurred: {str(e)}')
                     
                 else:
-                    hashMap.put("toast", f'Error: {response.status_code}')        
+                    error_message = response.json().get('message', response.text)
+                    hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')
 
@@ -1049,7 +1054,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         hashMap.put("toast", f'Exception occurred: {str(e)}')
                     
                 else:
-                    hashMap.put("toast", f'Error: {response.status_code}')        
+                    error_message = response.json().get('message', response.text)
+                    hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')            
 
@@ -1112,7 +1118,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                             hashMap.put("toast", f'Exception occurred: {str(e)}')
                         
                     else:
-                        hashMap.put("toast", f'Error: {response.status_code}')        
+                        error_message = response.json().get('message', response.text)
+                        hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
 
@@ -1160,7 +1167,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     if response.status_code == 201:
                         hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")                                        
                     else:
-                        hashMap.put("toast", f'Error: {response.status_code}')        
+                        error_message = response.json().get('message', response.text)
+                        hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
             else:        
