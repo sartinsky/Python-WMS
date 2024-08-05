@@ -50,7 +50,6 @@ def get_Permit_On_qty(hashMap, user_locale):
                 
     return False if total_qty > 0 else True
 
-
 def Set_Var(hashMap, _files=None, _data=None):
 
     CurScreen = hashMap.get("current_screen_name")
@@ -79,8 +78,8 @@ def Set_Var(hashMap, _files=None, _data=None):
         hashMap.put("noaddr", 'true')                
     elif CurScreen=="wms.Ввод адреса отбор":
         hashMap.put("action_str", 'Сканируйте адрес ячейки')    
-        hashMap.put("NextAddr", 'Нет задания')    
-    elif CurScreen=="wms.Ввод количества отбор":
+        hashMap.put("NextAddr", 'Нет задания')
+    elif CurScreen=="wms.Ввод количества отбор" or CurScreen == 'wms.Ввод количества списание':
         hashMap.put("noaddr", 'false')
     elif CurScreen=="wms.Ввод товара отгрузка":
         hashMap.put("noaddr", 'true')
@@ -229,7 +228,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
     if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
         path = f'wms_orders_table?select=id:sku_id,Товар:nom,Артикул:code,План:plan,Факт:fact,manual:manual&order_id=eq.{order_id}'
                 
-    elif CurScreen == 'wms.Ввод адреса отбор':
+    elif CurScreen == 'wms.Ввод адреса отбор' or CurScreen == 'wms.Ввод адреса списание':
         if user_locale == 'ua':
             path = f'rpc/get_picking?orderid={order_id}&select=id:sku_id,Товар:sku,Адреса:address,Кіл-ть:qty,qty:qty'
         elif user_locale == 'ru':
@@ -272,7 +271,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
                 hashMap.put("table", json.dumps(data))
-            elif CurScreen == 'wms.Ввод адреса отбор':    
+            elif CurScreen == 'wms.Ввод адреса отбор'  or CurScreen == 'wms.Ввод адреса списание':    
                 hashMap.put("addr_table", json.dumps(data))
             elif CurScreen == 'wms.Выбор распоряжения инвентаризация':    
                 hashMap.put("table", json.dumps(data))
@@ -498,7 +497,11 @@ def on_BACK_BUTTON(hashMap, _files=None, _data=None):
     elif CurScreen=="wms.Ввод количества отгрузка":
         hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")
     elif CurScreen=="wms.Ввод товара инвентаризация":
-        hashMap.put("ShowScreen", "wms.Ввод адреса инвентаризация")    
+        hashMap.put("ShowScreen", "wms.Ввод адреса инвентаризация")
+    elif CurScreen=="wms.Ввод товара списание":
+        hashMap.put("ShowScreen", "wms.Ввод адреса списание")    
+    elif CurScreen=="wms.Ввод количества списание":
+        hashMap.put("ShowScreen", "wms.Ввод товара списание")    
     return hashMap 
 
 def on_FORVARD_BUTTON(hashMap, _files=None, _data=None):
@@ -617,7 +620,10 @@ def on_address_input(hashMap,_files=None,_data=None):
                     elif CurScreen == 'wms.Ввод адреса отбор':
                         hashMap.put("ShowScreen", "wms.Ввод товара отбор")
                     elif CurScreen == 'wms.Ввод адреса инвентаризация':
-                        hashMap.put("ShowScreen", "wms.Ввод товара инвентаризация")    
+                        hashMap.put("ShowScreen", "wms.Ввод товара инвентаризация")
+                    elif CurScreen == 'wms.Ввод адреса списание':
+                        hashMap.put("ShowScreen", "wms.Ввод товара списание")
+                        
                 else:    
                     if user_locale == 'ua':
                         hashMap.put("toast", f"Комірку з штрихкодом {barcode} не знайдено")
@@ -1299,6 +1305,45 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
 
+    elif CurScreen == "wms.Ввод количества списание":
+
+        if listener is None:
+            
+                hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
+
+                # Путь к нужной таблице или представлению
+                path = 'wms_operations'
+                
+                # Полный URL для запроса
+                url = f'{postgrest_url}/{path}'
+
+                # Заголовки для запроса
+                headers = {
+                'Content-Type': 'application/json'
+                }
+                
+                #Параметры запроса (например, фильтрация данных)
+                data = {
+                "no_order": 'true',
+                "qty": hashMap.get("qty_minus"),
+                "sku_id": hashMap.get("nom_id"),
+                "user": hashMap.get("ANDROID_ID"),
+                "address_id": hashMap.get("addr_id")            
+                }
+
+                try:
+                    # Отправка POST-запроса
+                    response = requests.post(url, json=data, timeout=timeout)
+
+                    # Проверка статуса ответа
+                    if response.status_code == 201:
+                        hashMap.put("ShowScreen", "wms.Ввод адреса списание")
+                        
+                    else:
+                        hashMap.put("toast", f'Error: {response.status_code}')        
+                except Exception as e:
+                    hashMap.put("toast", f'Exception occurred: {str(e)}')
+
     return hashMap 
 
 def on_units_input(hashMap,_files=None,_data=None):
@@ -1350,7 +1395,6 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("filtered_data", json.dumps(filtered_data))
                             hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
                     elif CurScreen == "wms.Ввод товара размещение":
-
                         data_with_ids = json.loads(hashMap.get('data_with_ids'))
                         filtered_data = [item for item in data_with_ids if item['id'] == jrecord['id']]  
                         if not filtered_data:
@@ -1366,9 +1410,8 @@ def on_units_input(hashMap,_files=None,_data=None):
                             hashMap.put("ShowScreen", "wms.Ввод товара размещение")
                         else:
                             hashMap.put("ShowScreen", "wms.Ввод количества размещение")
-
                     elif CurScreen == "wms.Ввод товара приемка факт":
-                        hashMap.put("ShowScreen", "wms.Ввод количества факт")    
+                        hashMap.put("ShowScreen", "wms.Ввод количества факт")
                     elif CurScreen == "wms.Ввод товара перемещение":
                         hashMap.put("ShowScreen", "wms.Ввод количества взять")        
                     elif CurScreen == "wms.Ввод товара положить":
@@ -1404,6 +1447,8 @@ def on_units_input(hashMap,_files=None,_data=None):
                                 hashMap.put("ShowScreen", "wms.Ввод количества отбор")
                             elif CurScreen == "wms.Ввод товара отгрузка":
                                 hashMap.put("ShowScreen", "wms.Ввод количества отгрузка")        
+                    elif CurScreen == 'wms.Ввод товара списание':
+                        hashMap.put("ShowScreen", "wms.Ввод количества списание")        
                     elif CurScreen == "wms.Ввод товара инвентаризация":
                         hashMap.put("ShowScreen", "wms.Ввод количества инвентаризация")
 
