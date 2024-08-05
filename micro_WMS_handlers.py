@@ -1320,9 +1320,10 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     # Проверка статуса ответа
                     if response.status_code == 201:
                         hashMap.put("ShowScreen", "wms.Ввод адреса списание")
-                        
                     else:
-                        hashMap.put("toast", f'Error: {response.status_code}')        
+                        error_message = response.json().get('message', response.text)
+                        hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
+                        
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
 
