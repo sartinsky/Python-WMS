@@ -228,7 +228,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
     if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
         path = f'wms_orders_table?select=id:sku_id,Товар:nom,Артикул:code,План:plan,Факт:fact,manual:manual&order_id=eq.{order_id}'
                 
-    elif CurScreen == 'wms.Ввод адреса отбор' or CurScreen == 'wms.Ввод адреса списание':
+    elif CurScreen == 'wms.Ввод адреса отбор':
         if user_locale == 'ua':
             path = f'rpc/get_picking?orderid={order_id}&select=id:sku_id,Товар:sku,Адреса:address,Кіл-ть:qty,qty:qty'
         elif user_locale == 'ru':
@@ -242,6 +242,12 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
     elif CurScreen == 'wms.Выбор распоряжения инвентаризация':
         path = f'rpc/get_inventory_list?orderid={order_id}&select=Товар:nom,План:qty_plan,Факт:qty_fact'
+
+    elif CurScreen == 'wms.Ввод адреса списание':
+        if user_locale == 'ua':
+            path = f'rpc/get_operators_outgoing_manually?order_id={order_id}&select=Товар:nom,Комірка:address,Кіл-ть:qty'
+        elif user_locale == 'ru':
+            path = f'rpc/get_operators_outgoing_manually?order_id={order_id}&select=Товар:nom,Ячейка:address,Кол-во:qty'
 
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -276,6 +282,8 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             elif CurScreen == 'wms.Выбор распоряжения инвентаризация':    
                 hashMap.put("table", json.dumps(data))
                 hashMap.put("ShowScreen", "wms.Ввод адреса инвентаризация")
+            elif CurScreen == 'wms.Ввод адреса списание':
+                hashMap.put("addr_table", json.dumps(data))    
                 
         else:
             hashMap.put("toast", f'Error: {response.status_code}')
@@ -773,16 +781,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 headers = {
                 'Content-Type': 'application/json'
                 }
-                
-                #Параметры запроса (например, фильтрация данных)
-                # data = {
-                # "no_order": str(no_order),
-                # "qty": hashMap.get("qty_minus"),
-                # "sku_id": hashMap.get("nom_id"),
-                # "user": hashMap.get("ANDROID_ID"),
-                # "address_id": hashMap.get("ANDROID_ID"),
-                # "to_operation": "1"
-                # }
                 
                 try:
                     
