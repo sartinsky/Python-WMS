@@ -794,8 +794,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                             # Проверка статуса ответа
                             if not response.status_code == 201:
-                                hashMap.put("toast", f'Error: {response.status_code}')
-                            else:
                                 error_message = response.json().get('message', response.text)
                                 hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')     
                                 return hashMap
@@ -1522,20 +1520,27 @@ class MockHashMap:
 if __name__ == "__main__":
     hashMap = MockHashMap()
     
+    hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("USER_LOCALE","ua")
-    hashMap.put('orderRef','186')
+    hashMap.put("listener", 'btn_placing')
+    hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
+    on_btn_placing(hashMap)
+    get_placement_orders(hashMap)
+    hashMap.put("addr_id", '1-1-1-1-1')
+    hashMap.put("nom_id", '95')
+    hashMap.put("qty", '1')
+    hashMap.put("current_screen_name","wms.Ввод количества размещение")
+    hashMap.put("listener", None)
+    on_input_qtyfact(hashMap)
     #hashMap.put("ANDROID_ID","380eaecaff29d921")
-    hashMap.put("current_screen_name","wms.Ввод адреса списание")
-    #hashMap.put("listener", 'btn_placing')
-    #on_btn_placing(hashMap)
     #hashMap.put("current_screen_name","wms.Ввод адреса размещение")
     #get_placement_orders(hashMap)
-    #hashMap.put("addr_id", '1-1-1-1-1')
-    #hashMap.put("nom_id", '95')
-    #hashMap.put("qty", '2')
+    
+    
+    
     #hashMap.put("current_screen_name","wms.Ввод количества размещение")
     #hashMap.put("listener", None)
-    Get_OrderGoods_Data_To_Table(hashMap)
+    #Get_OrderGoods_Data_To_Table(hashMap)
     
     
     #Get_OrderGoods_Data_To_Table(hashMap)
