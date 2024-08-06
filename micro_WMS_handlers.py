@@ -179,6 +179,8 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
     elif CurScreen == 'wms.Выбор распоряжения инвентаризация':
         path = 'wms_orders_captions?and=(typeid.eq.3,done.is.null)&select=id:id,Склад:contractor,Дата:doc_date_str'
+    elif CurScreen == 'wms.Выбор ручного списания':
+        path = 'wms_orders_captions?and=(typeid.eq.1,done.is.null,manual.eq.true)&select=id:id,Склад:contractor,Дата:doc_date_str'    
 
     else:
         hashMap.put("toast", "Ошибка: неизвестный экран")
@@ -256,9 +258,8 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
                 if 'qty' in item:
                     del item['qty']    
                         
-            if not CurScreen == 'wms.Ввод адреса списание':
-                hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen,user_locale)))
-                hashMap.put("data_with_ids", json.dumps(data_with_ids))
+            hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen,user_locale)))
+            hashMap.put("data_with_ids", json.dumps(data_with_ids))
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
                 hashMap.put("table", json.dumps(data))
@@ -1493,9 +1494,10 @@ def on_TableClick(hashMap,_files=None,_data=None):
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
                     hashMap.put("ShowScreen", "Приемка по заказу начало")
-                        
                 elif CurScreen == 'wms.Выбор распоряжения отгрузка':    
-                    hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")                                   
+                    hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")
+                elif CurScreen == 'wms.Выбор ручного списания':    
+                    hashMap.put("ShowScreen", "wms.Ввод адреса списание")
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
         except Exception as e:
