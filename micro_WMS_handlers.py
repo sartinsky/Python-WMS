@@ -161,9 +161,9 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     # Путь к нужной таблице или представлению
     if CurScreen == 'wms.Выбор распоряжения':        
         if user_locale == 'ua':
-            path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null,manual.neq.true))&select=id:id,Постачальник:contractor,Номер:doc_number'
+            path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null),manual.neq.true)&select=id:id,Постачальник:contractor,Номер:doc_number'
         elif user_locale == 'ru':
-            path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null,manual.neq.true))&select=id:id,Поставщик:contractor,Номер:doc_number'
+            path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null),manual.neq.true)&select=id:id,Поставщик:contractor,Номер:doc_number'
         
     elif CurScreen == 'wms.Выбор распоряжения отбор':
         if user_locale == 'ua':
