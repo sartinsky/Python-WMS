@@ -528,12 +528,15 @@ def on_btn_placing(hashMap,_files=None,_data=None):
 
 def on_btn_done(hashMap,_files=None,_data=None):
 
-    CurScreen = hashMap.get("current_screen_name")
-    user_locale = hashMap.get("USER_LOCALE")
-    orderIsManual = hashMap.get("orderIsManual") 
-    Doc_Updated = hashMap.get("Doc_Updated")
-    
     hashMap.put("toast", '1')
+    CurScreen = hashMap.get("current_screen_name")
+    hashMap.put("toast", '2')
+    user_locale = hashMap.get("USER_LOCALE")
+    hashMap.put("toast", '3')
+    orderIsManual = hashMap.get("orderIsManual") 
+    hashMap.put("toast", '4')
+    Doc_Updated = hashMap.get("Doc_Updated")
+    hashMap.put("toast", '5')
     hashMap.put("toast", str(orderIsManual))
     hashMap.put("toast", (Doc_Updated))
     
