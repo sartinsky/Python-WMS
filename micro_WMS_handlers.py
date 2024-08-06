@@ -533,6 +533,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
     orderIsManual = hashMap.get("orderIsManual") 
     Doc_Updated = hashMap.get("Doc_Updated")
     
+    hashMap.put("toast", '1')
     hashMap.put("toast", str(orderIsManual))
     hashMap.put("toast", (Doc_Updated))
     
