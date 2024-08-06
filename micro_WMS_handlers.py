@@ -180,7 +180,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     elif CurScreen == 'wms.Выбор распоряжения инвентаризация':
         path = 'wms_orders_captions?and=(typeid.eq.3,done.is.null)&select=id:id,Склад:contractor,Дата:doc_date_str'
     elif CurScreen == 'wms.Выбор ручного списания':
-        path = 'wms_orders_captions?and=(typeid.eq.2,done.is.null,manual.eq.true)&select=id:id,Склад:contractor,Дата:doc_date_str'    
+        path = 'wms_orders_captions?and=(typeid.eq.2,done.is.null,manual.eq.true)&select=id:id,Склад:contractor,Дата:doc_date_str,Номер:description'    
 
     else:
         hashMap.put("toast", "Ошибка: неизвестный экран")
