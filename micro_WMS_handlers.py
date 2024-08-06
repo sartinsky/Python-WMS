@@ -180,6 +180,10 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
     elif CurScreen == 'wms.Выбор распоряжения инвентаризация':
         path = 'wms_orders_captions?and=(typeid.eq.3,done.is.null)&select=id:id,Склад:contractor,Дата:doc_date_str'
 
+    else:
+        hashMap.put("toast", "Ошибка: неизвестный экран")
+        return hashMap
+
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
 
@@ -529,7 +533,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
     orderIsManual = hashMap.get("orderIsManual") 
     Doc_Updated = hashMap.get("Doc_Updated")
 
-    if orderIsManual == 'true': 
+    if orderIsManual: 
         if not Doc_Updated is None or Doc_Updated == False:
             if user_locale == 'ua':
                 hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
@@ -1516,42 +1520,10 @@ if __name__ == "__main__":
     
     hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("USER_LOCALE","ua")
-    hashMap.put("listener", 'btn_placing')
+    
     hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
-    on_btn_placing(hashMap)
-    get_placement_orders(hashMap)
-    hashMap.put("addr_id", '1-1-1-1-1')
-    hashMap.put("nom_id", '95')
-    hashMap.put("qty", '1')
-    hashMap.put("current_screen_name","wms.Ввод количества размещение")
-    hashMap.put("listener", None)
-    on_input_qtyfact(hashMap)
-    #hashMap.put("ANDROID_ID","380eaecaff29d921")
-    #hashMap.put("current_screen_name","wms.Ввод адреса размещение")
-    #get_placement_orders(hashMap)
+    Get_Orders_Data_To_Table(hashMap)
+    hashMap.put("listener", 'TableClick')
+    hashMap.put("selected_line", '1')
+    on_TableClick(hashMap)
     
-    
-    
-    #hashMap.put("current_screen_name","wms.Ввод количества размещение")
-    #hashMap.put("listener", None)
-    #Get_OrderGoods_Data_To_Table(hashMap)
-    
-    
-    #Get_OrderGoods_Data_To_Table(hashMap)
-    
-    #hashMap.put("current_screen_name","wms.Ввод количества отгрузка")
-    
-    #hashMap.put("orderRef","163")
-    # on_btn_placing(hashMap)
-    # hashMap.put("current_screen_name","wms.Ввод адреса размещение")
-    # get_placement_orders(hashMap)
-    # 
-    # hashMap.put("addr", '1-1-1-1-1')
-    # get_goods_for_address_placement(hashMap) 
-    # hashMap.put("nom", 'Свердло')
-    # hashMap.put("nom_id", '95')
-    
-    # hashMap.put("current_screen_name","wms.Ввод количества размещение")
-    # hashMap.put("qty","3")
-    
-    # on_input_qtyfact(hashMap)
