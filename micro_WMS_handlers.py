@@ -533,16 +533,14 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
     CurScreen = hashMap.get("current_screen_name")
     user_locale = hashMap.get("USER_LOCALE")
-    orderIsManual = hashMap.get("orderIsManual") 
     Doc_Updated = hashMap.get("Doc_Updated")
     
-    if orderIsManual == 'True': 
-        if Doc_Updated == 'False':
-            if user_locale == 'ua':
-                hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
-            elif user_locale == 'ru':
-                hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
-            return hashMap
+    if Doc_Updated == 'False':
+        if user_locale == 'ua':
+            hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
+        elif user_locale == 'ru':
+            hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
+        return hashMap
         
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
