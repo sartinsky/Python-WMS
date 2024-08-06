@@ -532,10 +532,6 @@ def on_btn_done(hashMap,_files=None,_data=None):
     user_locale = hashMap.get("USER_LOCALE")
     orderIsManual = hashMap.get("orderIsManual") 
     Doc_Updated = hashMap.get("Doc_Updated")
-    hashMap.put("toast",str(orderIsManual))
-    hashMap.put("toast",str(Doc_Updated))
-    return hashMap
-
     if orderIsManual: 
         if not Doc_Updated is None or Doc_Updated == False:
             if user_locale == 'ua':
