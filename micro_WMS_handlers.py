@@ -532,7 +532,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
     user_locale = hashMap.get("USER_LOCALE")
     orderIsManual = hashMap.get("orderIsManual") 
     Doc_Updated = hashMap.get("Doc_Updated")
-    if orderIsManual: 
+    if orderIsManual == 'true': 
         if not Doc_Updated is None or Doc_Updated == False:
             if user_locale == 'ua':
                 hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
