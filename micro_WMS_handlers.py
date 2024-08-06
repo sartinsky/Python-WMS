@@ -164,7 +164,13 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
             path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null),manual.neq.true)&select=id:id,Постачальник:contractor,Номер:doc_number'
         elif user_locale == 'ru':
             path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null),manual.neq.true)&select=id:id,Поставщик:contractor,Номер:doc_number'
-        
+
+    elif CurScreen == 'wms.Выбор распоряжения по факту':        
+        if user_locale == 'ua':
+            path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null),manual.eq.true)&select=id:id,Постачальник:contractor,Номер:doc_number'
+        elif user_locale == 'ru':
+            path = 'wms_orders_captions?and=(typeid.eq.1,or(done.neq.true,done.is.null),manual.eq.true)&select=id:id,Поставщик:contractor,Номер:doc_number'
+
     elif CurScreen == 'wms.Выбор распоряжения отбор':
         if user_locale == 'ua':
             path = 'wms_orders_captions?and=(typeid.eq.2,done.is.null,manual.neq.true)&select=id:id,Покупець:contractor,Номер:doc_number'
@@ -1516,6 +1522,8 @@ def on_TableClick(hashMap,_files=None,_data=None):
                     hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")
                 elif CurScreen == 'wms.Выбор ручного списания':    
                     hashMap.put("ShowScreen", "wms.Ввод адреса списание")
+                elif CurScreen == 'wms.Выбор распоряжения по факту':    
+                    hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")    
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
         except Exception as e:
