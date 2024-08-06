@@ -544,7 +544,8 @@ def on_btn_done(hashMap,_files=None,_data=None):
                 hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
             return hashMap
         
-    
+    return hashMap
+
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
 
