@@ -532,8 +532,8 @@ def on_btn_done(hashMap,_files=None,_data=None):
     user_locale = hashMap.get("USER_LOCALE")
     orderIsManual = hashMap.get("orderIsManual") 
     Doc_Updated = hashMap.get("Doc_Updated")
-    if orderIsManual == 'true': 
-        if not Doc_Updated is None or Doc_Updated == False:
+    if orderIsManual == 'True': 
+        if not Doc_Updated is None or Doc_Updated == 'False':
             if user_locale == 'ua':
                 hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
             elif user_locale == 'ru':
@@ -1487,8 +1487,8 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 jrecord = data[0]
                 hashMap.put("order", jrecord['caption'])
                 hashMap.put("orderRef", unit_id)
-                hashMap.put("orderIsManual", jrecord['manual'])
-                hashMap.put("toast", jrecord['manual'])
+                hashMap.put("orderIsManual", str(jrecord['manual']))
+                hashMap.put("toast", str(jrecord['manual']))
                 if CurScreen == 'wms.Выбор распоряжения отбор':
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
