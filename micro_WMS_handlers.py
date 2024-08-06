@@ -535,15 +535,20 @@ def on_btn_done(hashMap,_files=None,_data=None):
     user_locale = hashMap.get("USER_LOCALE")
     Doc_Updated = hashMap.get("Doc_Updated")
     
+    if Doc_Updated is None:
+        hashMap.put("toast", '0')
+
     if Doc_Updated == 'False':
-        hashMap.put("toast", 1)
+        hashMap.put("toast", '1')
     #     if user_locale == 'ua':
     #         hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
     #     elif user_locale == 'ru':
     #         hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
     #     return hashMap
+    elif Doc_Updated == 'True':
+        hashMap.put("toast", '2')
     else:
-        hashMap.put("toast", 2)    
+        hashMap.put("toast", '3')    
     return hashMap
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
