@@ -548,7 +548,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
     elif Doc_Updated == 'True':
         hashMap.put("toast", '2')
     else:
-        hashMap.put("toast", '3')    
+        hashMap.put("toast", str(Doc_Updated))    
     return hashMap
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
