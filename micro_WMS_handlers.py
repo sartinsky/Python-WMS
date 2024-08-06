@@ -1488,6 +1488,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 hashMap.put("order", jrecord['caption'])
                 hashMap.put("orderRef", unit_id)
                 hashMap.put("orderIsManual", jrecord['manual'])
+                hashMap.put("toast", jrecord['manual'])
                 if CurScreen == 'wms.Выбор распоряжения отбор':
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
