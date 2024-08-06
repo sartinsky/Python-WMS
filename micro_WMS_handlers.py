@@ -199,7 +199,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
             data = response.json()
             hashMap.put("orders_table", json.dumps(data))
         else:
-            hashMap.put("toast", f'Error: {response.status_code}')        
+           Toast_txt_error(hashMap, response)
     except Exception as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')        
 
@@ -234,7 +234,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
         if user_locale == 'ua':
             path = f'rpc/get_operators_outgoing_manually?orderid={order_id}&select=sku_id:sku_id,Товар:nom,Комірка:address,Кіл-ть:qty,qty:qty,manual:manual'
         elif user_locale == 'ru':
-            path = f'rpc/get_operators_outgoing_manually?orderid={order_id}&select=sku_id:sku_id,Товар:nom,Ячейка:address,Кол-во:qty,qty:qty,manual:manual'
+            path = f'rpc/get_operators_outgoing_manually?orderid={order_id}&select=sku_id:sku_id,Товар:nom,Ячейка:address,Кол-во:qty,qty:qty,manual:manual,'
 
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -674,7 +674,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     Get_OrderGoods_Data_To_Table(hashMap)
                     hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
                 else:
-                    hashMap.put("toast", f'Error: {response.status_code}')        
+                    Toast_txt_error(hashMap, response)       
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')
         elif listener == "BACK_BUTTON":
@@ -736,13 +736,12 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                             if response.status_code == 201:
                                 hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
                             else:
-                                hashMap.put("toast", f'Error: {response.status_code}')        
+                                Toast_txt_error(hashMap, response)       
                         except Exception as e:
                             hashMap.put("toast", f'Exception occurred: {str(e)}')
                         
                     else:
-                        error_message = response.json().get('message', response.text)
-                        hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
+                        Toast_txt_error(hashMap, response)
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
             else:
@@ -801,8 +800,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                             # Проверка статуса ответа
                             if not response.status_code == 201:
-                                error_message = response.json().get('message', response.text)
-                                hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')     
+                                Toast_txt_error(hashMap, response)
                                 return hashMap
 
                 except Exception as e:
@@ -825,7 +823,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     if response.status_code == 201:
                         hashMap.put("ShowScreen", "wms.Ввод адреса размещение")
                     else:
-                        hashMap.put("toast", f'Error: {response.status_code}')        
+                        Toast_txt_error(hashMap, response)       
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')                                     
             else:
@@ -878,16 +876,16 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     patch_url = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{nom_id}&id=eq.{record_id}'
                     response = requests.patch(patch_url, json=patch_data, headers=headers, timeout=timeout)
                     if not (response.status_code == 200 or response.status_code == 204):
-                        hashMap.put("toast", f'Error: {response.status_code}')
+                        Toast_txt_error(hashMap, response)
                         return hashMap
                 elif get_response.status_code == 404 or not get_response.json():
                     # Запись не существует, выполняем POST-запрос для создания новой
                     response = requests.post(url, json=data, headers=headers, timeout=timeout)
                     if not response.status_code == 201:
-                        hashMap.put("toast", f'Error: {response.status_code}')
+                        Toast_txt_error(hashMap, response)
                         return hashMap
                 else:
-                    hashMap.put("toast", f'Error: {get_response.status_code}')
+                    Toast_txt_error(hashMap, response)
                     return hashMap
                     
             except Exception as e:
@@ -928,16 +926,16 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     if response.status_code == 200 or response.status_code == 204:
                         hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
                     else:
-                        hashMap.put("toast", f'Error: {response.status_code}')
+                        Toast_txt_error(hashMap, response)
                 elif get_response.status_code == 404 or not get_response.json():
                     # Запись не существует, выполняем POST-запрос для создания новой
                     response = requests.post(url, json=data, headers=headers, timeout=timeout)
                     if response.status_code == 201:
                         hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
                     else:
-                        hashMap.put("toast", f'Error: {response.status_code}')
+                        Toast_txt_error(hashMap, response)
                 else:
-                    hashMap.put("toast", f'Error: {get_response.status_code}')
+                    Toast_txt_error(hashMap, response)
                     
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')   
@@ -993,13 +991,12 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         if response.status_code == 201:
                             hashMap.put("ShowScreen", "wms.Ввод адреса")
                         else:
-                            hashMap.put("toast", f'Error: {response.status_code}')        
+                            Toast_txt_error(hashMap, response)       
                     except Exception as e:
                         hashMap.put("toast", f'Exception occurred: {str(e)}')
                     
                 else:
-                    error_message = response.json().get('message', response.text)
-                    hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
+                    Toast_txt_error(hashMap, response)
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')
 
@@ -1054,13 +1051,12 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         if response.status_code == 201:
                             hashMap.put("ShowScreen", "wms.Ввод адреса положить")
                         else:
-                            hashMap.put("toast", f'Error: {response.status_code}')        
+                            Toast_txt_error(hashMap, response)       
                     except Exception as e:
                         hashMap.put("toast", f'Exception occurred: {str(e)}')
                     
                 else:
-                    error_message = response.json().get('message', response.text)
-                    hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
+                    Toast_txt_error(hashMap, response)
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')            
 
@@ -1118,13 +1114,12 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                             if response.status_code == 201:
                                 hashMap.put("ShowScreen", "wms.Ввод адреса отбор")
                             else:
-                                hashMap.put("toast", f'Error: {response.status_code}')        
+                                Toast_txt_error(hashMap, response)       
                         except Exception as e:
                             hashMap.put("toast", f'Exception occurred: {str(e)}')
                         
                     else:
-                        error_message = response.json().get('message', response.text)
-                        hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
+                        Toast_txt_error(hashMap, response)
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
 
@@ -1172,8 +1167,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     if response.status_code == 201:
                         hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")                                        
                     else:
-                        error_message = response.json().get('message', response.text)
-                        hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
+                        Toast_txt_error(hashMap, response)
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
             else:        
@@ -1234,7 +1228,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         hashMap.put("toast", f'Error: {response.status_code}')
                     
                 else:
-                    hashMap.put("toast", f'Error: {response.status_code}')        
+                    Toast_txt_error(hashMap, response)       
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')            
   
@@ -1293,7 +1287,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                     # Проверка статуса ответа
                     if not response.status_code == 201:
-                        hashMap.put("toast", f'Error: {response.status_code}')        
+                        Toast_txt_error(hashMap, response)       
                 except Exception as e:
                     hashMap.put("toast", f'Exception occurred: {str(e)}')
 
@@ -1301,46 +1295,70 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:
             
-                order_id = hashMap.get("orderRef")
+            order_id = hashMap.get("orderRef")
+            hashMap.put("qty_plan", str(-1*int(hashMap.get("qty_minus"))))
 
-                hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
+            path = 'wms_orders'
+            url = f'{postgrest_url}/{path}'
+            
+            #Параметры запроса (например, фильтрация данных)
+            data = {
+            "sku_id": hashMap.get("nom_id"),
+            "qty_plan": hashMap.get("qty_plan"),
+            "order_id": str(order_id)
+            }
 
-                # Путь к нужной таблице или представлению
-                path = 'wms_operations'
+            try:
+                response = requests.post(url, json=data, headers=headers, timeout=timeout)
+                if not response.status_code == 201:
+                    Toast_txt_error(hashMap, response)
+                    return hashMap
+                    
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
+                return hashMap
+
+
+            #---------------------------------    
+            # Путь к нужной таблице или представлению
+            path = 'wms_operations'
                 
-                # Полный URL для запроса
-                url = f'{postgrest_url}/{path}'
+            # Полный URL для запроса
+            url = f'{postgrest_url}/{path}'
 
-                # Заголовки для запроса
-                headers = {
-                'Content-Type': 'application/json'
-                }
+            # Заголовки для запроса
+            headers = {
+            'Content-Type': 'application/json'
+            }
                 
-                #Параметры запроса (например, фильтрация данных)
-                data = {
-                "order_id": order_id,
-                "no_order": 'true',
-                "qty": hashMap.get("qty_minus"),
-                "sku_id": hashMap.get("nom_id"),
-                "user": hashMap.get("ANDROID_ID"),
-                "address_id": hashMap.get("addr_id")            
-                }
+            #Параметры запроса (например, фильтрация данных)
+            data = {
+            "order_id": order_id,
+            "no_order": 'true',
+            "qty": hashMap.get("qty_minus"),
+            "sku_id": hashMap.get("nom_id"),
+            "user": hashMap.get("ANDROID_ID"),
+            "address_id": hashMap.get("addr_id")            
+            }
 
-                try:
-                    # Отправка POST-запроса
-                    response = requests.post(url, json=data, timeout=timeout)
+            try:
+                # Отправка POST-запроса
+                response = requests.post(url, json=data, timeout=timeout)
 
-                    # Проверка статуса ответа
-                    if response.status_code == 201:
-                        hashMap.put("ShowScreen", "wms.Ввод адреса списание")
-                    else:
-                        error_message = response.json().get('message', response.text)
-                        hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
+                # Проверка статуса ответа
+                if response.status_code == 201:
+                    hashMap.put("ShowScreen", "wms.Ввод адреса списание")
+                else:
+                    Toast_txt_error(hashMap, response)
                         
-                except Exception as e:
-                    hashMap.put("toast", f'Exception occurred: {str(e)}')
-
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
+                
     return hashMap 
+
+def Toast_txt_error(hashMap, response):
+    error_message = response.json().get('message', response.text)
+    hashMap.put("toast", f'Error: {response.status_code}, Message: {error_message}')
 
 def on_units_input(hashMap,_files=None,_data=None):
     
