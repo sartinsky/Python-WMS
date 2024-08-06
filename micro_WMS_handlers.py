@@ -536,7 +536,6 @@ def on_btn_done(hashMap,_files=None,_data=None):
     orderIsManual = hashMap.get("orderIsManual") 
     Doc_Updated = hashMap.get("Doc_Updated")
     
-    hashMap.put("toast", Doc_Updated)
     if orderIsManual == 'True': 
         if Doc_Updated == 'False':
             if user_locale == 'ua':
@@ -545,8 +544,6 @@ def on_btn_done(hashMap,_files=None,_data=None):
                 hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
             return hashMap
         
-    return hashMap
-
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
 
