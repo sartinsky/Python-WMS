@@ -1,4 +1,4 @@
-import ui_global
+#import ui_global
 from pony.orm.core import db_session
 from pony import orm
 from pony.orm import Database,Required,Set,select,commit
@@ -10,7 +10,7 @@ postgrest_url = 'http://192.168.1.102:3000'
 timeout = 3
 
 def init_on_start(hashMap,_files=None,_data=None):
-    ui_global.init()
+ #   ui_global.init()
     user_locale = hashMap.get("USER_LOCALE")
     return hashMap
 
@@ -1296,15 +1296,20 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
         if listener is None:
             
             order_id = hashMap.get("orderRef")
-            hashMap.put("qty_plan", str(-1*int(hashMap.get("qty_minus"))))
+            hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
             path = 'wms_orders'
             url = f'{postgrest_url}/{path}'
             
+            # Заголовки для запроса
+            headers = {
+            'Content-Type': 'application/json'
+            }
+
             #Параметры запроса (например, фильтрация данных)
             data = {
             "sku_id": hashMap.get("nom_id"),
-            "qty_plan": hashMap.get("qty_plan"),
+            "qty_plan": str(hashMap.get("qty")),
             "order_id": str(order_id)
             }
 
@@ -1325,12 +1330,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 
             # Полный URL для запроса
             url = f'{postgrest_url}/{path}'
-
-            # Заголовки для запроса
-            headers = {
-            'Content-Type': 'application/json'
-            }
-                
+    
             #Параметры запроса (например, фильтрация данных)
             data = {
             "order_id": order_id,
@@ -1539,10 +1539,12 @@ if __name__ == "__main__":
     
     hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("USER_LOCALE","ua")
-    hashMap.put("orderRef","227")
-    
-    hashMap.put("current_screen_name","wms.Ввод адреса списание")
-    Get_OrderGoods_Data_To_Table(hashMap)
+    hashMap.put("orderRef","263")
+    hashMap.put("listener",None)
+    hashMap.put("current_screen_name","wms.Ввод количества списание")
+    hashMap.put("nom_id","95")
+    hashMap.put("qty","1")
+    on_input_qtyfact(hashMap)
     # hashMap.put("listener", 'TableClick')
     # hashMap.put("selected_line", '1')
     # on_TableClick(hashMap)
