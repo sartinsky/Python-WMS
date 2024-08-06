@@ -524,17 +524,20 @@ def on_btn_placing(hashMap,_files=None,_data=None):
 
 def on_btn_done(hashMap,_files=None,_data=None):
 
+    CurScreen = hashMap.get("current_screen_name")
     user_locale = hashMap.get("USER_LOCALE")
+    orderIsManual = hashMap.get("Doc_Updated") 
     Doc_Updated = hashMap.get("Doc_Updated")
 
-    if not Doc_Updated is None and Doc_Updated == False:
-        if user_locale == 'ua':
-            hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
-        elif user_locale == 'ru':
-            hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
-        return hashMap
+    if orderIsManual: 
+        if not Doc_Updated is None or Doc_Updated == False:
+            if user_locale == 'ua':
+                hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
+            elif user_locale == 'ru':
+                hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
+            return hashMap
         
-    CurScreen = hashMap.get("current_screen_name")
+    
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
 
@@ -1481,20 +1484,11 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 jrecord = data[0]
                 hashMap.put("order", jrecord['caption'])
                 hashMap.put("orderRef", unit_id)
+                hashMap.put("orderIsManual", jrecord['manual'])
                 if CurScreen == 'wms.Выбор распоряжения отбор':
                     hashMap.put("ShowScreen", "wms.Ввод адреса отбор")        
                 elif CurScreen == 'wms.Выбор распоряжения':    
-                    # if jrecord['manual'] == True:
-                        
-                    #     curorder = hashMap.get("order")
-                    #     curorderRef = hashMap.get("orderRef")
-                    #     hashMap.put("FinishProcess")
-                    #     hashMap.put("StartProcess", 'Приемка по факту')                        
-                    #     hashMap.put("order", curorder)
-                    #     hashMap.put("orderRef", curorderRef)
-                    #     hashMap.put("ShowScreen", "wms.Данные приходной накладной")
-                    # else:
-                        hashMap.put("ShowScreen", "Приемка по заказу начало")
+                    hashMap.put("ShowScreen", "Приемка по заказу начало")
                         
                 elif CurScreen == 'wms.Выбор распоряжения отгрузка':    
                     hashMap.put("ShowScreen", "wms.Ввод товара отгрузка")                                   
