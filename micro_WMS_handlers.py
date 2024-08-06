@@ -536,12 +536,12 @@ def on_btn_done(hashMap,_files=None,_data=None):
     Doc_Updated = hashMap.get("Doc_Updated")
     hashMap.put("toast", Doc_Updated)
 
-    if Doc_Updated == 'False':
-        if user_locale == 'ua':
-            hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
-        elif user_locale == 'ru':
-            hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
-        return hashMap
+    # if Doc_Updated == 'False':
+    #     if user_locale == 'ua':
+    #         hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
+    #     elif user_locale == 'ru':
+    #         hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
+    #     return hashMap
         
     return hashMap
     unit_id = hashMap.get("orderRef")
