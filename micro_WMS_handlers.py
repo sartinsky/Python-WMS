@@ -541,9 +541,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
         elif user_locale == 'ru':
             hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
         return hashMap
-    else:
-        hashMap.put("toast", str(Doc_Updated))
-    return hashMap
+    
     unit_id = hashMap.get("orderRef")
     path = f'wms_orders_captions?id=eq.{unit_id}'
 
