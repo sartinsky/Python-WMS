@@ -232,9 +232,9 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
     elif CurScreen == 'wms.Ввод адреса списание':
         if user_locale == 'ua':
-            path = f'rpc/get_operators_outgoing_manually?orderid={order_id}&select=Товар:nom,Комірка:address,Кіл-ть:qty'
+            path = f'rpc/get_operators_outgoing_manually?orderid={order_id}&select=sku_id:sku_id,Товар:nom,Комірка:address,Кіл-ть:qty,qty:qty'
         elif user_locale == 'ru':
-            path = f'rpc/get_operators_outgoing_manually?orderid={order_id}&select=Товар:nom,Ячейка:address,Кол-во:qty'
+            path = f'rpc/get_operators_outgoing_manually?orderid={order_id}&select=sku_id:sku_id,Товар:nom,Ячейка:address,Кол-во:qty,qty:qty'
 
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
@@ -257,8 +257,10 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
                     del item['manual']
                 if 'qty' in item:
                     del item['qty']    
-                        
-            hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen,user_locale)))
+
+            if not CurScreen == 'wms.Ввод адреса списание':
+                hashMap.put("central_table", json.dumps(fill_central_table(data,CurScreen,user_locale)))
+            
             hashMap.put("data_with_ids", json.dumps(data_with_ids))
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
@@ -1522,10 +1524,11 @@ if __name__ == "__main__":
     
     hashMap.put("ANDROID_ID","380eaecaff29d921")
     hashMap.put("USER_LOCALE","ua")
+    hashMap.put("orderRef","227")
     
-    hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
-    Get_Orders_Data_To_Table(hashMap)
-    hashMap.put("listener", 'TableClick')
-    hashMap.put("selected_line", '1')
-    on_TableClick(hashMap)
+    hashMap.put("current_screen_name","wms.Ввод адреса списание")
+    Get_OrderGoods_Data_To_Table(hashMap)
+    # hashMap.put("listener", 'TableClick')
+    # hashMap.put("selected_line", '1')
+    # on_TableClick(hashMap)
     
