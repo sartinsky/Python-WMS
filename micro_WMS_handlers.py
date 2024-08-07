@@ -1,16 +1,17 @@
-import ui_global
 from pony.orm.core import db_session
 from pony import orm
-from pony.orm import Database,Required,Set,select,commit
+from pony.orm import Database,Required,Set,Json,PrimaryKey,Optional,select,commit
+import datetime
+
 import requests
 import json
 
  # URL вашего PostgREST сервера
-postgrest_url = 'http://192.168.1.102:3000'
+postgrest_url = 'http://176.102.48.128:3000'
 timeout = 3
 
 def init_on_start(hashMap,_files=None,_data=None):
-    ui_global.init()
+    init()
     user_locale = hashMap.get("USER_LOCALE")
     return hashMap
 
@@ -21,6 +22,18 @@ def settings_on_create(hashMap,_files=None,_data=None):
         hashMap.put("lang",hashMap.get("_UserLocale")) #set defaul list value
     
     return hashMap 
+
+db = Database()
+db.bind(provider='sqlite', filename='//data/data/ru.travelfood.simple_ui/databases/SimpleWMS', create_db=True)
+
+class Record(db.Entity):
+        barcode =  Required(str)
+        name =  Required(str)
+        qty = Required(int)
+        
+def init():
+    db.generate_mapping(create_tables=True)  
+
 
 def settings_on_input(hashMap,_files=None,_data=None):
     if hashMap.get("listener")=="lang":
