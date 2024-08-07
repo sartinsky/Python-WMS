@@ -1,4 +1,4 @@
-#import ui_global
+import ui_global
 from pony.orm.core import db_session
 from pony import orm
 from pony.orm import Database,Required,Set,select,commit
@@ -10,7 +10,7 @@ postgrest_url = 'http://192.168.1.102:3000'
 timeout = 3
 
 def init_on_start(hashMap,_files=None,_data=None):
- #   ui_global.init()
+    ui_global.init()
     user_locale = hashMap.get("USER_LOCALE")
     return hashMap
 
@@ -1531,30 +1531,27 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-#Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# #Пример использования функции
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
-    def get(self, key, default=None):
-       return self.store.get(key, default)
+#     def get(self, key, default=None):
+#        return self.store.get(key, default)
 
-#Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
+# #Тестирование функции
+# if __name__ == "__main__":
+#     hashMap = MockHashMap()
     
-    hashMap.put("ANDROID_ID","380eaecaff29d921")
-    hashMap.put("USER_LOCALE","ua")
-    hashMap.put("orderRef","263")
-    hashMap.put("listener",None)
-    hashMap.put("current_screen_name","wms.Ввод количества списание")
-    hashMap.put("nom_id","95")
-    hashMap.put("qty","1")
-    on_input_qtyfact(hashMap)
-    # hashMap.put("listener", 'TableClick')
-    # hashMap.put("selected_line", '1')
-    # on_TableClick(hashMap)
+#     hashMap.put("ANDROID_ID","380eaecaff29d921")
+#     hashMap.put("USER_LOCALE","ua")
+#     hashMap.put("orderRef","263")
+#     hashMap.put("listener",None)
+#     hashMap.put("current_screen_name","wms.Ввод количества списание")
+#     hashMap.put("nom_id","95")
+#     hashMap.put("qty","1")
+#     on_input_qtyfact(hashMap)
     
