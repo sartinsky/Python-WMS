@@ -528,6 +528,8 @@ def on_FORVARD_BUTTON(hashMap, _files=None, _data=None):
         hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
     elif CurScreen == "wms.Ввод количества факт" and listener is None:
         on_input_qtyfact(hashMap)
+        hashMap.put('qty_plan', None)
+        hashMap.put('qty', None)
     return hashMap 
 
 def on_btn_put(hashMap, _files=None, _data=None):
