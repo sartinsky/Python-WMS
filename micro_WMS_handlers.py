@@ -492,12 +492,14 @@ def get_operators_moving(hashMap, _files=None, _data=None):
 def on_BACK_BUTTON(hashMap, _files=None, _data=None):
 
     CurScreen = hashMap.get("current_screen_name")
-    if CurScreen == "wms.Ввод товара размещение":
-        hashMap.put("ShowScreen", "wms.Ввод адреса размещение")
-    elif CurScreen == "wms.Ввод количества размещение":
-        hashMap.put("ShowScreen", "wms.Ввод товара размещение")
-    elif CurScreen == "wms.Ввод количества взять размещение":
+    if CurScreen == "wms.Ввод количества взять размещение":
         hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
+    elif CurScreen == "wms.Ввод адреса размещение":
+        hashMap.put("ShowScreen", "wms.Ввод количества взять размещение")
+    elif CurScreen == "wms.Ввод товара размещение":
+        hashMap.put("ShowScreen", "wms.Ввод адреса размещение")    
+    elif CurScreen == "wms.Ввод количества размещение":
+        hashMap.put("ShowScreen", "wms.Ввод товара размещение")    
     elif CurScreen == "wms.Ввод товара отбор":
         hashMap.put("ShowScreen", "wms.Ввод адреса отбор")
     elif CurScreen=="wms.Ввод количества отбор":
@@ -549,6 +551,8 @@ def on_FORVARD_BUTTON(hashMap, _files=None, _data=None):
         on_input_qtyfact(hashMap)
     elif CurScreen == "wms.Ввод количества положить" and listener is None:
         on_input_qtyfact(hashMap)    
+    elif CurScreen == "wms.Ввод количества размещение" and listener is None:
+        on_input_qtyfact(hashMap)        
     return hashMap 
 
 def on_btn_put(hashMap, _files=None, _data=None):
