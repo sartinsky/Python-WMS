@@ -676,6 +676,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
     no_order = not hashMap.get("orderRef")
     listener = hashMap.get("listener")
     CurScreen = hashMap.get("current_screen_name")
+    hashMap.put("toast", CurScreen)    
+            
     if CurScreen == "wms.Ввод количества факт по заказу":
         
         if listener is None:
@@ -980,7 +982,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:
 
-            hashMap.put("toast", '1')    
             hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
             # Путь к нужной таблице или представлению
