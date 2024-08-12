@@ -676,8 +676,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
     no_order = not hashMap.get("orderRef")
     listener = hashMap.get("listener")
     CurScreen = hashMap.get("current_screen_name")
-    hashMap.put("toast", CurScreen)    
-            
     if CurScreen == "wms.Ввод количества факт по заказу":
         
         if listener is None:
@@ -1037,6 +1035,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     Toast_txt_error(hashMap, response)
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')
+        hashMap.put("toast",'1')
 
     elif CurScreen == "wms.Ввод количества положить":
 
