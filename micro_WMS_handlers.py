@@ -518,6 +518,18 @@ def on_BACK_BUTTON(hashMap, _files=None, _data=None):
         hashMap.put("ShowScreen", "wms.Ввод адреса списание")    
     elif CurScreen=="wms.Ввод количества списание":
         hashMap.put("ShowScreen", "wms.Ввод товара списание")    
+    elif CurScreen=="Приемка по заказу начало":
+        hashMap.put("ShowScreen", "wms.Выбор распоряжения")
+    elif CurScreen=="wms.Ввод товара по заказу":
+        hashMap.put("ShowScreen", "Приемка по заказу начало")    
+    elif CurScreen=="wms.Ввод товара по заказу":
+        hashMap.put("ShowScreen", "wms.Ввод количества факт по заказу")
+    elif CurScreen=="wms.Данные приходной накладной":
+        hashMap.put("ShowScreen", "wms.Выбор распоряжения по факту")
+    elif CurScreen=="wms.Ввод товара приемка факт":
+        hashMap.put("ShowScreen", "wms.Данные приходной накладной")
+    elif CurScreen=="wms.Ввод количества факт":
+        hashMap.put("ShowScreen", "wms.Данные приходной накладной")            
     return hashMap 
 
 def on_FORVARD_BUTTON(hashMap, _files=None, _data=None):
