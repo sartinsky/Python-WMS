@@ -979,7 +979,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
     elif CurScreen == "wms.Ввод количества взять":
 
         if listener is None:
-        
+
+            hashMap.put("toast", '1')    
             hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
             # Путь к нужной таблице или представлению
