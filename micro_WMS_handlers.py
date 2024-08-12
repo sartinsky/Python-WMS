@@ -980,7 +980,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:
 
-            hashMap.put("toast",'1')
             hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
             # Путь к нужной таблице или представлению
@@ -1031,9 +1030,11 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                             Toast_txt_error(hashMap, response)       
                     except Exception as e:
                         hashMap.put("toast", f'Exception occurred: {str(e)}')
+                        hashMap.put("toast",'2')
                     
                 else:
                     Toast_txt_error(hashMap, response)
+                    hashMap.put("toast",'1')
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')
         
