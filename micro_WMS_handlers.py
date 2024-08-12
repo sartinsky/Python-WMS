@@ -527,7 +527,7 @@ def on_BACK_BUTTON(hashMap, _files=None, _data=None):
     elif CurScreen=="wms.Данные приходной накладной":
         hashMap.put("ShowScreen", "wms.Выбор распоряжения по факту")
     elif CurScreen=="wms.Ввод товара приемка факт":
-        hashMap.put("ShowScreen", "wms.Данные приходной накладной")
+        hashMap.put("ShowScreen", "wms.Выбор распоряжения по факту")
     elif CurScreen=="wms.Ввод количества факт":
         hashMap.put("ShowScreen", "wms.Данные приходной накладной")            
     return hashMap 
