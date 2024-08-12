@@ -979,64 +979,66 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
     elif CurScreen == "wms.Ввод количества взять":
 
         if listener is None:
+            hashMap.put("toast", '1')
+        else:
+            hashMap.put("toast", '2')    
+            # hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
-            hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
-
-            # Путь к нужной таблице или представлению
-            path = 'wms_operations'
+            # # Путь к нужной таблице или представлению
+            # path = 'wms_operations'
             
-            # Полный URL для запроса
-            url = f'{postgrest_url}/{path}'
+            # # Полный URL для запроса
+            # url = f'{postgrest_url}/{path}'
 
-            # Заголовки для запроса
-            headers = {
-            'Content-Type': 'application/json'
-            }
+            # # Заголовки для запроса
+            # headers = {
+            # 'Content-Type': 'application/json'
+            # }
             
-            #Параметры запроса (например, фильтрация данных)
-            data = {
-            "no_order": str(no_order),
-            "qty": hashMap.get("qty_minus"),
-            "sku_id": hashMap.get("nom_id"),
-            "user": hashMap.get("ANDROID_ID"),
-            "address_id": hashMap.get("addr_id"),
-            }
+            # #Параметры запроса (например, фильтрация данных)
+            # data = {
+            # "no_order": str(no_order),
+            # "qty": hashMap.get("qty_minus"),
+            # "sku_id": hashMap.get("nom_id"),
+            # "user": hashMap.get("ANDROID_ID"),
+            # "address_id": hashMap.get("addr_id"),
+            # }
 
-            try:
-                # Отправка POST-запроса
-                response = requests.post(url, json=data, timeout=timeout)
+            # try:
+            #     # Отправка POST-запроса
+            #     response = requests.post(url, json=data, timeout=timeout)
 
-                # Проверка статуса ответа
-                if response.status_code == 201:
+            #     # Проверка статуса ответа
+            #     if response.status_code == 201:
                     
-                    #Параметры запроса (например, фильтрация данных)
-                    data = {
-                    "no_order": str(no_order),
-                    "qty": hashMap.get("qty"),
-                    "sku_id": hashMap.get("nom_id"),
-                    "user": hashMap.get("ANDROID_ID"),
-                    "address_id": hashMap.get("ANDROID_ID"),
-                    "to_operation": "5"
-                    }
+            #         #Параметры запроса (например, фильтрация данных)
+            #         data = {
+            #         "no_order": str(no_order),
+            #         "qty": hashMap.get("qty"),
+            #         "sku_id": hashMap.get("nom_id"),
+            #         "user": hashMap.get("ANDROID_ID"),
+            #         "address_id": hashMap.get("ANDROID_ID"),
+            #         "to_operation": "5"
+            #         }
                     
-                    try:
-                        # Отправка GET-запроса
-                        response = requests.post(url, json=data, timeout=timeout)
+            #         try:
+            #             # Отправка GET-запроса
+            #             response = requests.post(url, json=data, timeout=timeout)
 
-                        # Проверка статуса ответа
-                        if response.status_code == 201:
-                            hashMap.put("ShowScreen", "wms.Ввод адреса")
-                        else:
-                            Toast_txt_error(hashMap, response)       
-                    except Exception as e:
-                        hashMap.put("toast", f'Exception occurred: {str(e)}')
-                        hashMap.put("toast",'2')
+            #             # Проверка статуса ответа
+            #             if response.status_code == 201:
+            #                 hashMap.put("ShowScreen", "wms.Ввод адреса")
+            #             else:
+            #                 Toast_txt_error(hashMap, response)       
+            #         except Exception as e:
+            #             hashMap.put("toast", f'Exception occurred: {str(e)}')
+            #             hashMap.put("toast",'2')
                     
-                else:
-                    Toast_txt_error(hashMap, response)
-                    hashMap.put("toast",'1')
-            except Exception as e:
-                hashMap.put("toast", f'Exception occurred: {str(e)}')
+            #     else:
+            #         Toast_txt_error(hashMap, response)
+            #         hashMap.put("toast",'1')
+            # except Exception as e:
+            #     hashMap.put("toast", f'Exception occurred: {str(e)}')
         
     elif CurScreen == "wms.Ввод количества положить":
 
