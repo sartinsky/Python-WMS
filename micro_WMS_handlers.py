@@ -527,9 +527,7 @@ def on_FORVARD_BUTTON(hashMap, _files=None, _data=None):
     if CurScreen == "Приемка по заказу начало" and listener is None:
         hashMap.put("ShowScreen", "wms.Ввод товара по заказу")
     elif CurScreen == "wms.Ввод количества факт" and listener is None:
-        on_input_qtyfact(hashMap)
-        hashMap.put('qty_plan', '')
-        hashMap.put('qty', '')
+        on_input_qtyfact(hashMap)        
     return hashMap 
 
 def on_btn_put(hashMap, _files=None, _data=None):
@@ -893,7 +891,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     # Запись существует, выполняем PATCH-запрос для обновления записи
                     patch_data = {
                         "qty_plan": hashMap.get("qty_plan")
-                        #"qty_fact": hashMap.get("qty")
                     }
                     patch_url = f'{postgrest_url}/{path}?order_id=eq.{order_id}&sku_id=eq.{nom_id}&id=eq.{record_id}'
                     response = requests.patch(patch_url, json=patch_data, headers=headers, timeout=timeout)
@@ -1315,8 +1312,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
     elif CurScreen == "wms.Ввод количества списание":
 
-        if listener is None:
-            
+        if listener is None:            
             order_id = hashMap.get("orderRef")
             hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
@@ -1376,7 +1372,69 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         
             except Exception as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')
+            order_id = hashMap.get("orderRef")
+            hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
+
+            path = 'wms_orders'
+            url = f'{postgrest_url}/{path}'
+            
+            # Заголовки для запроса
+            headers = {
+            'Content-Type': 'application/json'
+            }
+
+            #Параметры запроса (например, фильтрация данных)
+            data = {
+            "sku_id": hashMap.get("nom_id"),
+            "qty_plan": str(hashMap.get("qty")),
+            "qty_fact": str(hashMap.get("qty")),
+            "order_id": str(order_id)
+            }
+
+            try:
+                response = requests.post(url, json=data, headers=headers, timeout=timeout)
+                if not response.status_code == 201:
+                    Toast_txt_error(hashMap, response)
+                    return hashMap
+                    
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
+                return hashMap
+
+
+            #---------------------------------    
+            # Путь к нужной таблице или представлению
+            path = 'wms_operations'
                 
+            # Полный URL для запроса
+            url = f'{postgrest_url}/{path}'
+    
+            #Параметры запроса (например, фильтрация данных)
+            data = {
+            "order_id": order_id,
+            "no_order": 'true',
+            "qty": hashMap.get("qty_minus"),
+            "sku_id": hashMap.get("nom_id"),
+            "user": hashMap.get("ANDROID_ID"),
+            "address_id": hashMap.get("addr_id")            
+            }
+
+            try:
+                # Отправка POST-запроса
+                response = requests.post(url, json=data, timeout=timeout)
+
+                # Проверка статуса ответа
+                if response.status_code == 201:
+                    hashMap.put("ShowScreen", "wms.Ввод адреса списание")
+                else:
+                    Toast_txt_error(hashMap, response)
+                        
+            except Exception as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
+
+    hashMap.put('qty_plan', '')
+    hashMap.put('qty', '')
+
     return hashMap 
 
 def Toast_txt_error(hashMap, response):
