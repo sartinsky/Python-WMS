@@ -7,8 +7,8 @@ import requests
 import json
 
  # URL вашего PostgREST сервера
-postgrest_url = 'http://176.102.48.128:3000'
-#postgrest_url = 'http://192.168.1.110:3000'
+#postgrest_url = 'http://176.102.48.128:3000'
+postgrest_url = 'http://192.168.0.198:3000'
 timeout = 3
 
 def init_on_start(hashMap,_files=None,_data=None):
@@ -1615,8 +1615,9 @@ def on_TableClick(hashMap,_files=None,_data=None):
 
     if listener == "TableClick":
             
-        jrecord = json.loads(hashMap.get("selected_line"))
-        unit_id = str(jrecord['id'])
+        #jrecord = json.loads(hashMap.get("selected_line"))
+        #unit_id = str(jrecord['id'])
+        #unit_id = 
             
         # Путь к нужной таблице или представлению
         path = f'wms_orders_captions?id=eq.{unit_id}'
@@ -1653,26 +1654,27 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-# #Пример использования функции
-# class MockHashMap:
-#     def __init__(self):
-#         self.store = {}
+ #Пример использования функции
+ class MockHashMap:
+     def __init__(self):
+         self.store = {}
 
-#     def put(self, key, value):
-#         self.store[key] = value
+     def put(self, key, value):
+         self.store[key] = value
 
-#     def get(self, key, default=None):
-#        return self.store.get(key, default)
+     def get(self, key, default=None):
+        return self.store.get(key, default)
 
-# #Тестирование функции
-# if __name__ == "__main__":
-#     hashMap = MockHashMap()
+ #Тестирование функции
+ if __name__ == "__main__":
+    hashMap = MockHashMap()
     
-#     hashMap.put("ANDROID_ID","380eaecaff29d921")
-#     hashMap.put("USER_LOCALE","ua")
+    hashMap.put("ANDROID_ID","380eaecaff29d921")
+    hashMap.put("USER_LOCALE","ua")
 #     hashMap.put("orderRef","263")
-#     hashMap.put("listener",None)
-#     hashMap.put("current_screen_name","wms.Ввод количества списание")
+    hashMap.put("listener",'barcode')
+    hashMap.put("current_screen_name","wms.Ввод товара инвентаризация")
+    hashMap.put('barcode', '')
 #     hashMap.put("nom_id","95")
 #     hashMap.put("qty","1")
 #     on_input_qtyfact(hashMap)
