@@ -9,7 +9,7 @@ import json
  # URL вашего PostgREST сервера
 #postgrest_url = 'http://176.102.48.128:3000'
 postgrest_url = 'http://192.168.0.198:3000'
-timeout = 3
+timeout = 10
 
 def init_on_start(hashMap,_files=None,_data=None):
     init()
@@ -1499,7 +1499,7 @@ def on_units_input(hashMap,_files=None,_data=None):
         barcode = hashMap.get("barcode")
         
         #path = f'wms_goods?barcode=in.(%22{barcode}%22)'
-        path = f'rpc/get_goods_by_barcode?barcode={barcode}&select=caption:caption,code:code,id:id,unit_str:unit_str'
+        path = f'rpc/get_goods_by_barcode?p_barcode={barcode}'
         # Полный URL для запроса
         url = f'{postgrest_url}/{path}'
 
