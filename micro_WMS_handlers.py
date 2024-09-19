@@ -343,9 +343,9 @@ def get_operators_placing(hashMap, _files=None, _data=None):
     user = 'К РАЗМЕЩЕНИЮ' 
     # Путь к нужной таблице или представлению
     if user_locale == 'ua':
-        path = f'rpc/get_operators_placing?user_id={user}&select=id:sku_id,Товар:nom,Кіл-ть:qty,order_id:id,qty:qty'
+        path = f'rpc/get_operators_placing?user_id={user}&select=id:sku_id,Товар:nom,Кіл-ть:qty,order_id,qty:qty'
     elif user_locale == 'ru':
-        path = f'rpc/get_operators_placing?user_id={user}&select=id:sku_id,Товар:nom,Кол-во:qty,order_id:id,qty:qty'
+        path = f'rpc/get_operators_placing?user_id={user}&select=id:sku_id,Товар:nom,Кол-во:qty,order_id,qty:qty'
     
     # Полный URL для запроса
     url = f'{postgrest_url}/{path}'
