@@ -606,7 +606,7 @@ def on_btn_done(hashMap,_files=None,_data=None):
         if user_locale == 'ua':
             hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
         elif user_locale == 'ru':
-            hashMap.put("toast", 'Документ не обновлен в БУ базе. ПОпробуйте позже')
+            hashMap.put("toast", 'Документ не обновлен в БУ базе. Попробуйте позже')
         return hashMap
     
     unit_id = hashMap.get("orderRef")
@@ -646,6 +646,16 @@ def on_btn_done(hashMap,_files=None,_data=None):
         hashMap.put("toast", f'Exception occurred: {str(e)}')
     
     return hashMap
+
+def on_btn_cancel(hashMap,_files=None,_data=None):
+
+    CurScreen = hashMap.get("current_screen_name")
+    user_locale = hashMap.get("USER_LOCALE")
+    Doc_Updated = hashMap.get("Doc_Updated")
+    hashMap.put("toast",hashMap.get("event"))        
+    
+    return hashMap
+
 
 def on_address_input(hashMap,_files=None,_data=None):
     
