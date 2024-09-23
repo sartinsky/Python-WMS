@@ -1624,6 +1624,7 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 elif CurScreen == 'wms.Выбор ручного списания':    
                     hashMap.put("ShowScreen", "wms.Ввод адреса списание")
                 elif CurScreen == 'wms.Выбор распоряжения по факту':    
+                    hashMap.put("toast", '11')
                     hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")    
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
