@@ -598,6 +598,9 @@ def on_btn_placing(hashMap,_files=None,_data=None):
 
 def on_btn_done(hashMap,_files=None,_data=None):
 
+    if hashMap.get("event")=="onResultNegative":
+        return hashMap    
+
     CurScreen = hashMap.get("current_screen_name")
     user_locale = hashMap.get("USER_LOCALE")
     Doc_Updated = hashMap.get("Doc_Updated")
@@ -649,11 +652,23 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
 def on_btn_cancel(hashMap,_files=None,_data=None):
 
+    if hashMap.get("event")=="onResultNegative":
+        return hashMap
+
     CurScreen = hashMap.get("current_screen_name")
     user_locale = hashMap.get("USER_LOCALE")
     Doc_Updated = hashMap.get("Doc_Updated")
-    hashMap.put("toast",hashMap.get("event"))        
     
+    if Doc_Updated == None or Doc_Updated == 'False':
+        if user_locale == 'ua':
+            hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
+        elif user_locale == 'ru':
+            hashMap.put("toast", 'Документ не обновлен в БУ базе. Попробуйте позже')
+        return hashMap
+
+    
+
+
     return hashMap
 
 
