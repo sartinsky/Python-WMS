@@ -1592,7 +1592,6 @@ def on_TableClick(hashMap,_files=None,_data=None):
     CurScreen = hashMap.get("current_screen_name")
     listener = hashMap.get("listener")
 
-    hashMap.put("toast", listener)
     if listener == "TableClick":
             
         jrecord = json.loads(hashMap.get("selected_line"))
@@ -1633,16 +1632,16 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-#Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# #Пример использования функции
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
-    def get(self, key, default=None):
-       return self.store.get(key, default)
+#     def get(self, key, default=None):
+#        return self.store.get(key, default)
 
 # #Тестирование функции
 # if __name__ == "__main__":
@@ -1650,17 +1649,18 @@ class MockHashMap:
     
 #     hashMap.put("ANDROID_ID","380eaecaff29d921")
 #     hashMap.put("USER_LOCALE","ua")
-#     hashMap.put("current_screen_name","wms.Ввод адреса списание")
-#     hashMap.put("orderRef","63")
-#     Get_OrderGoods_Data_To_Table(hashMap)
-#     hashMap.put("listener",'barcode')
-#     hashMap.put("addr_barcode",'1-1-1-1')
-#     on_address_input(hashMap)
-#     hashMap.put("barcode",'2000000002040')
-#     hashMap.put("current_screen_name","wms.Ввод товара списание")
-#     on_units_input(hashMap)
-#     hashMap.put("current_screen_name","wms.Ввод количества списание")
-#     hashMap.put("qty","1")
-#     hashMap.put("listener",None)
-#     on_FORVARD_BUTTON(hashMap)
+#     hashMap.put("current_screen_name","wms.Выбор распоряжения по факту")
+#     hashMap.put("orderRef","53")
+#     hashMap.put("listener",'TableClick')
+#     on_TableClick(hashMap)#Get_OrderGoods_Data_To_Table(hashMap)
+    #hashMap.put("listener",'barcode')
+    #hashMap.put("addr_barcode",'1-1-1-1')
+    #on_address_input(hashMap)
+    #hashMap.put("barcode",'2000000002040')
+    #hashMap.put("current_screen_name","wms.Ввод товара списание")
+    #on_units_input(hashMap)
+    #hashMap.put("current_screen_name","wms.Ввод количества списание")
+    #hashMap.put("qty","1")
+    #hashMap.put("listener",None)
+    #on_FORVARD_BUTTON(hashMap)
     
