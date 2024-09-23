@@ -760,9 +760,6 @@ def DeleteDocInfoById(hashMap, res):
         res = False
         return hashMap
 
-
-
-
 def on_address_input(hashMap,_files=None,_data=None):
     
     user_locale = hashMap.get("USER_LOCALE")
