@@ -667,18 +667,100 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
             hashMap.put("toast", 'Документ не обновлен в БУ базе. Попробуйте позже')
         return hashMap
 
+    res = False
+    DeleteDocInfoById(hashMap, res)
     
-    if CurScreen == 'wms.Ввод товара по заказу':
-        hashMap.put("ShowScreen", "wms.Выбор распоряжения")
-    elif CurScreen == 'wms.Ввод товара приемка факт':
-        hashMap.put("ShowScreen", "wms.Выбор распоряжения по факту")
-    elif CurScreen == 'wms.Ввод товара отгрузка':
-        hashMap.put("ShowScreen", "wms.Выбор распоряжения отгрузка")
-    elif CurScreen == 'wms.Ввод адреса списание':
-        hashMap.put("ShowScreen", "wms.Выбор ручного списания")
-
+    if res == True:
+        if CurScreen == 'wms.Ввод товара по заказу':
+            hashMap.put("ShowScreen", "wms.Выбор распоряжения")
+        elif CurScreen == 'wms.Ввод товара приемка факт':
+            hashMap.put("ShowScreen", "wms.Выбор распоряжения по факту")
+        elif CurScreen == 'wms.Ввод товара отгрузка':
+            hashMap.put("ShowScreen", "wms.Выбор распоряжения отгрузка")
+        elif CurScreen == 'wms.Ввод адреса списание':
+            hashMap.put("ShowScreen", "wms.Выбор ручного списания")
+        elif CurScreen == 'wms.Ввод адреса инвентаризация':
+            hashMap.put("ShowScreen", "wms.Выбор распоряжения инвентаризация")    
 
     return hashMap
+
+def DeleteDocInfoById(hashMap, res):
+
+    order_id = hashMap.get("orderRef") 
+
+    # Путь к нужной таблице или представлению с фильтром по id
+    path = f'wms_orders_captions?id=eq.{unit_id}'
+    # Полный URL для запроса
+    url = f'{postgrest_url}/{path}'
+
+    # Заголовки запроса, если требуется авторизация
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    try:
+        # Отправка DELETE-запроса
+        response = requests.delete(url, headers=headers, timeout=timeout)
+
+        # Проверка статуса ответа
+        if response.status_code == 204:
+            
+            # Путь к нужной таблице или представлению с фильтром по id
+            path = f'wms_orders?order_id=eq.{unit_id}'
+            # Полный URL для запроса
+            url = f'{postgrest_url}/{path}'        
+
+            try:
+                # Отправка DELETE-запроса
+                response = requests.delete(url, headers=headers, timeout=timeout)
+
+                # Проверка статуса ответа
+                if response.status_code == 204:
+                    
+                    # Путь к нужной таблице или представлению с фильтром по id
+                    path = f'wms_operations?order_id=eq.{unit_id}'
+                    # Полный URL для запроса
+                    url = f'{postgrest_url}/{path}'        
+
+                    try:
+                        # Отправка DELETE-запроса
+                        response = requests.delete(url, headers=headers, timeout=timeout)
+
+                        # Проверка статуса ответа
+                        if response.status_code == 204:
+                           res = True
+                           return hashMap
+                        else:
+                            Toast_txt_error(hashMap, response)
+                            res = False
+                            return hashMap
+
+                    except requests.exceptions.RequestException as e:
+                        hashMap.put("toast", f'Exception occurred: {str(e)}')
+                        res = False
+                        return hashMap
+
+                else:
+                    Toast_txt_error(hashMap, response)
+                    res = False
+                    return hashMap
+
+            except requests.exceptions.RequestException as e:
+                hashMap.put("toast", f'Exception occurred: {str(e)}')
+                res = False
+                return hashMap
+
+        else:
+            Toast_txt_error(hashMap, response)
+            res = False
+            return hashMap
+
+    except requests.exceptions.RequestException as e:
+        hashMap.put("toast", f'Exception occurred: {str(e)}')
+        res = False
+        return hashMap
+
+
 
 
 def on_address_input(hashMap,_files=None,_data=None):
