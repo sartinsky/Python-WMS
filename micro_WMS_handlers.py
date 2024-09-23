@@ -650,7 +650,6 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
 def on_btn_cancel(hashMap,_files=None,_data=None):
 
-    hashMap.put("toast", '1')
     CurScreen = hashMap.get("current_screen_name")
     user_locale = hashMap.get("USER_LOCALE")
     Doc_Updated = hashMap.get("Doc_Updated")
@@ -662,10 +661,8 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
             hashMap.put("toast", 'Документ не обновлен в БУ базе. Попробуйте позже')
         return hashMap
 
-    hashMap.put("toast", '2')
     res = False
     DeleteDocInfoById(hashMap, res)
-    hashMap.put("toast", '3')
     if res == True:
         if CurScreen == 'wms.Ввод товара по заказу':
             hashMap.put("ShowScreen", "wms.Выбор распоряжения")
@@ -682,7 +679,7 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
 
 def DeleteDocInfoById(hashMap, res):
 
-    order_id = hashMap.get("orderRef") 
+    unit_id = hashMap.get("orderRef") 
 
     # Путь к нужной таблице или представлению с фильтром по id
     path = f'wms_orders_captions?id=eq.{unit_id}'
@@ -1709,16 +1706,16 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-# #Пример использования функции
-# class MockHashMap:
-#     def __init__(self):
-#         self.store = {}
+#Пример использования функции
+class MockHashMap:
+    def __init__(self):
+        self.store = {}
 
-#     def put(self, key, value):
-#         self.store[key] = value
+    def put(self, key, value):
+        self.store[key] = value
 
-#     def get(self, key, default=None):
-#        return self.store.get(key, default)
+    def get(self, key, default=None):
+       return self.store.get(key, default)
 
 # #Тестирование функции
 # if __name__ == "__main__":
@@ -1727,9 +1724,10 @@ def on_TableClick(hashMap,_files=None,_data=None):
 #     hashMap.put("ANDROID_ID","380eaecaff29d921")
 #     hashMap.put("USER_LOCALE","ua")
 #     hashMap.put("current_screen_name","wms.Выбор распоряжения по факту")
-#     hashMap.put("orderRef","53")
-#     hashMap.put("listener",'TableClick')
-#     on_TableClick(hashMap)#Get_OrderGoods_Data_To_Table(hashMap)
+#     hashMap.put("orderRef","46")
+#     res = False
+    
+#     DeleteDocInfoById(hashMap,res)#Get_OrderGoods_Data_To_Table(hashMap)
     #hashMap.put("listener",'barcode')
     #hashMap.put("addr_barcode",'1-1-1-1')
     #on_address_input(hashMap)
