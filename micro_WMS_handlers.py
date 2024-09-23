@@ -721,38 +721,31 @@ def DeleteDocInfoById(hashMap, res):
 
                         # Проверка статуса ответа
                         if response.status_code == 204:
-                           res = True
-                           return hashMap
+                           res = True                           
                         else:
                             Toast_txt_error(hashMap, response)
                             res = False
-                            return hashMap
-
+                            
                     except requests.exceptions.RequestException as e:
                         hashMap.put("toast", f'Exception occurred: {str(e)}')
                         res = False
-                        return hashMap
-
+                        
                 else:
                     Toast_txt_error(hashMap, response)
                     res = False
-                    return hashMap
-
+                    
             except requests.exceptions.RequestException as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')
                 res = False
-                return hashMap
-
+                
         else:
             Toast_txt_error(hashMap, response)
             res = False
-            return hashMap
-
+            
     except requests.exceptions.RequestException as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')
         res = False
-        return hashMap
-
+        
 def on_address_input(hashMap,_files=None,_data=None):
     
     user_locale = hashMap.get("USER_LOCALE")
