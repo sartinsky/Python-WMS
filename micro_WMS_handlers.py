@@ -230,7 +230,8 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
     user_locale = hashMap.get("USER_LOCALE")
     CurScreen = hashMap.get("current_screen_name")
     order_id = hashMap.get("orderRef") 
-
+    
+     hashMap.put("toast", f'{str(order_id)}')
     # Путь к нужной таблице или представлению
     if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
         path = f'wms_orders_table?select=id:sku_id,Товар:nom,Артикул:code,План:plan,Факт:fact,manual:manual&order_id=eq.{order_id}'
@@ -1624,7 +1625,8 @@ def on_TableClick(hashMap,_files=None,_data=None):
                 elif CurScreen == 'wms.Выбор ручного списания':    
                     hashMap.put("ShowScreen", "wms.Ввод адреса списание")
                 elif CurScreen == 'wms.Выбор распоряжения по факту':    
-                    hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")    
+                    hashMap.put("ShowScreen", "wms.Ввод товара приемка факт")
+                    hashMap.put("toast", '11')    
             else:
                 hashMap.put("toast", f'Error: {response.status_code}')
         except Exception as e:
