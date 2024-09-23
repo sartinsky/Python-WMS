@@ -227,6 +227,7 @@ def Get_Orders_Data_To_Table(hashMap, _files=None, _data=None):
 
 def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
 
+    hashMap.put("toast", '22')
     user_locale = hashMap.get("USER_LOCALE")
     CurScreen = hashMap.get("current_screen_name")
     order_id = hashMap.get("orderRef") 
