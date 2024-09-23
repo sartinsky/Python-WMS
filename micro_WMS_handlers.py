@@ -662,7 +662,7 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
         return hashMap
 
     res = False
-    DeleteDocInfoById(hashMap, res)
+    hashMap, res = DeleteDocInfoById(hashMap,res)
     if res == True:
         if CurScreen == 'wms.Ввод товара по заказу':
             hashMap.put("ShowScreen", "wms.Выбор распоряжения")
@@ -721,30 +721,30 @@ def DeleteDocInfoById(hashMap, res):
 
                         # Проверка статуса ответа
                         if response.status_code == 204:
-                           res = True                           
+                           return hashMap, True
                         else:
                             Toast_txt_error(hashMap, response)
-                            res = False
+                            return hashMap, False
                             
                     except requests.exceptions.RequestException as e:
                         hashMap.put("toast", f'Exception occurred: {str(e)}')
-                        res = False
+                        return hashMap, False
                         
                 else:
                     Toast_txt_error(hashMap, response)
-                    res = False
+                    return hashMap, False
                     
             except requests.exceptions.RequestException as e:
                 hashMap.put("toast", f'Exception occurred: {str(e)}')
-                res = False
+                return hashMap, False
                 
         else:
             Toast_txt_error(hashMap, response)
-            res = False
+            return hashMap, False
             
     except requests.exceptions.RequestException as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')
-        res = False
+        return hashMap, False
         
 def on_address_input(hashMap,_files=None,_data=None):
     
@@ -1716,10 +1716,10 @@ class MockHashMap:
     
 #     hashMap.put("ANDROID_ID","380eaecaff29d921")
 #     hashMap.put("USER_LOCALE","ua")
-#     hashMap.put("current_screen_name","wms.Выбор распоряжения по факту")
+#     hashMap.put("current_screen_name","wms.Ввод товара по заказу")
+#     hashMap.put("Doc_Updated","True")
 #     hashMap.put("orderRef","46")
-#     res = False
-    
+#     on_btn_cancel(hashMap)
 #     DeleteDocInfoById(hashMap,res)#Get_OrderGoods_Data_To_Table(hashMap)
     #hashMap.put("listener",'barcode')
     #hashMap.put("addr_barcode",'1-1-1-1')
