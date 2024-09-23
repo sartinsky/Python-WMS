@@ -661,7 +661,6 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
     Doc_Updated = hashMap.get("Doc_Updated")
     
     if Doc_Updated == None or Doc_Updated == 'False':
-        hashMap.put("toast", '3')
         if user_locale == 'ua':
             hashMap.put("toast", 'Документ не оновлено у БУ базі. Спробуйте ще раз')
         elif user_locale == 'ru':
@@ -676,7 +675,6 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
     elif CurScreen == 'wms.Ввод товара отгрузка':
         hashMap.put("ShowScreen", "wms.Выбор распоряжения отгрузка")
     elif CurScreen == 'wms.Ввод адреса списание':
-        hashMap.put("toast", '2')
         hashMap.put("ShowScreen", "wms.Выбор ручного списания")
 
 
