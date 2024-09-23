@@ -653,11 +653,8 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
 def on_btn_cancel(hashMap,_files=None,_data=None):
 
-    hashMap.put("toast", '1')
     if hashMap.get("event")=="onResultNegative":
         return hashMap
-
-    hashMap.put("toast", '2')
 
     CurScreen = hashMap.get("current_screen_name")
     user_locale = hashMap.get("USER_LOCALE")
@@ -671,8 +668,7 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
             hashMap.put("toast", 'Документ не обновлен в БУ базе. Попробуйте позже')
         return hashMap
 
-    hashMap.put("toast", '4')
-
+    
     if CurScreen == 'wms.Ввод товара по заказу':
         hashMap.put("ShowScreen", "wms.Выбор распоряжения")
     elif CurScreen == 'wms.Ввод товара приемка факт':
