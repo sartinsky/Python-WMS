@@ -285,8 +285,7 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             
             if CurScreen == 'Приемка по заказу начало' or CurScreen == 'wms.Ввод товара отгрузка' or CurScreen == 'wms.Ввод количества факт по заказу' or CurScreen == 'wms.Ввод товара приемка факт':
                 hashMap.put("table", json.dumps(data))
-                hashMap.put("toast", str(order_id))
-    
+                    
             elif CurScreen == 'wms.Ввод адреса отбор'  or CurScreen == 'wms.Ввод адреса списание':    
                 hashMap.put("addr_table", json.dumps(data))
             elif CurScreen == 'wms.Выбор распоряжения инвентаризация':    
@@ -300,7 +299,9 @@ def Get_OrderGoods_Data_To_Table(hashMap, _files=None, _data=None):
             
     except Exception as e:
         hashMap.put("toast", f'Exception occurred: {str(e)}')
-        
+
+    hashMap.put("toast", '22')    
+
     return hashMap
 
 def Get_Picking(hashMap, _files=None, _data=None):
