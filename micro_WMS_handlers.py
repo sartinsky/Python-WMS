@@ -653,9 +653,6 @@ def on_btn_done(hashMap,_files=None,_data=None):
 
 def on_btn_cancel(hashMap,_files=None,_data=None):
 
-    if hashMap.get("event")=="onResultNegative":
-        return hashMap
-
     CurScreen = hashMap.get("current_screen_name")
     user_locale = hashMap.get("USER_LOCALE")
     Doc_Updated = hashMap.get("Doc_Updated")
