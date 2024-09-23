@@ -670,7 +670,7 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
 
 
 
-
+    hashMap.put("toast", '1')
 
     if CurScreen == 'wms.Ввод товара по заказу':
         hashMap.put("ShowScreen", "wms.Выбор распоряжения")
@@ -679,6 +679,7 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
     elif CurScreen == 'wms.Ввод товара отгрузка':
         hashMap.put("ShowScreen", "wms.Выбор распоряжения отгрузка")
     elif CurScreen == 'wms.Ввод адреса списание':
+        hashMap.put("toast", '2')
         hashMap.put("ShowScreen", "wms.Выбор ручного списания")
 
 
