@@ -666,8 +666,8 @@ def on_btn_cancel(hashMap,_files=None,_data=None):
             hashMap.put("toast", 'Документ не обновлен в БУ базе. Попробуйте позже')
         return hashMap
 
-    
-
+    if CurScreen == 'wms.Ввод товара по заказу'
+        hashMap.put("ShowScreen", "wms.Выбор распоряжения")
 
     return hashMap
 
