@@ -832,7 +832,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
             "address_id": "К РАЗМЕЩЕНИЮ",
-            "order_id": str(order_id),
+            "order_id": order_id,
             "to_operation": "1"
             }
 
@@ -886,7 +886,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                             #Параметры запроса (например, фильтрация данных)
                             data = {
-                            "order_id": str(order_id),    
+                            "order_id": order_id,    
                             "no_order": no_order,
                             "qty": str(-cur_qty),
                             "sku_id": hashMap.get("nom_id"),
@@ -968,7 +968,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                             
                             #Параметры запроса (например, фильтрация данных)
                             data = {
-                            "order_id": str(order_id),
+                            "order_id": order_id,
                             "no_order": no_order,
                             "qty": str(-cur_qty),
                             "sku_id": hashMap.get("nom_id"),
@@ -1039,7 +1039,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
             #Параметры запроса (например, фильтрация данных)
             data = {
-            "order_id": str(order_id),
+            "order_id": order_id,
             "no_order": no_order,
             "qty": hashMap.get("qty"),
             "sku_id": str(nom_id),
@@ -1092,7 +1092,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             data = {
             "sku_id": hashMap.get("nom_id"),
             "qty_plan": hashMap.get("qty_plan"),
-            "order_id": str(order_id)
+            "order_id": order_id
             }
 
             try:
@@ -1299,7 +1299,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         "sku_id": hashMap.get("nom_id"),
                         "user": hashMap.get("ANDROID_ID"),
                         "address_id": "ОТБОР",
-                        "order_id": str(order_id)
+                        "order_id": order_id
                         }
                         
                         try:
@@ -1354,7 +1354,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 "qty": hashMap.get("qty_minus"),
                 "sku_id": hashMap.get("nom_id"),
                 "user": hashMap.get("ANDROID_ID"),
-                "order_id": str(order_id),
+                "order_id": order_id,
                 "address_id": 'ОТБОР'
                 }
 
@@ -1542,7 +1542,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             "sku_id": hashMap.get("nom_id"),
             "qty_plan": str(hashMap.get("qty")),
             "qty_fact": str(hashMap.get("qty")),
-            "order_id": str(order_id)
+            "order_id": order_id
             }
 
             try:
@@ -1746,15 +1746,20 @@ def on_TableClick(hashMap,_files=None,_data=None):
     
 #     hashMap.put("ANDROID_ID","380eaecaff29d921")
 #     hashMap.put("USER_LOCALE","ua")
-#     hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
-#     get_operators_placing(hashMap)
+#     hashMap.put("current_screen_name","wms.Ввод адреса размещение")
+#     hashMap = get_placement_orders(hashMap)
+#     hashMap.put("listener","barcode")
+#     hashMap.put("addr_barcode","1-1-1-2")
+#     hashMap = on_address_input(hashMap)
+#     hashMap = get_goods_for_address_placement(hashMap)
 #     hashMap.put("listener","barcode")
 #     hashMap.put("barcode","2000000005140")
-#     on_units_input(hashMap)
-#     hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
+#     hashMap.put("current_screen_name","wms.Ввод товара размещение")
+#     hashMap = on_units_input(hashMap)
 #     hashMap.put("qty","152")
 #     hashMap.put("listener",None)
-#     on_input_qtyfact(hashMap)
+#     hashMap.put("current_screen_name","wms.Ввод количества размещение")
+#     hashMap = on_input_qtyfact(hashMap)
     
     #hashMap.put("listener",'barcode')
     #hashMap.put("addr_barcode",'1-1-1-1')
