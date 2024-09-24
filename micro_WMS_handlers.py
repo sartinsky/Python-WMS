@@ -908,7 +908,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                 #Параметры запроса (например, фильтрация данных)
                 data = {
-                    "no_order": no_order,
+                    "no_order": 'true',
                     "qty": hashMap.get("qty"),
                     "sku_id": hashMap.get("nom_id"),
                     "user": hashMap.get("ANDROID_ID"),
@@ -1752,7 +1752,7 @@ if __name__ == "__main__":
     hashMap.put("barcode","2000000005140")
     on_units_input(hashMap)
     hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
-    hashMap.put("qty","145")
+    hashMap.put("qty","152")
     hashMap.put("listener",None)
     on_input_qtyfact(hashMap)
     
