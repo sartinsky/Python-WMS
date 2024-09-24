@@ -802,7 +802,7 @@ def on_address_input(hashMap,_files=None,_data=None):
 def on_input_qtyfact(hashMap,_files=None,_data=None):
 
     user_locale = hashMap.get("USER_LOCALE")
-    no_order = not hashMap.get("orderRef")
+    
     listener = hashMap.get("listener")
     CurScreen = hashMap.get("current_screen_name")
     if CurScreen == "wms.Ввод количества факт по заказу":
@@ -820,6 +820,9 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             'Content-Type': 'application/json'
             }
             
+            order_id = hashMap.get("orderRef")
+            no_order = not order_id
+
             #Параметры запроса (например, фильтрация данных)
             data = {
             "no_order": str(no_order),
@@ -827,7 +830,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
             "address_id": "К РАЗМЕЩЕНИЮ",
-            "order_id": hashMap.get("orderRef"),
+            "order_id": str(order_id),
             "to_operation": "1"
             }
 
@@ -865,11 +868,14 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             if permit:
                 
                 hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
-           
+
+                order_id = hashMap.get("orderRef")
+                no_order = not order_id
+
                 #Параметры запроса (например, фильтрация данных)
                 data = {
                 "order_id": str(order_id),    
-                "no_order": str(order_id is None),
+                "no_order": str(no_order),
                 "qty": hashMap.get("qty_minus"),
                 "sku_id": hashMap.get("nom_id"),
                 "user": hashMap.get("ANDROID_ID"),
@@ -922,8 +928,6 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
         
             permit = get_Permit_On_qty(hashMap, user_locale)
             if permit:
-                
-                #hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
                 
                 # Путь к нужной таблице или представлению
                 path = 'wms_operations'
@@ -1002,7 +1006,8 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:
         
-            order_id = int(hashMap.get("orderRef"))
+            order_id = hashMap.get("orderRef")
+            no_order = not order_id
             nom_id = int(hashMap.get("nom_id"))
             ANDROID_ID = hashMap.get("ANDROID_ID")
 
@@ -1127,6 +1132,9 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             'Content-Type': 'application/json'
             }
             
+            order_id = hashMap.get("orderRef")
+            no_order = not order_id
+
             #Параметры запроса (например, фильтрация данных)
             data = {
             "no_order": str(no_order),
@@ -1187,6 +1195,9 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             'Content-Type': 'application/json'
             }
             
+            order_id = hashMap.get("orderRef")
+            no_order = not order_id
+
             #Параметры запроса (например, фильтрация данных)
             data = {
             "no_order": str(no_order),
@@ -1250,6 +1261,9 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 'Content-Type': 'application/json'
                 }
                 
+                order_id = hashMap.get("orderRef")
+                no_order = not order_id
+
                 #Параметры запроса (например, фильтрация данных)
                 data = {
                 "no_order": 'true',
@@ -1273,7 +1287,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         "sku_id": hashMap.get("nom_id"),
                         "user": hashMap.get("ANDROID_ID"),
                         "address_id": "ОТБОР",
-                        "order_id": hashMap.get("orderRef")
+                        "order_id": str(order_id)
                         }
                         
                         try:
@@ -1319,13 +1333,16 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 'Content-Type': 'application/json'
                 }
                 
+                order_id = hashMap.get("orderRef")
+                no_order = not order_id
+
                 #Параметры запроса (например, фильтрация данных)
                 data = {
                 "no_order": str(no_order),
                 "qty": hashMap.get("qty_minus"),
                 "sku_id": hashMap.get("nom_id"),
                 "user": hashMap.get("ANDROID_ID"),
-                "order_id": hashMap.get("orderRef"),
+                "order_id": str(order_id),
                 "address_id": 'ОТБОР'
                 }
 
@@ -1465,6 +1482,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:            
             order_id = hashMap.get("orderRef")
+            no_order = not order_id
             hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
             #---------------------------------    
             # Путь к нужной таблице или представлению
@@ -1476,7 +1494,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             #Параметры запроса (например, фильтрация данных)
             data = {
             "order_id": order_id,
-            "no_order": 'true',
+            "no_order": no_order,
             "qty": hashMap.get("qty_minus"),
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
