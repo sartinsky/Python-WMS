@@ -25,7 +25,7 @@ def settings_on_create(hashMap,_files=None,_data=None):
     return hashMap 
 
 db = Database()
-#db.bind(provider='sqlite', filename='//data/data/ru.travelfood.simple_ui/databases/SimpleWMS', create_db=True)
+db.bind(provider='sqlite', filename='//data/data/ru.travelfood.simple_ui/databases/SimpleWMS', create_db=True)
 
 class Record(db.Entity):
         barcode =  Required(str)
@@ -908,7 +908,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                 #Параметры запроса (например, фильтрация данных)
                 data = {
-                    "no_order": 'true',
+                    "no_order": True,
                     "qty": hashMap.get("qty"),
                     "sku_id": hashMap.get("nom_id"),
                     "user": hashMap.get("ANDROID_ID"),
@@ -990,7 +990,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                 #Параметры запроса (например, фильтрация данных)
                 data = {
-                    "no_order": 'true',
+                    "no_order": True,
                     "qty": hashMap.get("qty"),
                     "sku_id": hashMap.get("nom_id"),
                     "user": hashMap.get("ANDROID_ID"),
@@ -1278,7 +1278,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                 #Параметры запроса (например, фильтрация данных)
                 data = {
-                "no_order": 'true',
+                "no_order": True,
                 "qty": hashMap.get("qty_minus"),
                 "sku_id": hashMap.get("nom_id"),
                 "user": hashMap.get("ANDROID_ID"),
@@ -1477,7 +1477,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                 "sku_id": row["sku_id"],
                 "user": hashMap.get("ANDROID_ID"),
                 "address_id": row["address_id"],
-                "no_order": 'true'
+                "no_order": True
                 }
 
                 try:
@@ -1729,32 +1729,32 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-#Пример использования функции
-class MockHashMap:
-    def __init__(self):
-        self.store = {}
+# #Пример использования функции
+# class MockHashMap:
+#     def __init__(self):
+#         self.store = {}
 
-    def put(self, key, value):
-        self.store[key] = value
+#     def put(self, key, value):
+#         self.store[key] = value
 
-    def get(self, key, default=None):
-       return self.store.get(key, default)
+#     def get(self, key, default=None):
+#        return self.store.get(key, default)
 
-#Тестирование функции
-if __name__ == "__main__":
-    hashMap = MockHashMap()
+# #Тестирование функции
+# if __name__ == "__main__":
+#     hashMap = MockHashMap()
     
-    hashMap.put("ANDROID_ID","380eaecaff29d921")
-    hashMap.put("USER_LOCALE","ua")
-    hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
-    get_operators_placing(hashMap)
-    hashMap.put("listener","barcode")
-    hashMap.put("barcode","2000000005140")
-    on_units_input(hashMap)
-    hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
-    hashMap.put("qty","152")
-    hashMap.put("listener",None)
-    on_input_qtyfact(hashMap)
+#     hashMap.put("ANDROID_ID","380eaecaff29d921")
+#     hashMap.put("USER_LOCALE","ua")
+#     hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
+#     get_operators_placing(hashMap)
+#     hashMap.put("listener","barcode")
+#     hashMap.put("barcode","2000000005140")
+#     on_units_input(hashMap)
+#     hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
+#     hashMap.put("qty","152")
+#     hashMap.put("listener",None)
+#     on_input_qtyfact(hashMap)
     
     #hashMap.put("listener",'barcode')
     #hashMap.put("addr_barcode",'1-1-1-1')
