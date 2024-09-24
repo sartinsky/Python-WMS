@@ -25,7 +25,7 @@ def settings_on_create(hashMap,_files=None,_data=None):
     return hashMap 
 
 db = Database()
-db.bind(provider='sqlite', filename='//data/data/ru.travelfood.simple_ui/databases/SimpleWMS', create_db=True)
+#db.bind(provider='sqlite', filename='//data/data/ru.travelfood.simple_ui/databases/SimpleWMS', create_db=True)
 
 class Record(db.Entity):
         barcode =  Required(str)
@@ -827,7 +827,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
             #Параметры запроса (например, фильтрация данных)
             data = {
-            "no_order": str(no_order),
+            "no_order": no_order,
             "qty": hashMap.get("qty"),
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
@@ -855,69 +855,78 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
         if listener is None:
             
-            # Путь к нужной таблице или представлению
-            path = 'wms_operations'
-            
-            # Полный URL для запроса
-            url = f'{postgrest_url}/{path}'
-
-            # Заголовки для запроса
-            headers = {
-            'Content-Type': 'application/json'
-            }
-            
             permit = get_Permit_On_qty(hashMap, user_locale)
             if permit:
-                
-                hashMap.put("qty_minus", str(-1*int(hashMap.get("qty"))))
 
-                order_id = hashMap.get("orderRef")
-                no_order = not order_id
+                # Путь к нужной таблице или представлению
+                path = 'wms_operations'
+                
+                # Полный URL для запроса
+                url = f'{postgrest_url}/{path}'
+
+                # Заголовки для запроса
+                headers = {
+                'Content-Type': 'application/json'
+                }
+                
+                try:
+                    
+                    total_qty = int(hashMap.get("qty"))
+                    nom_id = hashMap.get("nom_id")
+                    data_with_ids = json.loads(hashMap.get('data_with_ids'))
+                    for item in data_with_ids:
+                        if total_qty == 0:
+                            break
+
+                        if item['id'] == int(nom_id):
+                            order_id = item['order_id']
+                            no_order = not order_id
+                            cur_qty = min(item['qty'],total_qty)
+                            total_qty = total_qty - cur_qty
+
+                            #Параметры запроса (например, фильтрация данных)
+                            data = {
+                            "order_id": str(order_id),    
+                            "no_order": no_order,
+                            "qty": str(-cur_qty),
+                            "sku_id": hashMap.get("nom_id"),
+                            "user": hashMap.get("ANDROID_ID"),
+                            "address_id": "К РАЗМЕЩЕНИЮ",
+                            "to_operation": "1"                
+                            }
+
+                            # Отправка POST-запроса
+                            response = requests.post(url, json=data, timeout=timeout)
+
+                            # Проверка статуса ответа
+                            if not response.status_code == 201:
+                                Toast_txt_error(hashMap, response)
+                                return hashMap
+                                
+                except Exception as e:
+                    hashMap.put("toast", f'Exception occurred: {str(e)}')
 
                 #Параметры запроса (например, фильтрация данных)
                 data = {
-                "order_id": str(order_id),    
-                "no_order": str(no_order),
-                "qty": hashMap.get("qty_minus"),
-                "sku_id": hashMap.get("nom_id"),
-                "user": hashMap.get("ANDROID_ID"),
-                "address_id": "К РАЗМЕЩЕНИЮ",
-                "to_operation": "1"                
-                }
-
+                    "no_order": no_order,
+                    "qty": hashMap.get("qty"),
+                    "sku_id": hashMap.get("nom_id"),
+                    "user": hashMap.get("ANDROID_ID"),
+                    "address_id": hashMap.get("ANDROID_ID"),
+                    "to_operation": "1"
+                    }
+                            
                 try:
                     # Отправка GET-запроса
                     response = requests.post(url, json=data, timeout=timeout)
 
                     # Проверка статуса ответа
                     if response.status_code == 201:
-                        
-                        #Параметры запроса (например, фильтрация данных)
-                        data = {
-                        "no_order": str(no_order),
-                        "qty": hashMap.get("qty"),
-                        "sku_id": hashMap.get("nom_id"),
-                        "user": hashMap.get("ANDROID_ID"),
-                        "address_id": hashMap.get("ANDROID_ID"),
-                        "to_operation": "1"
-                        }
-                        
-                        try:
-                            # Отправка GET-запроса
-                            response = requests.post(url, json=data, timeout=timeout)
-
-                            # Проверка статуса ответа
-                            if response.status_code == 201:
-                                hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
-                            else:
-                                Toast_txt_error(hashMap, response)       
-                        except Exception as e:
-                            hashMap.put("toast", f'Exception occurred: {str(e)}')
-                        
+                        hashMap.put("ShowScreen", "wms.Ввод товара размещение взять")
                     else:
-                        Toast_txt_error(hashMap, response)
+                        Toast_txt_error(hashMap, response)       
                 except Exception as e:
-                    hashMap.put("toast", f'Exception occurred: {str(e)}')
+                    hashMap.put("toast", f'Exception occurred: {str(e)}')                
             else:
                 if user_locale == 'ua':
                     hashMap.put("toast", 'Не можна перевищувати кількість до відбору')
@@ -956,10 +965,11 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                             no_order = not order_id
                             cur_qty = min(item['qty'],total_qty)
                             total_qty = total_qty - cur_qty
-
+                            
+                            #Параметры запроса (например, фильтрация данных)
                             data = {
                             "order_id": str(order_id),
-                            "no_order": str(no_order),
+                            "no_order": no_order,
                             "qty": str(-cur_qty),
                             "sku_id": hashMap.get("nom_id"),
                             "user": hashMap.get("ANDROID_ID"),
@@ -1030,7 +1040,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
             #Параметры запроса (например, фильтрация данных)
             data = {
             "order_id": str(order_id),
-            "no_order": str(no_order),
+            "no_order": no_order,
             "qty": hashMap.get("qty"),
             "sku_id": str(nom_id),
             "user": ANDROID_ID,
@@ -1139,7 +1149,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
             #Параметры запроса (например, фильтрация данных)
             data = {
-            "no_order": str(no_order),
+            "no_order": no_order,
             "qty": hashMap.get("qty_minus"),
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
@@ -1155,7 +1165,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     
                     #Параметры запроса (например, фильтрация данных)
                     data = {
-                    "no_order": str(no_order),
+                    "no_order": no_order,
                     "qty": hashMap.get("qty"),
                     "sku_id": hashMap.get("nom_id"),
                     "user": hashMap.get("ANDROID_ID"),
@@ -1202,7 +1212,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
             #Параметры запроса (например, фильтрация данных)
             data = {
-            "no_order": str(no_order),
+            "no_order": no_order,
             "qty": hashMap.get("qty_minus"),
             "sku_id": hashMap.get("nom_id"),
             "user": hashMap.get("ANDROID_ID"),
@@ -1219,7 +1229,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                     
                     #Параметры запроса (например, фильтрация данных)
                     data = {
-                    "no_order": str(no_order),
+                    "no_order": no_order,
                     "qty": hashMap.get("qty"),
                     "sku_id": hashMap.get("nom_id"),
                     "user": hashMap.get("ANDROID_ID"),
@@ -1284,7 +1294,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
                         
                         #Параметры запроса (например, фильтрация данных)
                         data = {
-                        "no_order": str(no_order),
+                        "no_order": no_order,
                         "qty": hashMap.get("qty"),
                         "sku_id": hashMap.get("nom_id"),
                         "user": hashMap.get("ANDROID_ID"),
@@ -1340,7 +1350,7 @@ def on_input_qtyfact(hashMap,_files=None,_data=None):
 
                 #Параметры запроса (например, фильтрация данных)
                 data = {
-                "no_order": str(no_order),
+                "no_order": no_order,
                 "qty": hashMap.get("qty_minus"),
                 "sku_id": hashMap.get("nom_id"),
                 "user": hashMap.get("ANDROID_ID"),
@@ -1730,17 +1740,22 @@ class MockHashMap:
     def get(self, key, default=None):
        return self.store.get(key, default)
 
-# #Тестирование функции
-# if __name__ == "__main__":
-#     hashMap = MockHashMap()
+#Тестирование функции
+if __name__ == "__main__":
+    hashMap = MockHashMap()
     
-#     hashMap.put("ANDROID_ID","380eaecaff29d921")
-#     hashMap.put("USER_LOCALE","ua")
-#     hashMap.put("current_screen_name","wms.Ввод товара по заказу")
-#     hashMap.put("Doc_Updated","True")
-#     hashMap.put("orderRef","46")
-#     on_btn_cancel(hashMap)
-#     DeleteDocInfoById(hashMap,res)#Get_OrderGoods_Data_To_Table(hashMap)
+    hashMap.put("ANDROID_ID","380eaecaff29d921")
+    hashMap.put("USER_LOCALE","ua")
+    hashMap.put("current_screen_name","wms.Ввод товара размещение взять")
+    get_operators_placing(hashMap)
+    hashMap.put("listener","barcode")
+    hashMap.put("barcode","2000000005140")
+    on_units_input(hashMap)
+    hashMap.put("current_screen_name","wms.Ввод количества взять размещение")
+    hashMap.put("qty","145")
+    hashMap.put("listener",None)
+    on_input_qtyfact(hashMap)
+    
     #hashMap.put("listener",'barcode')
     #hashMap.put("addr_barcode",'1-1-1-1')
     #on_address_input(hashMap)
