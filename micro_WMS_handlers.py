@@ -566,6 +566,8 @@ def on_FORVARD_BUTTON(hashMap, _files=None, _data=None):
         on_input_qtyfact(hashMap)
     elif CurScreen == "wms.Ввод количества положить" and listener is None:
         on_input_qtyfact(hashMap)    
+    elif CurScreen == "wms.Ввод количества взять размещение" and listener is None:
+        on_input_qtyfact(hashMap)
     elif CurScreen == "wms.Ввод количества размещение" and listener is None:
         on_input_qtyfact(hashMap)        
     elif CurScreen == "wms.Ввод количества отбор" and listener is None:
@@ -575,7 +577,7 @@ def on_FORVARD_BUTTON(hashMap, _files=None, _data=None):
     elif CurScreen == "wms.Ввод количества списание" and listener is None:
         on_input_qtyfact(hashMap)                    
     elif CurScreen == "wms.Ввод количества инвентаризация" and listener is None:
-        on_input_qtyfact(hashMap)                        
+        on_input_qtyfact(hashMap)
     return hashMap 
 
 def on_btn_put(hashMap, _files=None, _data=None):
