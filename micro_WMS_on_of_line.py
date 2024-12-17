@@ -10,7 +10,7 @@ import json
 #postgrest_url = 'http://176.102.48.128:3000'
 postgrest_url = 'http://192.168.0.198:3000'
 timeout = 10
-
+#we
 def init_on_start(hashMap,_files=None,_data=None):
     init()
     user_locale = hashMap.get("USER_LOCALE")
