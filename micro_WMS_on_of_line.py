@@ -8,7 +8,7 @@ import json
 
  # URL вашего PostgREST сервера
 #postgrest_url = 'http://176.102.48.128:3000'
-postgrest_url = 'http://192.168.0.176:3000'
+postgrest_url = 'http://192.168.0.198:3000'
 timeout = 10
 
 def init_on_start(hashMap,_files=None,_data=None):
