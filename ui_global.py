@@ -10,6 +10,7 @@ class Record(db.Entity):
         barcode =  Required(str)
         name =  Required(str)
         qty = Required(int)
+        d=1
         
 def init():
     db.generate_mapping(create_tables=True)  
