@@ -1730,22 +1730,24 @@ def on_TableClick(hashMap,_files=None,_data=None):
         
     return hashMap
 
-def on_btn_Create_Doc(hashMap,_files=None,_data=None):
-
+def on_btn_Create_Doc(hashMap, _files=None, _data=None):
     user_locale = hashMap.get("USER_LOCALE")
     incomedoc_contragent_code = hashMap.get('incomedoc_contragent_code')
-	incomedoc_contragent_name = hashMap.get('incomedoc_contragent_name')
-	incomedoc_date            = hashMap.get('incomedoc_date')
-	incomedoc_num             = hashMap.get('incomedoc_num')
-   
+    incomedoc_contragent_name = hashMap.get('incomedoc_contragent_name')
+    incomedoc_date = hashMap.get('incomedoc_date')
+    incomedoc_num = hashMap.get('incomedoc_num')
+
+    # Проверяем, что все поля заполнены
     if not (incomedoc_contragent_code and incomedoc_contragent_name and incomedoc_date and incomedoc_num):
         if user_locale == 'ua':
-            hashMap.put("toast", 'Не заповнено всі поля!')        
+            hashMap.put("toast", 'Не заповнено всі поля!')
         elif user_locale == 'ru':
-            hashMap.put("toast", 'Не заполнены все поля') 
-        return hashMap       
+            hashMap.put("toast", 'Не заполнены все поля')
+        return hashMap
 
+    # Если все поля заполнены, возвращаем hashMap без изменений
     return hashMap
+
 
 
 # #Пример использования функции
