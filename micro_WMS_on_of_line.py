@@ -1,3 +1,4 @@
+import ui_global
 from pony.orm.core import db_session
 from pony import orm
 from pony.orm import Database,Required,Set,Json,PrimaryKey,Optional,select,commit
@@ -12,7 +13,7 @@ postgrest_url = 'http://192.168.0.198:3000'
 timeout = 10
 #we
 def init_on_start(hashMap,_files=None,_data=None):
-    init()
+    ui_global.init()
     user_locale = hashMap.get("USER_LOCALE")
     return hashMap
 
